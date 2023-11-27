@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { createContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 export function MainLayout() {
   const [top100, setTop100] = useState(null);
@@ -30,6 +30,8 @@ export function MainLayout() {
   const genrePopOver = useDisclosure();
 
   const params = new URLSearchParams();
+
+  const location = useLocation();
 
   const navigate = useNavigate();
 
@@ -54,7 +56,9 @@ export function MainLayout() {
           "/api/song/ft100?genre=" +
             genreInclude.current +
             "&mood=" +
-            moodInclude.current,
+            moodInclude.current +
+            "&" +
+            params,
         )
         .then(({ data }) => setTop100(data));
     } else {
@@ -64,7 +68,9 @@ export function MainLayout() {
           "/api/song/ft100?genre=" +
             genreInclude.current +
             "&mood=" +
-            moodInclude.current,
+            moodInclude.current +
+            "&" +
+            params,
         )
         .then(({ data }) => setTop100(data));
     }
@@ -81,7 +87,9 @@ export function MainLayout() {
           "/api/song/ft100?genre=" +
             genreInclude.current +
             "&mood=" +
-            moodInclude.current,
+            moodInclude.current +
+            "&" +
+            params,
         )
         .then(({ data }) => setTop100(data));
     } else {
@@ -91,7 +99,9 @@ export function MainLayout() {
           "/api/song/ft100?genre=" +
             genreInclude.current +
             "&mood=" +
-            moodInclude.current,
+            moodInclude.current +
+            "&" +
+            params,
         )
         .then(({ data }) => setTop100(data));
     }
@@ -117,7 +127,15 @@ export function MainLayout() {
   return (
     <SongContext.Provider value={{ top100, searched }}>
       <Box position={"relative"} width={"100%"} m={0}>
-        <Button onClick={() => navigate("/main")}>로고</Button>
+        <Button
+          onClick={() => {
+            navigate("/main");
+            document.getElementById("searchInput").value = "";
+            setSearchKeyword("");
+          }}
+        >
+          로고
+        </Button>
         <Box
           position={"absolute"}
           width={"20px"}
@@ -202,34 +220,30 @@ export function MainLayout() {
         </Box>
         <FormControl width={"100%"} height={"50px"}>
           <Button
-            className="searchButton"
             ml={"5%"}
             value={"가수"}
             onClick={(e) => handleSearchCategoryButton(e)}
           >
             가수
           </Button>
-          <Button
-            className="searchButton"
-            value={"제목"}
-            onClick={(e) => handleSearchCategoryButton(e)}
-          >
+          <Button value={"제목"} onClick={(e) => handleSearchCategoryButton(e)}>
             제목
           </Button>
-          <Button
-            className="searchButton"
-            value={"가사"}
-            onClick={(e) => handleSearchCategoryButton(e)}
-          >
+          <Button value={"가사"} onClick={(e) => handleSearchCategoryButton(e)}>
             가사
           </Button>
           <Input
+            id="searchInput"
             ml={"5%"}
             height={"90%"}
             width={"80%"}
             onChange={(e) => setSearchKeyword(e.target.value)}
           />
-          <Button height={"100%"} width={"10%"} onClick={handleSearchButton}>
+          <Button
+            height={"100%"}
+            width={"10%"}
+            onClick={() => handleSearchButton()}
+          >
             검색
           </Button>
         </FormControl>
