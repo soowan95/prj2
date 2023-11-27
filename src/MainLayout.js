@@ -53,27 +53,39 @@ export function MainLayout() {
       if (e.target.className.toString().includes("genre"))
         genreInclude.current = genreInclude.current + e.target.value + ",";
       else moodInclude.current = moodInclude.current + e.target.value + ",";
-      axios
-        .get(
-          "/api/song/ft100?genre=" +
-            genreInclude.current +
-            "&mood=" +
-            moodInclude.current,
-        )
-        .then(({ data }) => setTop100(data));
+      if (location.pathname === "/main") {
+        axios
+          .get(
+            "/api/song/ft100?genre=" +
+              genreInclude.current +
+              "&mood=" +
+              moodInclude.current +
+              "&" +
+              params,
+          )
+          .then(({ data }) => setTop100(data));
+      } else {
+        handleSearchButton();
+      }
     } else {
       if (e.target.className.toString().includes("genre"))
         genreInclude.current = genreInclude.current.replace(e.target.value, "");
       else
         moodInclude.current = moodInclude.current.replace(e.target.value, "");
-      axios
-        .get(
-          "/api/song/ft100?genre=" +
-            genreInclude.current +
-            "&mood=" +
-            moodInclude.current,
-        )
-        .then(({ data }) => setTop100(data));
+      if (location.pathname === "/main") {
+        axios
+          .get(
+            "/api/song/ft100?genre=" +
+              genreInclude.current +
+              "&mood=" +
+              moodInclude.current +
+              "&" +
+              params,
+          )
+          .then(({ data }) => setTop100(data));
+      } else {
+        handleSearchButton();
+      }
     }
 
     if (genreInclude.current.replaceAll(",", "") === "")
@@ -94,7 +106,14 @@ export function MainLayout() {
 
   function handleSearchButton() {
     axios
-      .get("/api/song/search?" + params)
+      .get(
+        "/api/song/search?genre=" +
+          genreInclude.current +
+          "&mood=" +
+          moodInclude.current +
+          "&" +
+          params,
+      )
       .then(({ data }) => setSearched(data))
       .finally(() => navigate("/main/search"));
   }
