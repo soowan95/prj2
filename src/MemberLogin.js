@@ -15,6 +15,7 @@ import {
   useDisclosure,
   useToast,
   Center,
+  Card,
 } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import axios from "axios";
@@ -26,7 +27,7 @@ import { LoginContext } from "./App";
 export function MemberLogin() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const { fetchLogin } = useContext(LoginContext);
+  const { fetchLogin, isAuthenticated } = useContext(LoginContext);
 
   const { isOpen, onClose, onOpen } = useDisclosure();
 
@@ -57,10 +58,12 @@ export function MemberLogin() {
 
   return (
     <Center>
-      <Button colorScheme="purple" mr={5} onClick={onOpen}>
-        <FontAwesomeIcon icon={faRightToBracket} />
-        　로그인
-      </Button>
+      {isAuthenticated() || (
+        <Button colorScheme="purple" mr={5} onClick={onOpen}>
+          <FontAwesomeIcon icon={faRightToBracket} />
+          로그인
+        </Button>
+      )}
 
       {/* 로그인 창 모달 */}
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -86,9 +89,18 @@ export function MemberLogin() {
           </ModalBody>
 
           <ModalFooter>
-            <Button onClick={handleLogin} colorScheme="purple">
+            <Button
+              w={"250px"}
+              mr={3}
+              onClick={handleLogin}
+              colorScheme="purple"
+            >
               로그인
             </Button>
+            <Button size={"xs"} mr={1}>
+              비밀번호찾기
+            </Button>
+            <Button size={"xs"}>회원가입</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
