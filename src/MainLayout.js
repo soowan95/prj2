@@ -25,6 +25,7 @@ export function MainLayout() {
 
   const genreInclude = useRef(",");
   const moodInclude = useRef(",");
+  const genreMoodList = useRef([]);
 
   const moodPopOver = useDisclosure();
   const genrePopOver = useDisclosure();
@@ -47,6 +48,13 @@ export function MainLayout() {
 
   function handlePlusButton(e) {
     handleButtonColor(e);
+
+    if (!genreMoodList.current.includes(e.target.value))
+      genreMoodList.current.push(e.target.value);
+    else
+      genreMoodList.current = genreMoodList.current.filter(
+        (a) => a !== e.target.value,
+      );
 
     e.target.name = e.target.name === "true" ? "false" : "true";
     if (e.target.name === "true") {
@@ -215,33 +223,60 @@ export function MainLayout() {
           </Popover>
         </Box>
         <FormControl width={"100%"} height={"50px"}>
-          <Button
-            ml={"5%"}
-            value={"가수"}
-            onClick={(e) => handleSearchCategoryButton(e)}
+          <Flex width={"70%"} m={"0 auto"}>
+            <Button
+              value={"가수"}
+              onClick={(e) => handleSearchCategoryButton(e)}
+            >
+              가수
+            </Button>
+            <Button
+              value={"제목"}
+              onClick={(e) => handleSearchCategoryButton(e)}
+            >
+              제목
+            </Button>
+            <Button
+              value={"가사"}
+              onClick={(e) => handleSearchCategoryButton(e)}
+            >
+              가사
+            </Button>
+          </Flex>
+          <Flex
+            position={"relative"}
+            width={"70%"}
+            m={"0 auto"}
+            alignItems={"center"}
           >
-            가수
-          </Button>
-          <Button value={"제목"} onClick={(e) => handleSearchCategoryButton(e)}>
-            제목
-          </Button>
-          <Button value={"가사"} onClick={(e) => handleSearchCategoryButton(e)}>
-            가사
-          </Button>
-          <Input
-            id="searchInput"
-            ml={"5%"}
-            height={"90%"}
-            width={"80%"}
-            onChange={(e) => setSearchKeyword(e.target.value)}
-          />
-          <Button
-            height={"100%"}
-            width={"10%"}
-            onClick={() => handleSearchButton()}
-          >
-            검색
-          </Button>
+            {genreMoodList !== null &&
+              genreMoodList.current.map((key) => (
+                <Button
+                  mr={2}
+                  key={key}
+                  value={key}
+                  size={"sm"}
+                  fontSize={"0.8rem"}
+                  colorScheme="orange"
+                >
+                  {key}
+                </Button>
+              ))}
+            <Input
+              ml={2}
+              id="searchInput"
+              height={"45px"}
+              placeholder="검색어를 입력해주세요"
+              onChange={(e) => setSearchKeyword(e.target.value)}
+            />
+            <Button
+              height={"45px"}
+              width={"5%"}
+              onClick={() => handleSearchButton()}
+            >
+              검색
+            </Button>
+          </Flex>
         </FormControl>
         <Outlet />
       </Box>
