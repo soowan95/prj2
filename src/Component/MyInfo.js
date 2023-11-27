@@ -11,13 +11,17 @@ import {
 } from "@chakra-ui/react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUser} from "@fortawesome/free-solid-svg-icons";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import axios from "axios";
-import {MyPlayList} from "./MyPlayList";
+import {useNavigate} from "react-router-dom";
+import {LoginContext} from "./LoginProvider";
 
 
 export function MyInfo() {
   const [login, setLogin] = useState("");
+
+  const navigate = useNavigate();
+
   useEffect(() => {
     axios.get("/api/member/logininfo")
       .then(({data}) => setLogin(data))
@@ -35,7 +39,8 @@ export function MyInfo() {
         <PopoverHeader>{login.nickName} 님
           <Button size="xs" ml={5}>LOGOUT</Button></PopoverHeader>
         <PopoverBody>
-          <MyPlayList/>
+          <Button onClick={()=>navigate("/myplaylist")}
+          variant="ghost">MyPlayList</Button>
         </PopoverBody>
         <PopoverFooter>Logout Button</PopoverFooter>
       </PopoverContent>
