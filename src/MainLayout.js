@@ -1,4 +1,8 @@
 import {
+  Accordion,
+  AccordionButton,
+  AccordionItem,
+  AccordionPanel,
   Box,
   Button,
   Flex,
@@ -22,6 +26,7 @@ export function MainLayout() {
   const [genres, setGenres] = useState(null);
   const [searchCategory, setSearchCategory] = useState("가수");
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [autoComplete, setAutoComplete] = useState(null);
 
   const genreInclude = useRef(",");
   const moodInclude = useRef(",");
@@ -45,6 +50,12 @@ export function MainLayout() {
     axios.get("/api/song/mood").then(({ data }) => setMoods(data));
     axios.get("/api/song/genre").then(({ data }) => setGenres(data));
   }, []);
+
+  useEffect(() => {
+    axios
+      .get("/api/song/autoComplete?" + params)
+      .then(({ data }) => setAutoComplete(data));
+  }, [searchKeyword]);
 
   function handlePlusButton(e) {
     handleButtonColor(e);
@@ -124,6 +135,13 @@ export function MainLayout() {
       )
       .then(({ data }) => setSearched(data))
       .finally(() => navigate("/main/search"));
+  }
+  console.log(searchKeyword);
+
+  function handleChangeSearchInput(e) {
+    setSearchKeyword(e.target.value);
+    params.set("sc", searchCategory);
+    params.set("sk", searchKeyword);
   }
 
   return (
@@ -248,6 +266,7 @@ export function MainLayout() {
             width={"70%"}
             m={"0 auto"}
             alignItems={"center"}
+            border={"1px solid black"}
           >
             {genreMoodList !== null &&
               genreMoodList.current.map((key) => (
@@ -262,20 +281,40 @@ export function MainLayout() {
                   {key}
                 </Button>
               ))}
-            <Input
-              ml={2}
-              id="searchInput"
-              height={"45px"}
-              placeholder="검색어를 입력해주세요"
-              onChange={(e) => setSearchKeyword(e.target.value)}
-            />
-            <Button
-              height={"45px"}
-              width={"5%"}
-              onClick={() => handleSearchButton()}
-            >
-              검색
-            </Button>
+            <Accordion allowMultiple w={"100%"} bg={"white"}>
+              <AccordionItem>
+                <h2>
+                  <AccordionButton>
+                    <Input
+                      ml={2}
+                      id="searchInput"
+                      height={"45px"}
+                      placeholder="검색어를 입력해주세요"
+                      onChange={(e) => {
+                        handleChangeSearchInput(e);
+                      }}
+                    />
+                    <Button
+                      border={"1px solid black"}
+                      height={"45px"}
+                      width={"5%"}
+                      onClick={() => handleSearchButton()}
+                    >
+                      검색
+                    </Button>
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel pb={4}>
+                  {autoComplete !== null &&
+                    autoComplete.map((song) => (
+                      <Flex justifyContent={"space-between"}>
+                        <Box>{song.title}</Box>
+                        <Box>{song.artistName}</Box>
+                      </Flex>
+                    ))}
+                </AccordionPanel>
+              </AccordionItem>
+            </Accordion>
           </Flex>
         </FormControl>
         <Outlet />
