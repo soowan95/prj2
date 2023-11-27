@@ -45,66 +45,41 @@ export function MainLayout() {
     axios.get("/api/song/genre").then(({ data }) => setGenres(data));
   }, []);
 
-  // genre 필터
-  function handleGenrePlusButton(e) {
+  function handlePlusButton(e) {
     handleButtonColor(e);
-    e.target.name = e.target.name === "true" ? "false" : "true";
-    if (e.target.name === "true") {
-      genreInclude.current = genreInclude.current + e.target.value + ",";
-      axios
-        .get(
-          "/api/song/ft100?genre=" +
-            genreInclude.current +
-            "&mood=" +
-            moodInclude.current +
-            "&" +
-            params,
-        )
-        .then(({ data }) => setTop100(data));
-    } else {
-      genreInclude.current = genreInclude.current.replace(e.target.value, "");
-      axios
-        .get(
-          "/api/song/ft100?genre=" +
-            genreInclude.current +
-            "&mood=" +
-            moodInclude.current +
-            "&" +
-            params,
-        )
-        .then(({ data }) => setTop100(data));
-    }
-  }
 
-  // mood 필터
-  function handleMoodPlusButton(e) {
-    handleButtonColor(e);
     e.target.name = e.target.name === "true" ? "false" : "true";
     if (e.target.name === "true") {
-      moodInclude.current = moodInclude.current + e.target.value + ",";
+      if (e.target.className.toString().includes("genre"))
+        genreInclude.current = genreInclude.current + e.target.value + ",";
+      else moodInclude.current = moodInclude.current + e.target.value + ",";
       axios
         .get(
           "/api/song/ft100?genre=" +
             genreInclude.current +
             "&mood=" +
-            moodInclude.current +
-            "&" +
-            params,
+            moodInclude.current,
         )
         .then(({ data }) => setTop100(data));
     } else {
-      moodInclude.current = moodInclude.current.replace(e.target.value, "");
+      if (e.target.className.toString().includes("genre"))
+        genreInclude.current = genreInclude.current.replace(e.target.value, "");
+      else
+        moodInclude.current = moodInclude.current.replace(e.target.value, "");
       axios
         .get(
           "/api/song/ft100?genre=" +
             genreInclude.current +
             "&mood=" +
-            moodInclude.current +
-            "&" +
-            params,
+            moodInclude.current,
         )
         .then(({ data }) => setTop100(data));
     }
+
+    if (genreInclude.current.replaceAll(",", "") === "")
+      genreInclude.current = "";
+    if (moodInclude.current.replaceAll(",", "") === "")
+      moodInclude.current = "";
   }
 
   function handleButtonColor(e) {
@@ -171,12 +146,13 @@ export function MainLayout() {
                   <Flex key={genre.id} my={"5px"} alignItems={"center"}>
                     <p style={{ width: "60%" }}>{genre.genre}</p>
                     <Button
+                      className="genre"
                       size={"xs"}
                       h={"13px"}
                       w={"13px"}
                       borderRadius={"5px"}
                       border={"1px solid black"}
-                      onClick={(e) => handleGenrePlusButton(e)}
+                      onClick={(e) => handlePlusButton(e)}
                       value={genre.genre}
                       name="false"
                     >
@@ -203,12 +179,13 @@ export function MainLayout() {
                   <Flex key={mood.id} my={"5px"} alignItems={"center"}>
                     <p style={{ width: "60%" }}>{mood.mainMood}</p>
                     <Button
+                      className="mood"
                       size={"xs"}
                       h={"13px"}
                       w={"13px"}
                       borderRadius={"5px"}
                       border={"1px solid black"}
-                      onClick={(e) => handleMoodPlusButton(e)}
+                      onClick={(e) => handlePlusButton(e)}
                       value={mood.mainMood}
                     >
                       +
