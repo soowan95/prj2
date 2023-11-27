@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
+import PasswordRecovery from "./PasswordRecovery";
 
 export function MemberSignup() {
   // securityQuestionList를 함수 외부에서 선언
@@ -41,6 +42,8 @@ export function MemberSignup() {
   const [securityAnswer, setSecurityAnswer] = useState("");
 
   const [idAvailable, setIdAvailable] = useState(false);
+
+  const [isPasswordRecoveryOpen, setIsPasswordRecoveryOpen] = useState(false);
 
   const toast = useToast();
 
@@ -76,6 +79,7 @@ export function MemberSignup() {
           duration: 3000,
           isClosable: true,
         });
+        window.location.reload(0);
 
         // 가입이 완료되면 모달을 닫음
         setIsModalOpen(false);
@@ -119,37 +123,7 @@ export function MemberSignup() {
   }
 
   function handleForgotPassword() {
-    // 사용자에게 입력받은 ID를 서버로 전송하여 보안 질문을 가져옴
-    axios
-      .get(`/api/member/securityQuestion/${id}`)
-      .then((response) => {
-        const serverSecurityQuestion = response.data.sequrityQuestion;
-
-        // 사용자에게 보안 질문 물어보고 답변 확인
-        const userAnswer = prompt(serverSecurityQuestion);
-        if (userAnswer === null) {
-          return;
-        }
-
-        // 서버로 보안 질문 답변을 전송하여 확인
-        axios
-          .post("/api/member/forgotPassword", {
-            id,
-            securityAnswer: userAnswer,
-          })
-          .then(() => {
-            // 비밀번호 재설정 성공
-            alert("비밀번호가 성공적으로 재설정되었습니다.");
-          })
-          .catch(() => {
-            // 보안 질문 답변 일치하지 않을 경우
-            alert("답변이 올바르지 않습니다.");
-          });
-      })
-      .catch(() => {
-        // ID에 해당하는 보안 질문을 찾지 못했을 때
-        alert("ID에 해당하는 보안 질문을 찾지 못했습니다.");
-      });
+    setIsPasswordRecoveryOpen(true);
   }
 
   return (
@@ -242,6 +216,13 @@ export function MemberSignup() {
           </ModalFooter>
         </ModalContent>
       </Modal>
+      <PasswordRecovery
+        isOpen={isPasswordRecoveryOpen}
+        onClose={() => setIsPasswordRecoveryOpen(false)}
+        securityQuestions={securityQuestionList}
+      />
     </Box>
   );
 }
+
+export default MemberSignup;
