@@ -21,6 +21,7 @@ export function NavBar() {
           description: "로그아웃 되었습니다🙂",
           status: "info",
         });
+        window.location.reload(0);
         navigate("/");
       })
       .finally(() => fetchLogin());

@@ -16,12 +16,20 @@ import {
   useToast,
   Center,
   Card,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
 } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBold,
+  faLockOpen,
+  faRightToBracket,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 import { LoginContext } from "./App";
 
 export function MemberLogin() {
@@ -44,6 +52,7 @@ export function MemberLogin() {
           status: "info",
         });
         onClose();
+        window.location.reload(0);
       })
       .catch(() => {
         toast({
@@ -54,6 +63,17 @@ export function MemberLogin() {
       .finally(() => {
         fetchLogin();
       });
+  }
+
+  function handleSearchPassword() {
+    axios
+      .post("/api/member/update-password", {})
+      .then(console.log("일치"))
+      .finally(console.log("불일치"));
+  }
+
+  function handleSingUp() {
+    axios.post("/api/member/signup");
   }
 
   return (
@@ -68,26 +88,46 @@ export function MemberLogin() {
       {/* 로그인 창 모달 */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>로그인</ModalHeader>
-          <ModalCloseButton />
 
+        <ModalContent>
+          <ModalHeader fontSize={"small"}>로그인</ModalHeader>
+          <ModalCloseButton />
           <ModalBody>
+            <Box>
+              <Center mb={20} fontSize={"xx-large"}>
+                R E L I E V E
+              </Center>
+            </Box>
             <FormControl mb={5}>
               <FormLabel>아이디</FormLabel>
-              <Input value={id} onChange={(e) => setId(e.target.value)} />
-            </FormControl>
+              <InputGroup>
+                <InputLeftElement>
+                  <FontAwesomeIcon icon={faUser} />
+                </InputLeftElement>
 
+                <Input
+                  placeholder="ID"
+                  value={id}
+                  onChange={(e) => setId(e.target.value)}
+                />
+              </InputGroup>
+            </FormControl>
             <FormControl mb={5}>
               <FormLabel>비밀번호</FormLabel>
-              <Input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <InputGroup>
+                <InputLeftElement>
+                  <FontAwesomeIcon icon={faLockOpen} />
+                </InputLeftElement>
+
+                <Input
+                  placeholder="PASSWORD"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </InputGroup>
             </FormControl>
           </ModalBody>
-
           <ModalFooter>
             <Button
               w={"250px"}
@@ -97,10 +137,12 @@ export function MemberLogin() {
             >
               로그인
             </Button>
-            <Button size={"xs"} mr={1}>
+            <Button size={"xs"} mr={1} onClick={handleSearchPassword}>
               비밀번호찾기
             </Button>
-            <Button size={"xs"}>회원가입</Button>
+            <Button size={"xs"} onClick={handleSingUp}>
+              회원가입
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
