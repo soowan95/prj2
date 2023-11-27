@@ -6,6 +6,8 @@ import {
 } from "react-router-dom";
 import { HomeLayout } from "./layout/HomeLayout";
 import { MemberLogin } from "./MemberLogin";
+import { createContext, useEffect, useState } from "react";
+import axios from "axios";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -15,8 +17,30 @@ const routes = createBrowserRouter(
   ),
 );
 
+export const LoginContext = createContext(null);
+
 function App(props) {
-  return <RouterProvider router={routes} />;
+  const [login, setLogin] = useState(null);
+
+  useEffect(() => {
+    fetchLogin();
+  }, []);
+
+  function fetchLogin() {
+    axios.get("/api/member/login").then((response) => setLogin(response.data));
+  }
+
+  function isAuthenticated() {
+    return login !== "";
+  }
+
+  console.log(login);
+
+  return (
+    <LoginContext.Provider value={{ login, fetchLogin, isAuthenticated }}>
+      <RouterProvider router={routes} />
+    </LoginContext.Provider>
+  );
 }
 
 export default App;

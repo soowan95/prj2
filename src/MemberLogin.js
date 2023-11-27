@@ -16,15 +16,17 @@ import {
   useToast,
   Center,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
+import { LoginContext } from "./App";
 
 export function MemberLogin() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+  const { fetchLogin } = useContext(LoginContext);
 
   const { isOpen, onClose, onOpen } = useDisclosure();
 
@@ -47,6 +49,9 @@ export function MemberLogin() {
           description: "아이디와 암호를 다시 확인해주세요😥",
           status: "warning",
         });
+      })
+      .finally(() => {
+        fetchLogin();
       });
   }
 
