@@ -19,6 +19,8 @@ import {
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRightToBracket } from "@fortawesome/free-solid-svg-icons";
 
 export function MemberLogin() {
   const [id, setId] = useState("");
@@ -50,8 +52,9 @@ export function MemberLogin() {
 
   return (
     <Center>
-      <Button colorScheme="purple" onClick={onOpen}>
-        로그인
+      <Button colorScheme="purple" mr={5} onClick={onOpen}>
+        <FontAwesomeIcon icon={faRightToBracket} />
+        　로그인
       </Button>
 
       {/* 로그인 창 모달 */}
