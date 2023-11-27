@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { createContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 export function MainLayout() {
   const [top100, setTop100] = useState(null);
@@ -25,11 +25,14 @@ export function MainLayout() {
 
   const genreInclude = useRef(",");
   const moodInclude = useRef(",");
+  const genreMoodList = useRef([]);
 
   const moodPopOver = useDisclosure();
   const genrePopOver = useDisclosure();
 
   const params = new URLSearchParams();
+
+  const location = useLocation();
 
   const navigate = useNavigate();
 
@@ -38,63 +41,65 @@ export function MainLayout() {
 
   // 사이트 시작할 때 top100, mood, genre db에서 가져오기
   useEffect(() => {
-    axios.get("/api/song/top100/").then(({ data }) => setTop100(data));
+    axios.get("/api/song/top100").then(({ data }) => setTop100(data));
     axios.get("/api/song/mood").then(({ data }) => setMoods(data));
     axios.get("/api/song/genre").then(({ data }) => setGenres(data));
   }, []);
 
-  // genre 필터
-  function handleGenrePlusButton(e) {
+  function handlePlusButton(e) {
     handleButtonColor(e);
-    e.target.name = e.target.name === "true" ? "false" : "true";
-    if (e.target.name === "true") {
-      genreInclude.current = genreInclude.current + e.target.value + ",";
-      axios
-        .get(
-          "/api/song/top100/" +
-            genreInclude.current +
-            "$" +
-            moodInclude.current,
-        )
-        .then(({ data }) => setTop100(data));
-    } else {
-      genreInclude.current = genreInclude.current.replace(e.target.value, "");
-      axios
-        .get(
-          "/api/song/top100/" +
-            genreInclude.current +
-            "$" +
-            moodInclude.current,
-        )
-        .then(({ data }) => setTop100(data));
-    }
-  }
 
-  // mood 필터
-  function handleMoodPlusButton(e) {
-    handleButtonColor(e);
+    if (!genreMoodList.current.includes(e.target.value))
+      genreMoodList.current.push(e.target.value);
+    else
+      genreMoodList.current = genreMoodList.current.filter(
+        (a) => a !== e.target.value,
+      );
+
     e.target.name = e.target.name === "true" ? "false" : "true";
     if (e.target.name === "true") {
-      moodInclude.current = moodInclude.current + e.target.value + ",";
-      axios
-        .get(
-          "/api/song/top100/" +
-            genreInclude.current +
-            "$" +
-            moodInclude.current,
-        )
-        .then(({ data }) => setTop100(data));
+      if (e.target.className.toString().includes("genre"))
+        genreInclude.current = genreInclude.current + e.target.value + ",";
+      else moodInclude.current = moodInclude.current + e.target.value + ",";
+      if (location.pathname === "/main") {
+        axios
+          .get(
+            "/api/song/ft100?genre=" +
+              genreInclude.current +
+              "&mood=" +
+              moodInclude.current +
+              "&" +
+              params,
+          )
+          .then(({ data }) => setTop100(data));
+      } else {
+        handleSearchButton();
+      }
     } else {
-      moodInclude.current = moodInclude.current.replace(e.target.value, "");
-      axios
-        .get(
-          "/api/song/top100/" +
-            genreInclude.current +
-            "$" +
-            moodInclude.current,
-        )
-        .then(({ data }) => setTop100(data));
+      if (e.target.className.toString().includes("genre"))
+        genreInclude.current = genreInclude.current.replace(e.target.value, "");
+      else
+        moodInclude.current = moodInclude.current.replace(e.target.value, "");
+      if (location.pathname === "/main") {
+        axios
+          .get(
+            "/api/song/ft100?genre=" +
+              genreInclude.current +
+              "&mood=" +
+              moodInclude.current +
+              "&" +
+              params,
+          )
+          .then(({ data }) => setTop100(data));
+      } else {
+        handleSearchButton();
+      }
     }
+
+    if (genreInclude.current.replaceAll(",", "") === "")
+      genreInclude.current = "";
+    if (moodInclude.current.replaceAll(",", "") === "")
+      moodInclude.current = "";
   }
 
   function handleButtonColor(e) {
@@ -109,7 +114,14 @@ export function MainLayout() {
 
   function handleSearchButton() {
     axios
-      .get("/api/song/search?" + params)
+      .get(
+        "/api/song/search?genre=" +
+          genreInclude.current +
+          "&mood=" +
+          moodInclude.current +
+          "&" +
+          params,
+      )
       .then(({ data }) => setSearched(data))
       .finally(() => navigate("/main/search"));
   }
@@ -117,7 +129,15 @@ export function MainLayout() {
   return (
     <SongContext.Provider value={{ top100, searched }}>
       <Box position={"relative"} width={"100%"} m={0}>
-        <Button onClick={() => navigate("/main")}>로고</Button>
+        <Button
+          onClick={() => {
+            navigate("/main");
+            document.getElementById("searchInput").value = "";
+            setSearchKeyword("");
+          }}
+        >
+          로고
+        </Button>
         <Box
           position={"absolute"}
           width={"20px"}
@@ -153,12 +173,13 @@ export function MainLayout() {
                   <Flex key={genre.id} my={"5px"} alignItems={"center"}>
                     <p style={{ width: "60%" }}>{genre.genre}</p>
                     <Button
+                      className="genre"
                       size={"xs"}
                       h={"13px"}
                       w={"13px"}
                       borderRadius={"5px"}
                       border={"1px solid black"}
-                      onClick={(e) => handleGenrePlusButton(e)}
+                      onClick={(e) => handlePlusButton(e)}
                       value={genre.genre}
                       name="false"
                     >
@@ -185,12 +206,13 @@ export function MainLayout() {
                   <Flex key={mood.id} my={"5px"} alignItems={"center"}>
                     <p style={{ width: "60%" }}>{mood.mainMood}</p>
                     <Button
+                      className="mood"
                       size={"xs"}
                       h={"13px"}
                       w={"13px"}
                       borderRadius={"5px"}
                       border={"1px solid black"}
-                      onClick={(e) => handleMoodPlusButton(e)}
+                      onClick={(e) => handlePlusButton(e)}
                       value={mood.mainMood}
                     >
                       +
@@ -201,37 +223,60 @@ export function MainLayout() {
           </Popover>
         </Box>
         <FormControl width={"100%"} height={"50px"}>
-          <Button
-            className="searchButton"
-            ml={"5%"}
-            value={"가수"}
-            onClick={(e) => handleSearchCategoryButton(e)}
+          <Flex width={"70%"} m={"0 auto"}>
+            <Button
+              value={"가수"}
+              onClick={(e) => handleSearchCategoryButton(e)}
+            >
+              가수
+            </Button>
+            <Button
+              value={"제목"}
+              onClick={(e) => handleSearchCategoryButton(e)}
+            >
+              제목
+            </Button>
+            <Button
+              value={"가사"}
+              onClick={(e) => handleSearchCategoryButton(e)}
+            >
+              가사
+            </Button>
+          </Flex>
+          <Flex
+            position={"relative"}
+            width={"70%"}
+            m={"0 auto"}
+            alignItems={"center"}
           >
-            가수
-          </Button>
-          <Button
-            className="searchButton"
-            value={"제목"}
-            onClick={(e) => handleSearchCategoryButton(e)}
-          >
-            제목
-          </Button>
-          <Button
-            className="searchButton"
-            value={"가사"}
-            onClick={(e) => handleSearchCategoryButton(e)}
-          >
-            가사
-          </Button>
-          <Input
-            ml={"5%"}
-            height={"90%"}
-            width={"80%"}
-            onChange={(e) => setSearchKeyword(e.target.value)}
-          />
-          <Button height={"100%"} width={"10%"} onClick={handleSearchButton}>
-            검색
-          </Button>
+            {genreMoodList !== null &&
+              genreMoodList.current.map((key) => (
+                <Button
+                  mr={2}
+                  key={key}
+                  value={key}
+                  size={"sm"}
+                  fontSize={"0.8rem"}
+                  colorScheme="orange"
+                >
+                  {key}
+                </Button>
+              ))}
+            <Input
+              ml={2}
+              id="searchInput"
+              height={"45px"}
+              placeholder="검색어를 입력해주세요"
+              onChange={(e) => setSearchKeyword(e.target.value)}
+            />
+            <Button
+              height={"45px"}
+              width={"5%"}
+              onClick={() => handleSearchButton()}
+            >
+              검색
+            </Button>
+          </Flex>
         </FormControl>
         <Outlet />
       </Box>
