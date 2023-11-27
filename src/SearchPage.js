@@ -13,10 +13,11 @@ export function SearchPage() {
             key={song.id}
             m={"3px auto"}
             width={"60%"}
-            justifyContent={"center"}
+            justifyContent={"space-between"}
             border={"1px solid black"}
           >
             <Box>{song.title}</Box>
+            <Box>{song.artistName}</Box>
             <Box>{song.genre}</Box>
             <Box>{song.mood}</Box>
           </Flex>

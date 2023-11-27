@@ -38,7 +38,7 @@ export function MainLayout() {
 
   // 사이트 시작할 때 top100, mood, genre db에서 가져오기
   useEffect(() => {
-    axios.get("/api/song/top100/").then(({ data }) => setTop100(data));
+    axios.get("/api/song/top100").then(({ data }) => setTop100(data));
     axios.get("/api/song/mood").then(({ data }) => setMoods(data));
     axios.get("/api/song/genre").then(({ data }) => setGenres(data));
   }, []);
@@ -51,9 +51,9 @@ export function MainLayout() {
       genreInclude.current = genreInclude.current + e.target.value + ",";
       axios
         .get(
-          "/api/song/top100/" +
+          "/api/song/ft100?genre=" +
             genreInclude.current +
-            "$" +
+            "&mood=" +
             moodInclude.current,
         )
         .then(({ data }) => setTop100(data));
@@ -61,9 +61,9 @@ export function MainLayout() {
       genreInclude.current = genreInclude.current.replace(e.target.value, "");
       axios
         .get(
-          "/api/song/top100/" +
+          "/api/song/ft100?genre=" +
             genreInclude.current +
-            "$" +
+            "&mood=" +
             moodInclude.current,
         )
         .then(({ data }) => setTop100(data));
@@ -78,9 +78,9 @@ export function MainLayout() {
       moodInclude.current = moodInclude.current + e.target.value + ",";
       axios
         .get(
-          "/api/song/top100/" +
+          "/api/song/ft100?genre=" +
             genreInclude.current +
-            "$" +
+            "&mood=" +
             moodInclude.current,
         )
         .then(({ data }) => setTop100(data));
@@ -88,9 +88,9 @@ export function MainLayout() {
       moodInclude.current = moodInclude.current.replace(e.target.value, "");
       axios
         .get(
-          "/api/song/top100/" +
+          "/api/song/ft100?genre=" +
             genreInclude.current +
-            "$" +
+            "&mood=" +
             moodInclude.current,
         )
         .then(({ data }) => setTop100(data));
