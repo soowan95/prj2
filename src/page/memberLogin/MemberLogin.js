@@ -30,9 +30,9 @@ import {
   faRightToBracket,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { LoginContext } from "../../App";
 import PasswordRecovery from "./PasswordRecovery";
 import MemberSignup from "./MemberSignup";
+import { LoginContext } from "../../component/LoginProvider";
 
 export function MemberLogin() {
   const [id, setId] = useState("");
