@@ -1,4 +1,8 @@
 import {
+  Accordion,
+  AccordionButton,
+  AccordionItem,
+  AccordionPanel,
   Box,
   Button,
   Flex,
@@ -22,10 +26,13 @@ export function MainLayout() {
   const [genres, setGenres] = useState(null);
   const [searchCategory, setSearchCategory] = useState("가수");
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [autoComplete, setAutoComplete] = useState(null);
+  const [accordionIndex, setAccordionIndex] = useState(1);
 
   const genreInclude = useRef(",");
   const moodInclude = useRef(",");
   const genreMoodList = useRef([]);
+  const searchRef = useRef(null);
 
   const moodPopOver = useDisclosure();
   const genrePopOver = useDisclosure();
@@ -39,6 +46,19 @@ export function MainLayout() {
   params.set("sc", searchCategory);
   params.set("sk", searchKeyword);
 
+  // 검색창 외의 영역 클릭시 감지
+  useEffect(() => {
+    function handleOutside(e) {
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
+        setAccordionIndex(1);
+      }
+    }
+    document.addEventListener("mousedown", handleOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleOutside);
+    };
+  }, [searchRef]);
+
   // 사이트 시작할 때 top100, mood, genre db에서 가져오기
   useEffect(() => {
     axios.get("/api/song/top100").then(({ data }) => setTop100(data));
@@ -46,6 +66,19 @@ export function MainLayout() {
     axios.get("/api/song/genre").then(({ data }) => setGenres(data));
   }, []);
 
+  // 자동 완성 정보 불러오기
+  useEffect(() => {
+    axios
+      .get("/api/song/autoComplete?" + params)
+      .then(({ data }) => setAutoComplete(data));
+  }, [searchKeyword]);
+
+  // 검색창 placeholder
+  let searchInfoText = searchCategory;
+  searchInfoText +=
+    searchCategory === "제목" ? "을 검색해주세요." : "를 검색해주세요.";
+
+  // 필터 버튼
   function handlePlusButton(e) {
     handleButtonColor(e);
 
@@ -102,16 +135,19 @@ export function MainLayout() {
       moodInclude.current = "";
   }
 
+  // 필터 버튼 색 바꾸기
   function handleButtonColor(e) {
     e.target.style.background =
       e.target.style.background === "purple" ? "white" : "purple";
     e.target.style.color = e.target.style.color === "white" ? "black" : "white";
   }
 
+  // 검색창 카테고리 바꾸기
   function handleSearchCategoryButton(e) {
     setSearchCategory(e.target.value);
   }
 
+  // 검색 버튼
   function handleSearchButton() {
     axios
       .get(
@@ -126,30 +162,50 @@ export function MainLayout() {
       .finally(() => navigate("/main/search"));
   }
 
+  // 검색창 입력시 실시간 정보 입력
+  function handleChangeSearchInput(e) {
+    setSearchKeyword(e.target.value);
+    params.set("sc", searchCategory);
+    params.set("sk", searchKeyword);
+  }
+
   return (
     <SongContext.Provider value={{ top100, searched }}>
       <Box position={"relative"} width={"100%"} m={0}>
+        {/* 메인 로고 */}
         <Button
+          size={"L"}
+          mt={"50px"}
+          style={{
+            position: "relative",
+            left: "50%",
+            transform: "translate(-50%)",
+          }}
+          fontSize={"3rem"}
           onClick={() => {
             navigate("/main");
             document.getElementById("searchInput").value = "";
             setSearchKeyword("");
           }}
         >
-          로고
+          RELIEVE
         </Button>
+        {/* 사용자 정보 */}
         <Box
           position={"absolute"}
           width={"20px"}
-          right={"0%"}
+          right={"3%"}
           top={"0%"}
           textAlign={"center"}
+          fontSize={"1.7rem"}
         >
           <FontAwesomeIcon icon={faUser} />
         </Box>
+        {/* 필터 */}
         <Box
           position={"fixed"}
           top={"300px"}
+          left={"3%"}
           height={"200px"}
           alignItems={"center"}
         >
@@ -222,7 +278,8 @@ export function MainLayout() {
             </PopoverContent>
           </Popover>
         </Box>
-        <FormControl width={"100%"} height={"50px"}>
+        {/* 검색 카테고리 */}
+        <FormControl width={"100%"} height={"50px"} mt={"40px"}>
           <Flex width={"70%"} m={"0 auto"}>
             <Button
               value={"가수"}
@@ -243,6 +300,7 @@ export function MainLayout() {
               가사
             </Button>
           </Flex>
+          {/* 검색창 */}
           <Flex
             position={"relative"}
             width={"70%"}
@@ -262,20 +320,44 @@ export function MainLayout() {
                   {key}
                 </Button>
               ))}
-            <Input
-              ml={2}
-              id="searchInput"
-              height={"45px"}
-              placeholder="검색어를 입력해주세요"
-              onChange={(e) => setSearchKeyword(e.target.value)}
-            />
-            <Button
-              height={"45px"}
-              width={"5%"}
-              onClick={() => handleSearchButton()}
+            <Accordion
+              allowMultiple
+              w={"100%"}
+              bg={"white"}
+              index={[accordionIndex]}
             >
-              검색
-            </Button>
+              <AccordionItem>
+                <AccordionButton>
+                  <Input
+                    ref={searchRef}
+                    id="searchInput"
+                    height={"45px"}
+                    placeholder={searchInfoText}
+                    onChange={(e) => {
+                      handleChangeSearchInput(e);
+                    }}
+                    onClick={() => setAccordionIndex(0)}
+                  />
+                  <Button
+                    border={"1px solid purple"}
+                    height={"45px"}
+                    width={"5%"}
+                    onClick={() => handleSearchButton()}
+                  >
+                    검색
+                  </Button>
+                </AccordionButton>
+                <AccordionPanel pb={4}>
+                  {autoComplete !== null &&
+                    autoComplete.map((song) => (
+                      <Flex key={song.id} justifyContent={"space-between"}>
+                        <Box>{song.title}</Box>
+                        <Box>{song.artistName}</Box>
+                      </Flex>
+                    ))}
+                </AccordionPanel>
+              </AccordionItem>
+            </Accordion>
           </Flex>
         </FormControl>
         <Outlet />
