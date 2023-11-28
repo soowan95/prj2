@@ -2,6 +2,7 @@ import { Box } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 import React from "react";
 import {NavBar} from "../Component/NavBar";
+import {MyPlayList} from "../Component/MyPlayList";
 
 export function HomeLayout() {
   return (

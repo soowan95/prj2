@@ -39,8 +39,8 @@ export function MyInfo() {
         <PopoverHeader>{login.nickName} 님
           <Button size="xs" ml={5}>LOGOUT</Button></PopoverHeader>
         <PopoverBody>
-          <Button onClick={()=>navigate("/myplaylist")}
-          variant="ghost">MyPlayList</Button>
+          <Button onClick={()=>navigate("/myplaylist")} variant="ghost">
+          MyPlayList</Button>
         </PopoverBody>
         <PopoverFooter>Logout Button</PopoverFooter>
       </PopoverContent>

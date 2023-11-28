@@ -7,13 +7,13 @@ import {
   CardFooter,
   CardHeader,
   Center,
-  Divider,
+  Divider, Flex,
   Heading,
   Image,
   Spacer, Text
 } from "@chakra-ui/react";
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faRecordVinyl} from "@fortawesome/free-solid-svg-icons";
 import {LoginContext} from "./LoginProvider";
@@ -22,34 +22,43 @@ import {LoginContext} from "./LoginProvider";
 export function MyPlayList() {
   const navigate = useNavigate();
   const [list, setList] = useState(null);
-  const params = new URLSearchParams();
 
   const {login} = useContext(LoginContext);
+  const location = useLocation();
 
-  params.set("listId", login.id);
 
 
   useEffect(() => {
+    const params = new URLSearchParams();
+    params.set("listId", login.id);
     axios.get("/api/myList/get?"+params)
       .then(({data}) => setList(data))
 
-  }, []);
+  }, [location]);
+
+  function handlePlaylist() {
+
+  }
 
   return (
     <>
       <Divider/>
-      {list !== null && list.map(song => (
-        <Box key={song.id}>
-          <Box>
-            {song.listId} 님의 재생목록
-          </Box>
-          <Box mt={30}>
-              <Card w="sm">
-                <CardHeader _hover={{cursor: "pointer"}}>
+      <Heading>
+        {login.id} 님의 재생목록
+      </Heading>
+      <Divider />
+      <Flex gap={5} >
+        {list !== null && list.map(song => (
+
+          <Box gap={5} key={song.id}>
+            <Box mt={30}>
+              <Card w="xs">
+                <CardHeader _hover={{cursor: "pointer"}} onClick={handlePlaylist}>
                   <Image src="https://cdn.dribbble.com/users/5783048/screenshots/13902636/skull_doodle_4x.jpg"/>
                 </CardHeader>
                 <CardBody>
-                  <Heading size="md">{song.listName}</Heading>
+                  <Heading size="md" _hover={{cursor:"pointer", textDecoration:"underline"}}
+                  onClick={handlePlaylist}>{song.listName}</Heading>
                 </CardBody>
                 <Divider color="gray"/>
                 <CardFooter>
@@ -59,10 +68,11 @@ export function MyPlayList() {
                   <Text>생성일 : </Text>
                 </CardFooter>
               </Card>
+            </Box>
           </Box>
-        </Box>
+        ))}
+      </Flex>
 
-      ))}
     </>
   )
 }
