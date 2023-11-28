@@ -30,9 +30,9 @@ import {
   faRightToBracket,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { LoginContext } from "./App";
-import PasswordRecovery from "./page/member/PasswordRecovery";
-import MemberSignup from "./page/member/MemberSignup";
+import { LoginContext } from "../../App";
+import PasswordRecovery from "./PasswordRecovery";
+import MemberSignup from "./MemberSignup";
 
 export function MemberLogin() {
   const [id, setId] = useState("");
@@ -59,6 +59,7 @@ export function MemberLogin() {
     axios
       .post("/api/member/login", { id, password })
       .then(() => {
+        navigate("/main");
         toast({
           description: "로그인 되었습니다😀 ",
           status: "info",

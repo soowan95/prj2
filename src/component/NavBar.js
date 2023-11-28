@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { Button, Flex, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { MemberLogin } from "../MemberLogin";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { LoginContext } from "../App";
+import { MemberLogin } from "../page/memberLogin/MemberLogin";
 
 export function NavBar() {
   const { fetchLogin, login, isAuthenticated } = useContext(LoginContext);

@@ -1,13 +1,8 @@
-import {MyPlayList} from "./Component/MyPlayList";
-import LogInProvider from "./Component/LoginProvider";
-import {MyInfo} from "./Component/MyInfo";
 import { HomeLayout } from "./layout/HomeLayout";
-import { MemberLogin } from "./MemberLogin";
-import { MainLayout } from "./MainLayout";
-import { SearchPage } from "./SearchPage";
-import { Top100Page } from "./Top100Page";
-import { MemberSignup } from "./page/member/MemberSignup";
-import PasswordRecovery from "./page/member/PasswordRecovery";
+import { MemberLogin } from "./page/memberLogin/MemberLogin";
+import { MainLayout } from "./layout/MainLayout";
+import { SearchPage } from "./page/main/SearchPage";
+import { Top100Page } from "./page/main/Top100Page";
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 
@@ -17,6 +12,8 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
+import { MyPlayList } from "./page/main/MyPlayList";
+import { MyInfo } from "./page/main/MyInfo";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -28,8 +25,7 @@ const routes = createBrowserRouter(
       <Route path="main" element={<MainLayout />}>
         <Route index element={<Top100Page />} />
         <Route path="search" element={<SearchPage />} />
-        <Route path="myplaylist" element={<MyPlayList />}/>
-        <Route path="myinfo" element={<MyInfo />} />
+        <Route path="myplaylist" element={<MyPlayList />} />
       </Route>
       ,
     </Route>,
@@ -56,11 +52,9 @@ function App(props) {
   console.log(login);
 
   return (
-    <LogInProvider>
-      <LoginContext.Provider value={{ login, fetchLogin, isAuthenticated }}>
-        <RouterProvider router={routes} />
-      </LoginContext.Provider>
-    </LogInProvider>
+    <LoginContext.Provider value={{ login, fetchLogin, isAuthenticated }}>
+      <RouterProvider router={routes} />
+    </LoginContext.Provider>
   );
 }
 

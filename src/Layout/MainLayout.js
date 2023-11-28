@@ -18,6 +18,7 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { createContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { MyInfo } from "../page/main/MyInfo";
 
 export function MainLayout() {
   const [top100, setTop100] = useState(null);
@@ -191,175 +192,174 @@ export function MainLayout() {
           RELIEVE
         </Button>
         {/* 사용자 정보 */}
-        <Box
-          position={"absolute"}
-          width={"20px"}
-          right={"3%"}
-          top={"50px"}
-          textAlign={"center"}
-          fontSize={"1.7rem"}
-        >
-          <FontAwesomeIcon icon={faUser} />
+        <Box position={"absolute"} width={"20px"} right={"3%"} top={"50px"}>
+          <MyInfo />
         </Box>
         {/* 필터 */}
-        <Box
-          position={"fixed"}
-          top={"300px"}
-          left={"3%"}
-          height={"200px"}
-          alignItems={"center"}
-        >
-          <Box textAlign={"center"} fontSize={"1.5rem"}>
-            FILTER
-          </Box>
-          <Popover
-            isOpen={genrePopOver.isOpen}
-            onOpen={genrePopOver.onOpen}
-            onClose={genrePopOver.onClose}
-            placement="right"
-          >
-            <PopoverTrigger>
-              <Box mt={"30px"} textAlign={"center"}>
-                Genre
-              </Box>
-            </PopoverTrigger>
-            <PopoverContent p={5}>
-              {genres !== null &&
-                genres.map((genre) => (
-                  <Flex key={genre.id} my={"5px"} alignItems={"center"}>
-                    <p style={{ width: "60%" }}>{genre.genre}</p>
-                    <Button
-                      className="genre"
-                      size={"xs"}
-                      h={"13px"}
-                      w={"13px"}
-                      borderRadius={"5px"}
-                      border={"1px solid black"}
-                      onClick={(e) => handlePlusButton(e)}
-                      value={genre.genre}
-                      name="false"
-                    >
-                      +
-                    </Button>
-                  </Flex>
-                ))}
-            </PopoverContent>
-          </Popover>
-          <Popover
-            isOpen={moodPopOver.isOpen}
-            onOpen={moodPopOver.onOpen}
-            onClose={moodPopOver.onClose}
-            placement="right"
-          >
-            <PopoverTrigger>
-              <Box mt={"30px"} textAlign={"center"}>
-                Mood
-              </Box>
-            </PopoverTrigger>
-            <PopoverContent p={5}>
-              {moods !== null &&
-                moods.map((mood) => (
-                  <Flex key={mood.id} my={"5px"} alignItems={"center"}>
-                    <p style={{ width: "60%" }}>{mood.mainMood}</p>
-                    <Button
-                      className="mood"
-                      size={"xs"}
-                      h={"13px"}
-                      w={"13px"}
-                      borderRadius={"5px"}
-                      border={"1px solid black"}
-                      onClick={(e) => handlePlusButton(e)}
-                      value={mood.mainMood}
-                    >
-                      +
-                    </Button>
-                  </Flex>
-                ))}
-            </PopoverContent>
-          </Popover>
-        </Box>
-        {/* 검색 카테고리 */}
-        <FormControl width={"100%"} height={"50px"} mt={"40px"}>
-          <Flex width={"70%"} m={"0 auto"}>
-            <Button
-              value={"가수"}
-              onClick={(e) => handleSearchCategoryButton(e)}
-            >
-              가수
-            </Button>
-            <Button
-              value={"제목"}
-              onClick={(e) => handleSearchCategoryButton(e)}
-            >
-              제목
-            </Button>
-            <Button
-              value={"가사"}
-              onClick={(e) => handleSearchCategoryButton(e)}
-            >
-              가사
-            </Button>
-          </Flex>
-          {/* 검색창 */}
-          <Flex
-            position={"relative"}
-            width={"70%"}
-            m={"0 auto"}
+        {(location.pathname === "/main" ||
+          location.pathname === "/main/search") && (
+          <Box
+            position={"fixed"}
+            top={"300px"}
+            left={"3%"}
+            height={"200px"}
             alignItems={"center"}
           >
-            {genreMoodList !== null &&
-              genreMoodList.current.map((key) => (
-                <Button
-                  mr={2}
-                  key={key}
-                  value={key}
-                  size={"sm"}
-                  fontSize={"0.8rem"}
-                  colorScheme="orange"
-                >
-                  {key}
-                </Button>
-              ))}
-            <Accordion
-              allowMultiple
-              w={"100%"}
-              bg={"white"}
-              index={[accordionIndex]}
+            <Box textAlign={"center"} fontSize={"1.5rem"}>
+              FILTER
+            </Box>
+            <Popover
+              isOpen={genrePopOver.isOpen}
+              onOpen={genrePopOver.onOpen}
+              onClose={genrePopOver.onClose}
+              placement="right"
             >
-              <AccordionItem>
-                <AccordionButton>
-                  <Input
-                    ref={searchRef}
-                    id="searchInput"
-                    height={"45px"}
-                    placeholder={searchInfoText}
-                    onChange={(e) => {
-                      handleChangeSearchInput(e);
-                    }}
-                    onClick={() => setAccordionIndex(0)}
-                  />
+              <PopoverTrigger>
+                <Box mt={"30px"} textAlign={"center"}>
+                  Genre
+                </Box>
+              </PopoverTrigger>
+              <PopoverContent p={5}>
+                {genres !== null &&
+                  genres.map((genre) => (
+                    <Flex key={genre.id} my={"5px"} alignItems={"center"}>
+                      <p style={{ width: "60%" }}>{genre.genre}</p>
+                      <Button
+                        className="genre"
+                        size={"xs"}
+                        h={"13px"}
+                        w={"13px"}
+                        borderRadius={"5px"}
+                        border={"1px solid black"}
+                        onClick={(e) => handlePlusButton(e)}
+                        value={genre.genre}
+                        name="false"
+                      >
+                        +
+                      </Button>
+                    </Flex>
+                  ))}
+              </PopoverContent>
+            </Popover>
+            <Popover
+              isOpen={moodPopOver.isOpen}
+              onOpen={moodPopOver.onOpen}
+              onClose={moodPopOver.onClose}
+              placement="right"
+            >
+              <PopoverTrigger>
+                <Box mt={"30px"} textAlign={"center"}>
+                  Mood
+                </Box>
+              </PopoverTrigger>
+              <PopoverContent p={5}>
+                {moods !== null &&
+                  moods.map((mood) => (
+                    <Flex key={mood.id} my={"5px"} alignItems={"center"}>
+                      <p style={{ width: "60%" }}>{mood.mainMood}</p>
+                      <Button
+                        className="mood"
+                        size={"xs"}
+                        h={"13px"}
+                        w={"13px"}
+                        borderRadius={"5px"}
+                        border={"1px solid black"}
+                        onClick={(e) => handlePlusButton(e)}
+                        value={mood.mainMood}
+                      >
+                        +
+                      </Button>
+                    </Flex>
+                  ))}
+              </PopoverContent>
+            </Popover>
+          </Box>
+        )}
+        {/* 검색 카테고리 */}
+        {(location.pathname === "/main" ||
+          location.pathname === "/main/search") && (
+          <FormControl width={"100%"} height={"50px"} mt={"40px"}>
+            <Flex width={"70%"} m={"0 auto"}>
+              <Button
+                value={"가수"}
+                onClick={(e) => handleSearchCategoryButton(e)}
+              >
+                가수
+              </Button>
+              <Button
+                value={"제목"}
+                onClick={(e) => handleSearchCategoryButton(e)}
+              >
+                제목
+              </Button>
+              <Button
+                value={"가사"}
+                onClick={(e) => handleSearchCategoryButton(e)}
+              >
+                가사
+              </Button>
+            </Flex>
+            {/* 검색창 */}
+            <Flex
+              position={"relative"}
+              width={"70%"}
+              m={"0 auto"}
+              alignItems={"center"}
+            >
+              {genreMoodList !== null &&
+                genreMoodList.current.map((key) => (
                   <Button
-                    border={"1px solid purple"}
-                    height={"45px"}
-                    width={"5%"}
-                    onClick={() => handleSearchButton()}
+                    mr={2}
+                    key={key}
+                    value={key}
+                    size={"sm"}
+                    fontSize={"0.8rem"}
+                    colorScheme="orange"
                   >
-                    검색
+                    {key}
                   </Button>
-                </AccordionButton>
-                <AccordionPanel pb={4}>
-                  {autoComplete !== null &&
-                    autoComplete.map((song) => (
-                      <Flex key={song.id} justifyContent={"space-between"}>
-                        <Box>{song.title}</Box>
-                        <Box>{song.artistName}</Box>
-                      </Flex>
-                    ))}
-                </AccordionPanel>
-              </AccordionItem>
-            </Accordion>
-          </Flex>
-        </FormControl>
+                ))}
+              <Accordion
+                allowMultiple
+                w={"100%"}
+                bg={"white"}
+                index={[accordionIndex]}
+              >
+                <AccordionItem>
+                  <AccordionButton>
+                    <Input
+                      ref={searchRef}
+                      id="searchInput"
+                      height={"45px"}
+                      placeholder={searchInfoText}
+                      onChange={(e) => {
+                        handleChangeSearchInput(e);
+                      }}
+                      onClick={() => setAccordionIndex(0)}
+                    />
+                    <Button
+                      border={"1px solid purple"}
+                      height={"45px"}
+                      width={"5%"}
+                      onClick={() => handleSearchButton()}
+                    >
+                      검색
+                    </Button>
+                  </AccordionButton>
+                  <AccordionPanel pb={4}>
+                    {autoComplete !== null &&
+                      autoComplete.map((song) => (
+                        <Flex key={song.id} justifyContent={"space-between"}>
+                          <Box>{song.title}</Box>
+                          <Box>{song.artistName}</Box>
+                        </Flex>
+                      ))}
+                  </AccordionPanel>
+                </AccordionItem>
+              </Accordion>
+            </Flex>
+          </FormControl>
+        )}
         <Outlet />
       </Box>
     </SongContext.Provider>
