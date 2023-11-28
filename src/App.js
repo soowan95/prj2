@@ -1,3 +1,6 @@
+import {MyPlayList} from "./Component/MyPlayList";
+import LogInProvider from "./Component/LoginProvider";
+import {MyInfo} from "./Component/MyInfo";
 import { HomeLayout } from "./layout/HomeLayout";
 import { MemberLogin } from "./MemberLogin";
 import { MainLayout } from "./MainLayout";
@@ -25,6 +28,8 @@ const routes = createBrowserRouter(
       <Route path="main" element={<MainLayout />}>
         <Route index element={<Top100Page />} />
         <Route path="search" element={<SearchPage />} />
+        <Route path="myplaylist" element={<MyPlayList />}/>
+        <Route path="myinfo" element={<MyInfo />} />
       </Route>
       ,
     </Route>,
@@ -51,9 +56,11 @@ function App(props) {
   console.log(login);
 
   return (
-    <LoginContext.Provider value={{ login, fetchLogin, isAuthenticated }}>
-      <RouterProvider router={routes} />
-    </LoginContext.Provider>
+    <LogInProvider>
+      <LoginContext.Provider value={{ login, fetchLogin, isAuthenticated }}>
+        <RouterProvider router={routes} />
+      </LoginContext.Provider>
+    </LogInProvider>
   );
 }
 
