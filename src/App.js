@@ -3,14 +3,18 @@ import {
   createRoutesFromElements,
   Route,
   RouterProvider,
-  BrowserRouter as Router,
-  Outlet,
 } from "react-router-dom";
-import React from "react";
-import { MemberSignup } from "./page/member/MemberSignup";
+import { MainLayout } from "./MainLayout";
+import { SearchPage } from "./SearchPage";
+import { Top100Page } from "./Top100Page";
 
 const routes = createBrowserRouter(
-  createRoutesFromElements(<Route path="/" element={<MemberSignup />} />),
+  createRoutesFromElements(
+    <Route path="/main" element={<MainLayout />}>
+      <Route index element={<Top100Page />} />
+      <Route path="search" element={<SearchPage />} />
+    </Route>,
+  ),
 );
 
 function App() {
