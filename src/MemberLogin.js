@@ -31,16 +31,28 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { LoginContext } from "./App";
+import PasswordRecovery from "./page/member/PasswordRecovery";
+import MemberSignup from "./page/member/MemberSignup";
 
 export function MemberLogin() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+
   const { fetchLogin, isAuthenticated } = useContext(LoginContext);
 
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const pr = useDisclosure();
+  const ms = useDisclosure();
 
   const navigate = useNavigate();
   const toast = useToast();
+
+  let securityQuestionList = [
+    "가장 좋아하는 색은 무엇입니까?",
+    "가장 좋아하는 영화 제목은 무엇입니까?",
+    "처음으로 가보았던 해변의 이름은 무엇입니까?",
+    "가장 처음 가본 콘서트는 어떤 가수의 콘서트였습니까?",
+  ];
 
   // handleSubmit
   function handleLogin() {
@@ -137,15 +149,38 @@ export function MemberLogin() {
             >
               로그인
             </Button>
-            <Button size={"xs"} mr={1} onClick={handleSearchPassword}>
+            <Button
+              size={"xs"}
+              mr={1}
+              onClick={() => {
+                pr.onOpen();
+                handleSearchPassword();
+              }}
+            >
               비밀번호찾기
             </Button>
-            <Button size={"xs"} onClick={handleSingUp}>
+            <Button
+              size={"xs"}
+              onClick={() => {
+                ms.onOpen();
+                handleSingUp();
+              }}
+            >
               회원가입
             </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
+      <PasswordRecovery
+        isOpen={pr.isOpen}
+        onClose={pr.onClose}
+        securityQuestions={securityQuestionList}
+      />
+      <MemberSignup
+        securityQuestionList={securityQuestionList}
+        isOpen={ms.isOpen}
+        onClose={ms.onClose}
+      />
     </Center>
   );
 }

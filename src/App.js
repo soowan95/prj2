@@ -8,18 +8,25 @@ import PasswordRecovery from "./page/member/PasswordRecovery";
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  RouterProvider,
+} from "react-router-dom";
+
 const routes = createBrowserRouter(
   createRoutesFromElements(
-    
-    
-    <Route path="/" element={<HomeLayout />}>
-      <Route path="login" element={<MemberLogin />} />
-      <Route path="membersingup" element={<MemberSignup />} />
-      <Route path="prc" element={<PasswordRecovery />} />
+    <Route>
+      <Route path="/" element={<HomeLayout />}>
+        <Route path="login" element={<MemberLogin />} />
+      </Route>
+      ,
       <Route path="main" element={<MainLayout />}>
         <Route index element={<Top100Page />} />
         <Route path="search" element={<SearchPage />} />
-      </Route>,
+      </Route>
+      ,
     </Route>,
   ),
 );

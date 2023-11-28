@@ -38,7 +38,7 @@ export function Top100Page() {
           <Box
             key={song.id}
             m={"3px auto"}
-            width={"60%"}
+            width={"70%"}
             border={"1px solid black"}
           >
             <Flex
@@ -62,6 +62,7 @@ export function Top100Page() {
               song.id === thisId.current &&
               similar.map((si) => (
                 <Flex
+                  key={si.id}
                   justifyContent={"space-between"}
                   alignItems={"center"}
                   width={"90%"}

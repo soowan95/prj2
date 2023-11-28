@@ -195,7 +195,7 @@ export function MainLayout() {
           position={"absolute"}
           width={"20px"}
           right={"3%"}
-          top={"0%"}
+          top={"50px"}
           textAlign={"center"}
           fontSize={"1.7rem"}
         >

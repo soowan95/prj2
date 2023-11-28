@@ -20,21 +20,14 @@ import { useState } from "react";
 import axios from "axios";
 import PasswordRecovery from "./PasswordRecovery";
 
-export function MemberSignup() {
+export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
   // securityQuestionList를 함수 외부에서 선언
-  let securityQuestionList = [
-    "가장 좋아하는 색은 무엇입니까?",
-    "가장 좋아하는 영화 제목은 무엇입니까?",
-    "처음으로 가보았던 해변의 이름은 무엇입니까?",
-    "가장 처음 가본 콘서트는 어떤 가수의 콘서트였습니까?",
-  ];
 
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [email, setEmail] = useState("");
   const [nickName, setNickName] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [selectedSecurityQuestion, setSecurityQuestion] = useState(
     securityQuestionList[0],
@@ -82,7 +75,7 @@ export function MemberSignup() {
         window.location.reload(0);
 
         // 가입이 완료되면 모달을 닫음
-        setIsModalOpen(false);
+        // setIsModalOpen(false);
       })
       .catch(() => {
         toast({
@@ -125,100 +118,91 @@ export function MemberSignup() {
   }
 
   return (
-    <Box>
-      <Button onClick={() => setIsModalOpen(true)}>회원 가입</Button>
-
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>회원 가입</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormControl mb={5} isInvalid={!idAvailable}>
-              <FormLabel>아이디</FormLabel>
-              <Flex>
-                <Input
-                  value={id}
-                  onChange={(e) => {
-                    setId(e.target.value);
-                    setIdAvailable(false);
-                  }}
-                />
-                <Button onClick={handleIdCheck}>중복 확인</Button>
-              </Flex>
-              <FormErrorMessage>아이디 중복체크를 해주세요.</FormErrorMessage>
-            </FormControl>
-            <FormControl mb={5}>
-              <FormLabel>비밀번호</FormLabel>
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>회원 가입</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <FormControl mb={5} isInvalid={!idAvailable}>
+            <FormLabel>아이디</FormLabel>
+            <Flex>
               <Input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={id}
+                onChange={(e) => {
+                  setId(e.target.value);
+                  setIdAvailable(false);
+                }}
               />
-            </FormControl>
-            <FormControl mb={5} isInvalid={password !== passwordCheck}>
-              <FormLabel>비밀번호 확인</FormLabel>
-              <Input
-                type="password"
-                value={passwordCheck}
-                onChange={(e) => setPasswordCheck(e.target.value)}
-              />
-              <FormErrorMessage>암호를 확인해주세요.</FormErrorMessage>
-            </FormControl>
-            <FormControl mb={5}>
-              <FormLabel>닉네임</FormLabel>
-              <Input
-                type="text"
-                value={nickName}
-                onChange={(e) => setNickName(e.target.value)}
-              />
-            </FormControl>
-            <FormControl mb={5}>
-              <FormLabel>이메일</FormLabel>
-              <Input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </FormControl>
-            <FormControl mb={5}>
-              <FormLabel>보안 질문</FormLabel>
-              <Select
-                value={selectedSecurityQuestion}
-                onChange={(e) => setSecurityQuestion(e.target.value)}
-              >
-                {securityQuestionList.map((question, index) => (
-                  <option key={index} value={question}>
-                    {question}
-                  </option>
-                ))}
-              </Select>
-              <Input
-                type="text"
-                value={securityAnswer}
-                onChange={(e) => setSecurityAnswer(e.target.value)}
-              />
-            </FormControl>
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              isDisabled={!submitAvailable}
-              onClick={handelSubmit}
-              colorScheme="purple"
+              <Button onClick={handleIdCheck}>중복 확인</Button>
+            </Flex>
+            <FormErrorMessage>아이디 중복체크를 해주세요.</FormErrorMessage>
+          </FormControl>
+          <FormControl mb={5}>
+            <FormLabel>비밀번호</FormLabel>
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </FormControl>
+          <FormControl mb={5} isInvalid={password !== passwordCheck}>
+            <FormLabel>비밀번호 확인</FormLabel>
+            <Input
+              type="password"
+              value={passwordCheck}
+              onChange={(e) => setPasswordCheck(e.target.value)}
+            />
+            <FormErrorMessage>암호를 확인해주세요.</FormErrorMessage>
+          </FormControl>
+          <FormControl mb={5}>
+            <FormLabel>닉네임</FormLabel>
+            <Input
+              type="text"
+              value={nickName}
+              onChange={(e) => setNickName(e.target.value)}
+            />
+          </FormControl>
+          <FormControl mb={5}>
+            <FormLabel>이메일</FormLabel>
+            <Input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </FormControl>
+          <FormControl mb={5}>
+            <FormLabel>보안 질문</FormLabel>
+            <Select
+              value={selectedSecurityQuestion}
+              onChange={(e) => setSecurityQuestion(e.target.value)}
             >
-              가입
-            </Button>
+              {securityQuestionList.map((question, index) => (
+                <option key={index} value={question}>
+                  {question}
+                </option>
+              ))}
+            </Select>
+            <Input
+              type="text"
+              value={securityAnswer}
+              onChange={(e) => setSecurityAnswer(e.target.value)}
+            />
+          </FormControl>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            isDisabled={!submitAvailable}
+            onClick={handelSubmit}
+            colorScheme="purple"
+          >
+            가입
+          </Button>
 
-            <Button onClick={handleForgotPassword}>비밀번호 찾기</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-      <PasswordRecovery
-        isOpen={isPasswordRecoveryOpen}
-        onClose={() => setIsPasswordRecoveryOpen(false)}
-        securityQuestions={securityQuestionList}
-      />
-    </Box>
+          <Button onClick={handleForgotPassword}>비밀번호 찾기</Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   );
 }
 

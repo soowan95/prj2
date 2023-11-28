@@ -29,7 +29,7 @@ export function NavBar() {
 
   return (
     <Flex>
-      <Button colorScheme="purple" mr={5} onClick={() => navigate("/")}>
+      <Button colorScheme="purple" mr={5} onClick={() => navigate("/main")}>
         MAIN
       </Button>
       <MemberLogin />
