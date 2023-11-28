@@ -1,6 +1,6 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { useContext, useRef, useState } from "react";
-import { SongContext } from "./MainLayout";
+import { SongContext } from "../../layout/MainLayout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClone } from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";

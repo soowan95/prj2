@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { SongContext } from "./MainLayout";
+import { SongContext } from "../../layout/MainLayout";
 import { Box, Flex } from "@chakra-ui/react";
 
 export function SearchPage() {
