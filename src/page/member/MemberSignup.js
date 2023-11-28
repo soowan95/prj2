@@ -104,7 +104,6 @@ export function MemberSignup() {
       .get("/api/member/check?" + searchParam.toString())
       .then(() => {
         setIdAvailable(false);
-        // setIdCheckClicked(true);
         toast({
           description: "이미 사용중인 ID입니다.",
           status: "warning",
@@ -113,7 +112,6 @@ export function MemberSignup() {
       .catch((error) => {
         if (error.response.status === 404) {
           setIdAvailable(true);
-          // setIdCheckClicked(true);
           toast({
             description: "사용 가능한 ID입니다.",
             status: "success",
@@ -144,7 +142,6 @@ export function MemberSignup() {
                   onChange={(e) => {
                     setId(e.target.value);
                     setIdAvailable(false);
-                    // setIdCheckClicked(false); // 아이디가 변경되면 중복 확인 버튼이 클릭되지 않은 것으로 초기화
                   }}
                 />
                 <Button onClick={handleIdCheck}>중복 확인</Button>
