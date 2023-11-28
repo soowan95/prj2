@@ -3,9 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@chakra-ui/react";
 import { LoginContext } from "./LogInProvider";
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function NavBar() {
   const { isAuthenticated } = useContext(LoginContext);
+
+  const navigate = useNavigate();
 
   return (
     <>

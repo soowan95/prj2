@@ -12,7 +12,7 @@ export function SearchPage() {
           <Flex
             key={song.id}
             m={"3px auto"}
-            width={"60%"}
+            width={"70%"}
             justifyContent={"space-between"}
             border={"1px solid black"}
           >
