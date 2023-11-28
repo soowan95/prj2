@@ -21,9 +21,9 @@ export function MyInfo() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    axios.get("/api/member/logininfo").then(({ data }) => setLogin(data));
-  }, []);
+  // useEffect(() => {
+  //   axios.get("/api/member/logininfo").then(({ data }) => setLogin(data));
+  // }, []);
   return (
     <Popover>
       <PopoverTrigger>

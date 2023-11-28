@@ -78,17 +78,6 @@ export function MemberLogin() {
       });
   }
 
-  function handleSearchPassword() {
-    axios
-      .post("/api/member/update-password", {})
-      .then(console.log("일치"))
-      .finally(console.log("불일치"));
-  }
-
-  function handleSingUp() {
-    axios.post("/api/member/signup");
-  }
-
   return (
     <Center>
       {isAuthenticated() || (
@@ -155,7 +144,6 @@ export function MemberLogin() {
               mr={1}
               onClick={() => {
                 pr.onOpen();
-                handleSearchPassword();
               }}
             >
               비밀번호찾기
@@ -164,7 +152,6 @@ export function MemberLogin() {
               size={"xs"}
               onClick={() => {
                 ms.onOpen();
-                handleSingUp();
               }}
             >
               회원가입
