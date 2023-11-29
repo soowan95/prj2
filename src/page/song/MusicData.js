@@ -21,12 +21,11 @@ export const MUSICS = [
   },
   {
     id: 2,
-    name: "Son of Man",
-    artist: "Phil Collins",
-    spotifyLink: "https://open.spotify.com/track/1LhFadk0aWYczltTjIbFlI",
-    image: "https://i.scdn.co/image/ab67616d0000b273ba44f1ff74c2c7c2da6e4c3f",
-    lyrics: "It's you\nwho'll reach the peak",
-    youtubeLink:
-      "https://www.youtube.com/watch?v=2sBtUBR-cYA&list=PLMOnBPx_op0Um_NXofYyx26WGAG6ApwZI&index=3&ab_channel=PhilCollins-Topic",
+    name: "Gee",
+    artist: "소녀시대",
+    spotifyLink: "https://open.spotify.com/track/4f6yvqLxN5t9xVEn5tP7eF",
+    image: "https://i.scdn.co/image/ab67616d0000b273eac54267c721463f59009af1",
+    lyrics: "Gee gee gee gee baby baby\nGee gee gee gee baby baby",
+    youtubeLink: "https://www.youtube.com/watch?v=U7mPqycQ0tQ",
   },
 ];

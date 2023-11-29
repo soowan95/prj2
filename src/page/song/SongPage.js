@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
   FormControl,
@@ -11,7 +11,7 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { SongContext } from "../../layout/MainLayout";
-import { useParams } from "react-router-dom";
+import { Form, useParams } from "react-router-dom";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -29,6 +29,17 @@ export function SongPage() {
   // 댓글 관련 state
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]); // 댓글 목록
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/api/song/${id}`);
+      } catch (error) {
+        console.error("에러 발생 : ", error);
+      }
+    };
+    fetchData();
+  }, [id]);
 
   const handleCommentChange = (e) => {
     setComment(e.target.value);
@@ -54,7 +65,7 @@ export function SongPage() {
           <Image
             src={selectedSong.image}
             alt={`${selectedSong.artistName} - ${selectedSong.title}`}
-            boxSize="200px"
+            boxSize="400px"
             objectFit="cover"
           />
         </Box>
@@ -62,26 +73,40 @@ export function SongPage() {
         {/* 노래 정보 입력 폼 */}
         <Box>
           <Heading fontSize="30px">{selectedSong.title}</Heading>
-          <FormControl mt={4}>
-            <FormLabel>가수</FormLabel>
-            <Input value={selectedSong.artistName} isReadOnly />
-          </FormControl>
-          <FormControl mt={4}>
-            <FormLabel>앨범명</FormLabel>
-            <Input value={selectedSong.album} isReadOnly />
-          </FormControl>
-          <FormControl mt={4}>
-            <FormLabel>Spotify 링크</FormLabel>
-            <Input value={selectedSong.spotifyLink} isReadOnly />
-          </FormControl>
-          <FormControl mt={4}>
-            <FormLabel>Youtube 링크</FormLabel>
-            <Input value={selectedSong.youtubeLink} isReadOnly />
-          </FormControl>
-          <FormControl mt={4}>
+          <Box mt={4}>
+            <Flex>
+              <FormLabel>가수</FormLabel>
+              <div>{selectedSong?.artistName || ""}</div>
+            </Flex>
+          </Box>
+          <Box mt={4}>
+            <Flex>
+              <FormLabel>앨범명</FormLabel>
+              <div>{selectedSong.album} </div>
+            </Flex>
+          </Box>
+          <Box mt={4}>
+            <Flex>
+              <FormLabel>Spotify</FormLabel>
+              <div>{selectedSong.spotifyLink} </div>
+            </Flex>
+          </Box>
+          <Box mt={4}>
+            <Flex>
+              <FormLabel>Youtube</FormLabel>
+              <div>{selectedSong.youtubeLink}</div>
+            </Flex>
+          </Box>
+          <Box mt={4}>
+            <Flex>
+              <FormLabel>mood</FormLabel>
+              <div>{selectedSong.mood}</div>
+            </Flex>
+          </Box>
+          <Box mt={4}>
             <FormLabel>가사</FormLabel>
             <Textarea value={selectedSong.lyrics} isReadOnly />
-          </FormControl>
+          </Box>
         </Box>
       </Flex>
 
