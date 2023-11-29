@@ -16,7 +16,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "./LoginProvider";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
