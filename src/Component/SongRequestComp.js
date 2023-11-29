@@ -13,10 +13,12 @@ import {
   ModalOverlay,
   Tooltip,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { useContext, useRef } from "react";
 import { LoginContext } from "./LoginProvider";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function SongRequestComp() {
   const requestTitle = useRef("");
@@ -26,7 +28,11 @@ function SongRequestComp() {
 
   const { login, isAuthenticated } = useContext(LoginContext);
 
-  // 없는 곡 요청 보내기
+  const toast = useToast();
+
+  const navigate = useNavigate();
+
+  // 없는 곡 요청 보내기, 빈칸은 요청 안됨
   function handleSongRequestButton() {
     axios
       .post("/api/song/request", {
@@ -34,7 +40,26 @@ function SongRequestComp() {
         artist: requestArtist.current,
         member: login.id,
       })
-      .then(() => console.log("ok"));
+      .then(() => {
+        navigate("/main");
+        toast({
+          description: "요청 됐습니다.",
+          status: "success",
+        });
+      })
+      .catch((e) => {
+        if (e.response.status === 400) {
+          toast({
+            description: "제목 또는 가수를 입력해주세요.",
+            status: "error",
+          });
+        } else {
+          toast({
+            description: "로그인 후 요청 보내주세요.",
+            status: "warning",
+          });
+        }
+      });
   }
 
   return (
