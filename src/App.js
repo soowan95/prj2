@@ -1,7 +1,7 @@
 import { HomeLayout } from "./layout/HomeLayout";
 import { MemberLogin } from "./page/memberLogin/MemberLogin";
 import { MainLayout } from "./layout/MainLayout";
-import { SearchPage } from "./page/main/SearchPage";
+import { SearchPage } from "./page/song/SearchPage";
 import { Top100Page } from "./page/main/Top100Page";
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
@@ -14,6 +14,7 @@ import {
 } from "react-router-dom";
 import { MyPlayList } from "./page/main/MyPlayList";
 import { MyInfo } from "./page/main/MyInfo";
+import songPage, { SongPage } from "./page/song/SongPage";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -26,6 +27,7 @@ const routes = createBrowserRouter(
         <Route index element={<Top100Page />} />
         <Route path="search" element={<SearchPage />} />
         <Route path="myplaylist" element={<MyPlayList />} />
+        <Route path="song/:id" element={<SongPage />} />
       </Route>
       ,
     </Route>,
