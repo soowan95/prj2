@@ -14,6 +14,9 @@ import { SongContext } from "../../layout/MainLayout";
 import { Form, useParams } from "react-router-dom";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Counter from "./ViewCounter";
+import { faComputerMouse } from "@fortawesome/free-solid-svg-icons";
+import { ViewIcon } from "@chakra-ui/icons";
 
 export function SongPage() {
   const { searched } = useContext(SongContext);
@@ -60,6 +63,17 @@ export function SongPage() {
   return (
     <Box mt={"100px"}>
       <Flex>
+        <Heading fontSize={"30px"}>
+          {/* 어떤 아이콘이 더 나은가..?!*/}
+          <FontAwesomeIcon
+            icon={faComputerMouse}
+            style={{ color: "#e3c7ff" }}
+          />
+          <ViewIcon color={"#e3c7ff"} />
+          <Counter />
+        </Heading>
+      </Flex>
+      <Flex>
         {/* 노래 사진 */}
         <Box mr={8}>
           <Image
@@ -72,7 +86,9 @@ export function SongPage() {
 
         {/* 노래 정보 입력 폼 */}
         <Box>
-          <Heading fontSize="30px">{selectedSong.title}</Heading>
+          <Heading fontSize="30px" color="purple">
+            {selectedSong.title}
+          </Heading>
           <Box mt={4}>
             <Flex>
               <FormLabel>가수</FormLabel>
