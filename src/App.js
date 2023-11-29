@@ -14,6 +14,7 @@ import {
 } from "react-router-dom";
 import { MyPlayList } from "./page/main/MyPlayList";
 import { MyInfo } from "./page/main/MyInfo";
+import SongRequest from "./page/main/SongRequest";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -26,6 +27,7 @@ const routes = createBrowserRouter(
         <Route index element={<Top100Page />} />
         <Route path="search" element={<SearchPage />} />
         <Route path="myplaylist" element={<MyPlayList />} />
+        <Route path="requestlist" element={<SongRequest />} />
       </Route>
       ,
     </Route>,

@@ -15,7 +15,7 @@ export function SongRequest() {
 
   function handleSubmit() {
     axios
-      .post("/api/song/add", {
+      .get("/api/song/requestlist", {
         songTitle,
         artist,
         requestor,
@@ -46,7 +46,7 @@ export function SongRequest() {
           onChange={(e) => setRequestor(e.target.value)}
         />
       </FormControl>
-      <Button onClick={handleSubmit}>저장</Button>
+      <Button onClick={handleSubmit}>정보입력</Button>
     </Center>
   );
 }

@@ -54,7 +54,6 @@ export function MemberLogin() {
     "가장 처음 가본 콘서트는 어떤 가수의 콘서트였습니까?",
   ];
 
-  // handleSubmit
   function handleLogin() {
     axios
       .post("/api/member/login", { id, password })
