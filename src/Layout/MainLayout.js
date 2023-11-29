@@ -7,30 +7,19 @@ import {
   Button,
   Flex,
   FormControl,
-  FormLabel,
   Input,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Popover,
   PopoverContent,
   PopoverTrigger,
   useDisclosure,
 } from "@chakra-ui/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { MyInfo } from "../page/main/MyInfo";
-import { LoginContext } from "../component/LoginProvider";
+import SongRequestComp from "../component/SongRequestComp";
 
 export function MainLayout() {
-  const { login } = useContext(LoginContext);
-
   const [top100, setTop100] = useState(null);
   const [searched, setSearched] = useState(null);
   const [moods, setMoods] = useState(null);
@@ -44,12 +33,9 @@ export function MainLayout() {
   const moodInclude = useRef(",");
   const genreMoodList = useRef([]);
   const searchRef = useRef(null);
-  const requestTitle = useRef("");
-  const requestArtist = useRef("");
 
   const moodPopOver = useDisclosure();
   const genrePopOver = useDisclosure();
-  const songRequestModal = useDisclosure();
 
   const params = new URLSearchParams();
 
@@ -181,17 +167,6 @@ export function MainLayout() {
     setSearchKeyword(e.target.value);
     params.set("sc", searchCategory);
     params.set("sk", searchKeyword);
-  }
-
-  // 없는 곡 요청 보내기
-  function handleSongRequestButton() {
-    axios
-      .post("/api/song/request", {
-        title: requestTitle.current,
-        artist: requestArtist.current,
-        member: login.id,
-      })
-      .then(() => console.log("ok"));
   }
 
   return (
@@ -380,42 +355,7 @@ export function MainLayout() {
                         </Flex>
                       ))}
                     {autoComplete !== null && autoComplete.length === 0 && (
-                      <Flex justifyContent={"center"} alignItems={"center"}>
-                        <Box>일치하는 정보가 없습니다. 요청을 원하시면</Box>
-                        <Button onClick={songRequestModal.onOpen}>여기</Button>
-                        <Box>를 클릭해주세요.</Box>
-                        <Modal
-                          isOpen={songRequestModal.isOpen}
-                          onClose={songRequestModal.onClose}
-                        >
-                          <ModalOverlay />
-                          <ModalContent>
-                            <ModalHeader>요청 정보를 입력해주세요.</ModalHeader>
-                            <ModalBody>
-                              <FormControl>
-                                <FormLabel>제목</FormLabel>
-                                <Input
-                                  onChange={(e) =>
-                                    (requestTitle.current = e.target.value)
-                                  }
-                                />
-                                <FormLabel mt={5}>가수</FormLabel>
-                                <Input
-                                  onChange={(e) =>
-                                    (requestArtist.current = e.target.value)
-                                  }
-                                />
-                              </FormControl>
-                            </ModalBody>
-                            <ModalFooter>
-                              <Button onClick={handleSongRequestButton}>
-                                요청
-                              </Button>
-                              <Button>닫기</Button>
-                            </ModalFooter>
-                          </ModalContent>
-                        </Modal>
-                      </Flex>
+                      <SongRequestComp />
                     )}
                   </AccordionPanel>
                 </AccordionItem>
