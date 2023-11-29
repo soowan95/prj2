@@ -3,6 +3,7 @@ import {
   Button,
   Flex,
   FormControl,
+  FormHelperText,
   FormLabel,
   Input,
   Modal,
@@ -15,14 +16,15 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { LoginContext } from "./LoginProvider";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function SongRequestComp() {
-  const requestTitle = useRef("");
-  const requestArtist = useRef("");
+  const [requestTitle, setRequestTitle] = useState("");
+  const [requestArtist, setRequestArtist] = useState("");
+  const [isExist, setIsExist] = useState(false);
 
   const songRequestModal = useDisclosure();
 
@@ -32,12 +34,21 @@ function SongRequestComp() {
 
   const navigate = useNavigate();
 
+  // 요청하려는 곡이 db에 있는지 판단
+  useEffect(() => {
+    axios
+      .get(
+        "/api/song/isExist?title=" + requestTitle + "&artist=" + requestArtist,
+      )
+      .then(({ data }) => setIsExist(data));
+  }, [requestTitle, requestArtist]);
+
   // 없는 곡 요청 보내기, 빈칸은 요청 안됨
   function handleSongRequestButton() {
     axios
       .post("/api/song/request", {
-        title: requestTitle.current,
-        artist: requestArtist.current,
+        title: requestTitle,
+        artist: requestArtist,
         member: login.id,
       })
       .then(() => {
@@ -85,17 +96,41 @@ function SongRequestComp() {
             <FormControl>
               <FormLabel>제목</FormLabel>
               <Input
-                onChange={(e) => (requestTitle.current = e.target.value)}
+                onChange={(e) => {
+                  setRequestTitle(e.target.value);
+                }}
               />
               <FormLabel mt={5}>가수</FormLabel>
               <Input
-                onChange={(e) => (requestArtist.current = e.target.value)}
+                onChange={(e) => {
+                  setRequestArtist(e.target.value);
+                }}
               />
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <Button onClick={handleSongRequestButton}>요청</Button>
-            <Button onClick={songRequestModal.onClose}>닫기</Button>
+            <FormControl position={"relative"}>
+              {isExist && (
+                <FormHelperText textAlign={"center"} color={"red"}>
+                  일치하는 곡 정보가 있습니다.
+                </FormHelperText>
+              )}
+              <Button
+                position={"relative"}
+                left={"70%"}
+                onClick={handleSongRequestButton}
+                isDisabled={isExist}
+              >
+                요청
+              </Button>
+              <Button
+                position={"relative"}
+                left={"70%"}
+                onClick={songRequestModal.onClose}
+              >
+                닫기
+              </Button>
+            </FormControl>
           </ModalFooter>
         </ModalContent>
       </Modal>
