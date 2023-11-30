@@ -12,6 +12,8 @@ import {
 } from "react-router-dom";
 import { MyPlayList } from "./page/main/MyPlayList";
 import { MyInfo } from "./page/main/MyInfo";
+import LoginProvider from "./component/LoginProvider";
+import SongPage from "./page/song/SongPage";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
