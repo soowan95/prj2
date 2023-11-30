@@ -14,7 +14,7 @@ import { SongContext } from "../../layout/MainLayout";
 import { Form, useParams } from "react-router-dom";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Counter from "./ViewCounter";
+import Counter from "./Counter";
 import { faComputerMouse } from "@fortawesome/free-solid-svg-icons";
 import { ViewIcon } from "@chakra-ui/icons";
 
@@ -70,7 +70,7 @@ export function SongPage() {
             style={{ color: "#e3c7ff" }}
           />
           <ViewIcon color={"#e3c7ff"} />
-          <Counter />
+          <Counter songId={selectedSong.id} />
         </Heading>
       </Flex>
       <Flex>
