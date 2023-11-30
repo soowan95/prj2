@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -43,12 +43,18 @@ export function SongRequest() {
 
   const [genre, setGenre] = useState(null);
   const [genreList, setGenreList] = useState(null);
+  const [mood, setMood] = useState(null);
+  const [moodList, setMoodList] = useState(null);
+
+  const artistName = useRef("");
+  const songTitle = useRef("");
 
   useEffect(() => {
     axios.get("/api/song/requestList").then((response) => {
       setRequestList(response.data);
-      setGenreList(response.data);
     });
+    axios.get("/api/song/genre").then(({ data }) => setGenreList(data));
+    axios.get("/api/song/mood").then(({ data }) => setMoodList(data));
   }, []);
 
   return (
@@ -76,7 +82,15 @@ export function SongRequest() {
                   <Td>{request.artist}</Td>
                   <Td>{request.title}</Td>
                   <Td>
-                    <Button onClick={onOpen} colorScheme="purple" size={"sm"}>
+                    <Button
+                      onClick={() => {
+                        artistName.current = request.artist;
+                        songTitle.current = request.title;
+                        onOpen();
+                      }}
+                      colorScheme="purple"
+                      size={"sm"}
+                    >
                       입력
                     </Button>
                   </Td>
@@ -94,34 +108,34 @@ export function SongRequest() {
           <ModalCloseButton />
           <ModalBody mt={10}>
             <FormControl mb={5}>
-              <FormLabel fontWeight={"bold"}>요청ID</FormLabel>
-              <Input
-                value={memberId}
-                onChange={(e) => setMemberId(e.target.value)}
-              />
-            </FormControl>
-            <FormControl mb={5}>
               <FormLabel fontWeight={"bold"}>가수</FormLabel>
               <Input
-                value={artist}
+                defaultValue={artistName.current}
                 onChange={(e) => setArtist(e.target.value)}
               />
             </FormControl>
             <FormControl mb={5}>
               <FormLabel fontWeight={"bold"}>노래 제목</FormLabel>
-              <Input value={title} onChange={(e) => setTitle(e.target.value)} />
+              <Input
+                defaultValue={songTitle.current}
+                onChange={(e) => setTitle(e.target.value)}
+              />
             </FormControl>
             <FormControl fontWeight={"bold"}>
               장르　　　　　　　　　　　무드
               <Flex>
-                <Select onChange={(e) => setGenre(e.target.value)} mr={3}>
-                  {genreList.map((genreList) => (
-                    <option>{genreList}</option>
-                  ))}
+                <Select mul onChange={(e) => setGenre(e.target.value)} mr={3}>
+                  {genreList !== null &&
+                    genreList.map((genreList) => (
+                      <option>{genreList.genre}</option>
+                    ))}
                 </Select>
 
-                <Select>
-                  <option></option>
+                <Select onChange={(e) => setMood(e.target.value)}>
+                  {moodList !== null &&
+                    moodList.map((moodList) => (
+                      <option>{moodList.mainMood}</option>
+                    ))}
                 </Select>
               </Flex>
             </FormControl>
@@ -130,13 +144,10 @@ export function SongRequest() {
 
           <ModalFooter>
             <Box fontWeight={"bold"} fontSize={"large"}>
-              입력 하시겠습니까? 😉　　　　　　
+              입력 하시겠습니까? 😉　　　　　　　　　
             </Box>
             <Button colorScheme="purple" mr={3}>
               <FontAwesomeIcon icon={faFloppyDisk} />
-            </Button>
-            <Button colorScheme="blue">
-              <FontAwesomeIcon icon={faPenToSquare} />
             </Button>
           </ModalFooter>
           <br />
