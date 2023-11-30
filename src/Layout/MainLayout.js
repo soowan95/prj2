@@ -13,12 +13,11 @@ import {
   PopoverTrigger,
   useDisclosure,
 } from "@chakra-ui/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { createContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { MyInfo } from "../page/main/MyInfo";
+import SongRequestComp from "../component/SongRequestComp";
 
 export function MainLayout() {
   const [top100, setTop100] = useState(null);
@@ -348,12 +347,16 @@ export function MainLayout() {
                   </AccordionButton>
                   <AccordionPanel pb={4}>
                     {autoComplete !== null &&
+                      autoComplete.length !== 0 &&
                       autoComplete.map((song) => (
                         <Flex key={song.id} justifyContent={"space-between"}>
                           <Box>{song.title}</Box>
                           <Box>{song.artistName}</Box>
                         </Flex>
                       ))}
+                    {autoComplete !== null && autoComplete.length === 0 && (
+                      <SongRequestComp />
+                    )}
                   </AccordionPanel>
                 </AccordionItem>
               </Accordion>

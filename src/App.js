@@ -3,8 +3,6 @@ import { MemberLogin } from "./page/memberLogin/MemberLogin";
 import { MainLayout } from "./layout/MainLayout";
 import { SearchPage } from "./page/main/SearchPage";
 import { Top100Page } from "./page/main/Top100Page";
-import { createContext, useEffect, useState } from "react";
-import axios from "axios";
 
 import {
   createBrowserRouter,
@@ -13,7 +11,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { MyPlayList } from "./page/main/MyPlayList";
-import { MyInfo } from "./page/main/MyInfo";
+import LoginProvider from "./component/LoginProvider";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -32,29 +30,11 @@ const routes = createBrowserRouter(
   ),
 );
 
-export const LoginContext = createContext(null);
-
 function App(props) {
-  const [login, setLogin] = useState(null);
-
-  useEffect(() => {
-    fetchLogin();
-  }, []);
-
-  function fetchLogin() {
-    axios.get("/api/member/login").then((response) => setLogin(response.data));
-  }
-
-  function isAuthenticated() {
-    return login !== "";
-  }
-
-  console.log(login);
-
   return (
-    <LoginContext.Provider value={{ login, fetchLogin, isAuthenticated }}>
+    <LoginProvider>
       <RouterProvider router={routes} />
-    </LoginContext.Provider>
+    </LoginProvider>
   );
 }
 
