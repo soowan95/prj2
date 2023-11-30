@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
-  Center,
   Flex,
   FormControl,
   FormLabel,
@@ -25,13 +24,8 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
-import {
-  faBasketballBall,
-  faFloppyDisk,
-  faPenToSquare,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { SongContext } from "../../layout/MainLayout";
 
 export function SongRequest() {
   const [requestList, setRequestList] = useState(null);
