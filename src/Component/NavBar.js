@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
-import { LoginContext } from "../App";
 import { MemberLogin } from "../page/memberLogin/MemberLogin";
+import { LoginContext } from "./LoginProvider";
 
 export function NavBar() {
   const { fetchLogin, login, isAuthenticated } = useContext(LoginContext);

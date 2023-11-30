@@ -1,7 +1,8 @@
-import { useContext } from "react";
-import { SongContext } from "../../layout/MainLayout";
-import { Box, Flex } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import {useContext, useEffect} from "react";
+import {SongContext} from "../../layout/MainLayout";
+import {Box, Flex} from "@chakra-ui/react";
+import SongRequestComp from "../../component/SongRequestComp";
 
 export function SearchPage() {
   const { searched } = useContext(SongContext);
@@ -11,6 +12,23 @@ export function SearchPage() {
   const goToSongPage = (songId) => {
     navigate(`/main/song/${songId}`);
   };
+
+  // 새로고침 방지 변수
+  const preventClose = (e:BeforeUnloadEvent) => {
+    e.preventDefault();
+    e.returnValue = "";
+  }
+
+  // 페이지 로딩 시 새로고침 방지
+  useEffect(() => {
+    (() => {
+      window.addEventListener("beforeunload", preventClose);
+    })();
+
+    return () => {
+      window.removeEventListener("beforeunload", preventClose);
+    };
+  },[]);
 
   return (
     <Box mt={"100px"}>
@@ -32,6 +50,7 @@ export function SearchPage() {
             <Box>{song.mood}</Box>
           </Flex>
         ))}
+      {searched !== null && searched.length === 0 && <SongRequestComp />}
     </Box>
   );
 }
