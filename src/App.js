@@ -1,7 +1,7 @@
 import { HomeLayout } from "./layout/HomeLayout";
 import { MemberLogin } from "./page/memberLogin/MemberLogin";
 import { MainLayout } from "./layout/MainLayout";
-import { SearchPage } from "./page/main/SearchPage";
+import { SearchPage } from "./page/song/SearchPage";
 import { Top100Page } from "./page/main/Top100Page";
 
 import {
@@ -11,7 +11,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { MyPlayList } from "./page/main/MyPlayList";
-import LoginProvider from "./component/LoginProvider";
+import { MyInfo } from "./page/main/MyInfo";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -24,6 +24,7 @@ const routes = createBrowserRouter(
         <Route index element={<Top100Page />} />
         <Route path="search" element={<SearchPage />} />
         <Route path="myplaylist" element={<MyPlayList />} />
+        <Route path="song/:id" element={<SongPage />} />
       </Route>
       ,
     </Route>,

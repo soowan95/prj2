@@ -169,6 +169,12 @@ export function MainLayout() {
     params.set("sk", searchKeyword);
   }
 
+  // 자동 완성 정보 클릭 이벤트 처리
+  function handleAutoCompleteClick(songId) {
+    // 선택한 정보에 따라 상세페이지로 이동
+    navigate(`/main/song/${songId}`);
+  }
+
   return (
     <SongContext.Provider value={{ top100, searched }}>
       <Box position={"relative"} width={"100%"} m={0}>
@@ -349,7 +355,11 @@ export function MainLayout() {
                     {autoComplete !== null &&
                       autoComplete.length !== 0 &&
                       autoComplete.map((song) => (
-                        <Flex key={song.id} justifyContent={"space-between"}>
+                        <Flex
+                          key={song.id}
+                          justifyContent={"space-between"}
+                          onClick={() => handleAutoCompleteClick(song.id)}
+                        >
                           <Box>{song.title}</Box>
                           <Box>{song.artistName}</Box>
                         </Flex>
