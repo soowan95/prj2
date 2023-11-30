@@ -1,8 +1,4 @@
 import {
-  Accordion,
-  AccordionButton,
-  AccordionItem,
-  AccordionPanel,
   Box,
   Button,
   Flex,
@@ -18,6 +14,7 @@ import axios from "axios";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { MyInfo } from "../page/main/MyInfo";
 import SongRequestComp from "../component/SongRequestComp";
+import _ from "lodash";
 
 export function MainLayout() {
   const [top100, setTop100] = useState(null);
@@ -27,7 +24,6 @@ export function MainLayout() {
   const [searchCategory, setSearchCategory] = useState("가수");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [autoComplete, setAutoComplete] = useState(null);
-  const [accordionIndex, setAccordionIndex] = useState(1);
 
   const genreInclude = useRef(",");
   const moodInclude = useRef(",");
@@ -45,19 +41,6 @@ export function MainLayout() {
 
   params.set("sc", searchCategory);
   params.set("sk", searchKeyword);
-
-  // 검색창 외의 영역 클릭시 감지
-  useEffect(() => {
-    function handleOutside(e) {
-      if (searchRef.current && !searchRef.current.contains(e.target)) {
-        setAccordionIndex(1);
-      }
-    }
-    document.addEventListener("mousedown", handleOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleOutside);
-    };
-  }, [searchRef]);
 
   // 사이트 시작할 때 top100, mood, genre db에서 가져오기
   useEffect(() => {
@@ -135,6 +118,23 @@ export function MainLayout() {
       moodInclude.current = "";
   }
 
+  let isCtrl = false;
+  let isAlt = false;
+
+  // 단축키 누른 후
+  document.onkeyup = (e) => {
+    if (e.key === "Ctrl") isCtrl = false;
+    if (e.key === "Alt") isAlt = false;
+  };
+
+  // 단축키 눌렀을때
+  document.onkeydown = (e) => {
+    if (e.key === "Ctrl") isCtrl = true;
+    if (e.key === "Alt") isAlt = true;
+
+    if (e.key === "Enter") document.getElementById("searchButton").click();
+  };
+
   // 필터 버튼 색 바꾸기
   function handleButtonColor(e) {
     e.target.style.background =
@@ -169,12 +169,6 @@ export function MainLayout() {
     params.set("sk", searchKeyword);
   }
 
-  // 자동 완성 정보 클릭 이벤트 처리
-  function handleAutoCompleteClick(songId) {
-    // 선택한 정보에 따라 상세페이지로 이동
-    navigate(`/main/song/${songId}`);
-  }
-
   return (
     <SongContext.Provider value={{ top100, searched }}>
       <Box position={"relative"} width={"100%"} m={0}>
@@ -190,7 +184,7 @@ export function MainLayout() {
           fontSize={"3rem"}
           onClick={() => {
             navigate("/main");
-            document.getElementById("searchInput").value = "";
+            // document.getElementById("searchInput").value = "";
             setSearchKeyword("");
           }}
         >
@@ -324,52 +318,77 @@ export function MainLayout() {
                     {key}
                   </Button>
                 ))}
-              <Accordion
-                allowMultiple
-                w={"100%"}
-                bg={"white"}
-                index={[accordionIndex]}
-              >
-                <AccordionItem>
-                  <AccordionButton>
-                    <Input
-                      ref={searchRef}
-                      id="searchInput"
-                      height={"45px"}
-                      placeholder={searchInfoText}
-                      onChange={(e) => {
-                        handleChangeSearchInput(e);
-                      }}
-                      onClick={() => setAccordionIndex(0)}
-                    />
-                    <Button
-                      border={"1px solid purple"}
-                      height={"45px"}
-                      width={"5%"}
-                      onClick={() => handleSearchButton()}
-                    >
-                      검색
-                    </Button>
-                  </AccordionButton>
-                  <AccordionPanel pb={4}>
-                    {autoComplete !== null &&
-                      autoComplete.length !== 0 &&
-                      autoComplete.map((song) => (
-                        <Flex
+              <Popover>
+                <PopoverTrigger>
+                  <Input
+                    ref={searchRef}
+                    id="searchInput"
+                    height={"45px"}
+                    placeholder={searchInfoText}
+                    onChange={(e) => {
+                      handleChangeSearchInput(e);
+                    }}
+                  />
+                </PopoverTrigger>
+                <Button
+                  id="searchButton"
+                  border={"1px solid purple"}
+                  height={"45px"}
+                  width={"5%"}
+                  onClick={handleSearchButton}
+                >
+                  검색
+                </Button>
+                <PopoverContent
+                  w={{
+                    base: "500px",
+                    lg: "700px",
+                    xl: "900px",
+                    "2xl": "1200px",
+                  }}
+                >
+                  {autoComplete !== null &&
+                  autoComplete.length !== 0 &&
+                  searchCategory === "가수"
+                    ? _.uniqBy(autoComplete, "artistName").map((song) => (
+                        <Box
                           key={song.id}
-                          justifyContent={"space-between"}
-                          onClick={() => handleAutoCompleteClick(song.id)}
+                          onClick={() => {
+                            params.set("sk", song.artistName);
+                            handleSearchButton();
+                          }}
                         >
-                          <Box>{song.title}</Box>
-                          <Box>{song.artistName}</Box>
-                        </Flex>
-                      ))}
-                    {autoComplete !== null && autoComplete.length === 0 && (
-                      <SongRequestComp />
-                    )}
-                  </AccordionPanel>
-                </AccordionItem>
-              </Accordion>
+                          {song.artistName}
+                        </Box>
+                      ))
+                    : searchCategory === "제목"
+                      ? _.uniqBy(autoComplete, "title").map((song) => (
+                          <Box
+                            key={song.id}
+                            onClick={() => {
+                              params.set("sk", song.title);
+                              handleSearchButton();
+                            }}
+                          >
+                            {song.title}
+                          </Box>
+                        ))
+                      : _.uniqBy(autoComplete, "lyric").map((song) => (
+                          <Box
+                            key={song.id}
+                            onClick={() => {
+                              params.set("sk", song.lyric);
+                              handleSearchButton();
+                            }}
+                          >
+                            {song.lyric}
+                          </Box>
+                        ))}
+                  {autoComplete !== null && autoComplete.length === 0 && (
+                    <SongRequestComp />
+                  )}
+                </PopoverContent>
+              </Popover>
             </Flex>
           </FormControl>
         )}
