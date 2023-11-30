@@ -1,29 +1,41 @@
+import { HomeLayout } from "./layout/HomeLayout";
+import { MemberLogin } from "./page/memberLogin/MemberLogin";
+import { MainLayout } from "./layout/MainLayout";
+import { SearchPage } from "./page/main/SearchPage";
+import { Top100Page } from "./page/main/Top100Page";
+
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
   RouterProvider,
 } from "react-router-dom";
-import { HomeLayout } from "./layout/HomeLayout";
-import { MemberLogin } from "./MemberLogin";
-import { MainLayout } from "./MainLayout";
-import { SearchPage } from "./SearchPage";
-import { Top100Page } from "./Top100Page";
+import { MyPlayList } from "./page/main/MyPlayList";
+import LoginProvider from "./component/LoginProvider";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<HomeLayout />}>
-      <Route path="login" element={<MemberLogin />} />
-    </Route>,
-    <Route path="/main" element={<MainLayout />}>
-      <Route index element={<Top100Page />} />
-      <Route path="search" element={<SearchPage />} />
+    <Route>
+      <Route path="/" element={<HomeLayout />}>
+        <Route path="login" element={<MemberLogin />} />
+      </Route>
+      ,
+      <Route path="main" element={<MainLayout />}>
+        <Route index element={<Top100Page />} />
+        <Route path="search" element={<SearchPage />} />
+        <Route path="myplaylist" element={<MyPlayList />} />
+      </Route>
+      ,
     </Route>,
   ),
 );
 
-function App() {
-  return <RouterProvider router={routes} />;
+function App(props) {
+  return (
+    <LoginProvider>
+      <RouterProvider router={routes} />
+    </LoginProvider>
+  );
 }
 
 export default App;
