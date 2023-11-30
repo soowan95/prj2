@@ -1,53 +1,47 @@
-import React, {useContext, useEffect, useState} from 'react';
-import {Button, Flex, Input, Spacer,} from "@chakra-ui/react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faBars, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
-import {LoginModal} from "../Member/LoginModal";
-import {LoginContext} from "./LoginProvider";
-import {useLocation, useNavigate} from "react-router-dom";
-import {MyInfo} from "./MyInfo";
+import React, { useContext } from "react";
+import { Button, Flex, useToast } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
+import { MemberLogin } from "../page/memberLogin/MemberLogin";
+import { LoginContext } from "./LoginProvider";
 
 export function NavBar() {
-  const [search, setSearch] = useState("");
-  const {fetchLogin, login, isAuthenticated} = useContext(LoginContext);
-  const location = useLocation();
-  const urlParams = new URLSearchParams();
+  const { fetchLogin, login, isAuthenticated } = useContext(LoginContext);
+
   const navigate = useNavigate();
+  const toast = useToast();
 
-  useEffect(() => {
-    fetchLogin();
-  }, [location]);
-
-  if (login !== "") {
-    urlParams.set("id", login.id);
+  function handleLogout() {
+    axios
+      .post("/api/member/logout")
+      .then(() => {
+        toast({
+          description: "로그아웃 되었습니다🙂",
+          status: "info",
+        });
+        window.location.reload(0);
+        navigate("/");
+      })
+      .finally(() => fetchLogin());
   }
 
-
   return (
-    <Flex
-      gap={5}
-      mt={10}
-    >
-      <Button
-        variant="ghost"
-        size="lg">
-        <FontAwesomeIcon icon={faBars}/>
+    <Flex>
+      <Button colorScheme="purple" mr={5} onClick={() => navigate("/main")}>
+        MAIN
       </Button>
-      <Button onClick={()=>console.log("RELIEVE")}>
-        RELIEVE
-      </Button>
-      <Input width="650px" value={search} placeholder="Search" onChange={(e)=>setSearch(e.target.value)}/>
-      <Button
-        variant="ghost"
-        leftIcon={<FontAwesomeIcon icon={faMagnifyingGlass} />} />
-      <Spacer/>
-      {isAuthenticated() || (
-        <LoginModal />
-      )}
-      {isAuthenticated() && (
-        <MyInfo />
-      )}
+      <MemberLogin />
 
+      {isAuthenticated() && (
+        <Button colorScheme="purple" onClick={handleLogout}>
+          로그아웃
+          <FontAwesomeIcon icon={faRightFromBracket} />
+        </Button>
+      )}
     </Flex>
   );
 }
+
+export default NavBar;
