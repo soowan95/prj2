@@ -30,6 +30,7 @@ export function SearchPage() {
     };
   },[]);
 
+
   return (
     <Box mt={"100px"}>
       {searched !== null &&
