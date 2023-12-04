@@ -14,7 +14,7 @@ export function RecommendedList() {
     const {fetchLogin} = useContext(LoginContext);
 
     useEffect(() => {
-        axios.get("/main/api/myList/recommended").then((response) => {
+        axios.get("/api/myList/recommended").then((response) => {
             setRecommendedList(response.data)
         })
             .finally(() => fetchLogin());
