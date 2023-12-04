@@ -4,6 +4,7 @@ import { SongContext } from "../../layout/MainLayout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClone } from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
+import PlayComp from "../../component/PlayComp";
 
 export function Top100Page() {
   const [similar, setSimilar] = useState(null);
@@ -76,6 +77,7 @@ export function Top100Page() {
               ))}
           </Box>
         ))}
+      <PlayComp />
     </Box>
   );
 }
