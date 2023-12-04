@@ -30,7 +30,7 @@ export function MyPlayList() {
     useEffect(() => {
         const params = new URLSearchParams();
         params.set("listId", login.id);
-        axios.get("/main/api/myList/get?" + params).then(({data}) => setList(data));
+        axios.get("/api/myList/get?" + params).then(({data}) => setList(data));
     }, [location]);
 
 
