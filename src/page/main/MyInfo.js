@@ -11,13 +11,12 @@ import {
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { useContext, useEffect, useState } from "react";
-import axios from "axios";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { LoginContext } from "../../component/LoginProvider";
+import {LoginContext} from "../../component/LoginProvider";
 
 export function MyInfo() {
-  const [loginInfo, setLoginInfo] = useState(null);
+  const {login} = useContext(LoginContext);
 
   const navigate = useNavigate();
 
@@ -32,7 +31,7 @@ export function MyInfo() {
         <PopoverArrow />
         <PopoverCloseButton />
         <PopoverHeader>
-          {loginInfo ? <>{loginInfo.nickName} 님 환영합니다</> : "로딩 중..."}
+          {login ? <>{login.nickName} 님 환영합니다</> : "로딩 중..."}
         </PopoverHeader>
         <PopoverBody>
           <Button variant="ghost" onClick={() => navigate("/main/recommended")}>
