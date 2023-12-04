@@ -3,6 +3,7 @@ import {useContext, useEffect} from "react";
 import {SongContext} from "../../layout/MainLayout";
 import {Box, Flex} from "@chakra-ui/react";
 import SongRequestComp from "../../component/SongRequestComp";
+import axios from "axios";
 
 export function SearchPage() {
   const { searched } = useContext(SongContext);
@@ -10,6 +11,7 @@ export function SearchPage() {
 
   // 노래 상세 페이지로 이동하는 함수
   const goToSongPage = (songId) => {
+    axios.put("/api/song/plusSongPoint", {id:songId}).then(() => console.log("ok"))
     navigate(`/main/song/${songId}`);
   };
 
@@ -29,6 +31,7 @@ export function SearchPage() {
       window.removeEventListener("beforeunload", preventClose);
     };
   },[]);
+
 
   return (
     <Box mt={"100px"}>
