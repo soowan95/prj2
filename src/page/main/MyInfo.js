@@ -17,7 +17,6 @@ import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../../component/LoginProvider";
 
 export function MyInfo() {
-  const {login} = useContext(LoginContext);
   const [loginInfo, setLoginInfo] = useState(null);
 
   const navigate = useNavigate();
@@ -42,7 +41,7 @@ export function MyInfo() {
                   {loginInfo.nickName} 님 환영합니다
                 </>
             ) : (
-                "로딩 중..." // 또는 다른 로딩 처리 방식을 사용할 수 있습니다.
+                "로딩 중..."
             )}
           </PopoverHeader>
           <PopoverBody>
