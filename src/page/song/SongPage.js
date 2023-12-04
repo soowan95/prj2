@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
-import { Box, Flex, FormLabel, Heading, Image } from "@chakra-ui/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComputerMouse } from "@fortawesome/free-solid-svg-icons";
-import Counter from "./Counter";
-import { useParams } from "react-router-dom";
+import {Box, Flex, FormLabel, Heading, Image} from "@chakra-ui/react";
+import {useParams} from "react-router-dom";
+import {CommentContainer} from "../../component/CommentContainer";
+import {MemberLogin} from "../memberLogin/MemberLogin";
 
 function SongPage(props) {
   const [songData, setSongData] = useState({});
@@ -77,6 +76,7 @@ function SongPage(props) {
           </Box>
         </Box>
       </Flex>
+      <CommentContainer songId={id} />
     </Box>
   );
 }
