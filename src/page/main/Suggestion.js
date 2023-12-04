@@ -218,7 +218,7 @@ export function Suggestion() {
                         }}
                         variant="ghost"
                       >
-                        {list.listName}
+                        {list.playlistId}
                       </Heading>
                       {/*</Tooltip>*/}
                       <Text>#카페 #힐링 #설렘</Text>
