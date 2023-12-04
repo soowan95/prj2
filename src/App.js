@@ -1,7 +1,6 @@
 import { HomeLayout } from "./layout/HomeLayout";
 import { MemberLogin } from "./page/memberLogin/MemberLogin";
 import { MainLayout } from "./layout/MainLayout";
-import { SearchPage } from "./page/song/SearchPage";
 import { Top100Page } from "./page/main/Top100Page";
 
 import {
@@ -16,6 +15,7 @@ import SongRequest from "./page/main/SongRequest";
 import LoginProvider from "./component/LoginProvider";
 import SongPage from "./page/song/SongPage";
 import KakaoLogin from "./page/memberLogin/KakaoLogin";
+import {SearchPage} from "./page/main/SearchPage";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
