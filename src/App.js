@@ -15,7 +15,7 @@ import SongRequest from "./page/main/SongRequest";
 import LoginProvider from "./component/LoginProvider";
 import SongPage from "./page/song/SongPage";
 import KakaoLogin from "./page/memberLogin/KakaoLogin";
-import {SearchPage} from "./page/main/SearchPage";
+import { SearchPage } from "./page/main/SearchPage";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
