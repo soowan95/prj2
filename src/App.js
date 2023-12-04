@@ -15,14 +15,15 @@ import { MyInfo } from "./page/main/MyInfo";
 import SongRequest from "./page/main/SongRequest";
 import LoginProvider from "./component/LoginProvider";
 import SongPage from "./page/song/SongPage";
+import KakaoLogin from "./page/memberLogin/KakaoLogin";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route path="/" element={<HomeLayout />}>
         <Route path="login" element={<MemberLogin />} />
+        <Route path="kakaoLogin" element={<KakaoLogin />} />,
       </Route>
-      ,
       <Route path="main" element={<MainLayout />}>
         <Route index element={<Top100Page />} />
         <Route path="search" element={<SearchPage />} />

@@ -33,6 +33,7 @@ import {
 import PasswordRecovery from "./PasswordRecovery";
 import MemberSignup from "./MemberSignup";
 import { LoginContext } from "../../component/LoginProvider";
+import KakaoLoginComp from "../../component/KakaoLoginComp";
 
 export function MemberLogin() {
   const [id, setId] = useState("");
@@ -155,6 +156,7 @@ export function MemberLogin() {
             >
               회원가입
             </Button>
+            <KakaoLoginComp />
           </ModalFooter>
         </ModalContent>
       </Modal>
