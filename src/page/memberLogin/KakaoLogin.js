@@ -28,7 +28,8 @@ function KakaoLogin() {
               axios
                 .post("/api/kakao/login", {
                   id: data.id,
-                  email: data.properties.email,
+                  email: data.kakao_account.email,
+                  nickName: data.properties.nickname,
                 })
                 .then(() => navigate("/main"));
             });
