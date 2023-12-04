@@ -18,20 +18,24 @@ import {
   Table,
   Tbody,
   Td,
+  Text,
+  Textarea,
   Th,
   Thead,
   Tr,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from "react-router-dom";
+import { useImmer } from "use-immer";
 
 export function SongRequest() {
   const [requestList, setRequestList] = useState(null);
   const { isOpen, onClose, onOpen } = useDisclosure();
 
-  const [memberId, setMemberId] = useState("");
   const [artist, setArtist] = useState("");
   const [title, setTitle] = useState("");
 
@@ -43,6 +47,12 @@ export function SongRequest() {
   const artistName = useRef("");
   const songTitle = useRef("");
 
+  const toast = useToast();
+  const navigate = useNavigate();
+
+  const [selectGenre, updateSelectGenre] = useImmer([]);
+  const [selectMood, updateSelectMood] = useImmer([]);
+
   useEffect(() => {
     axios.get("/api/song/requestList").then((response) => {
       setRequestList(response.data);
@@ -50,6 +60,54 @@ export function SongRequest() {
     axios.get("/api/song/genre").then(({ data }) => setGenreList(data));
     axios.get("/api/song/mood").then(({ data }) => setMoodList(data));
   }, []);
+
+  function handleInsert() {
+    // ok -> 성공 토스트 띄우면서 모달 닫기
+    // error -> 오류 토스트 띄우면서 그대로 있기
+    axios
+      .post("/api/song/insert")
+      .then(() => {
+        toast({
+          description: "저장이 완료 되었습니다☺️",
+          status: "success",
+        });
+        onClose();
+      })
+      .catch((error) => {
+        toast({
+          description: "저장 중 문제가 발생하였습니다😥",
+          status: "warning",
+        });
+      });
+  }
+
+  function handleGenre(e) {
+    if (e !== "") {
+      updateSelectGenre((draft) => {
+        // 중복 체크 후 중복된 항목이 있다면 제거
+        const index = draft.indexOf(e);
+        if (index === -1) {
+          draft.push(e);
+        } else {
+          draft.splice(index, 1);
+        }
+      });
+    }
+  }
+
+  function handleMood(e) {
+    if (e !== "") {
+      updateSelectMood((draft) => {
+        // 중복 체크 후 중복된 항목이 있다면 제거
+        const index = draft.indexOf(e);
+        if (index === -1) {
+          draft.push(e);
+        } else {
+          draft.splice(index, 1);
+        }
+      });
+    }
+  }
 
   return (
     <Box>
@@ -100,14 +158,20 @@ export function SongRequest() {
         <ModalContent>
           <ModalHeader fontSize={"small"}>입력 확인 ✅</ModalHeader>
           <ModalCloseButton />
-          <ModalBody mt={10}>
+          <ModalBody mt={5}>
             <FormControl mb={5}>
-              <FormLabel fontWeight={"bold"}>가수</FormLabel>
+              <FormLabel fontWeight={"bold"}>가수명</FormLabel>
               <Input
                 defaultValue={artistName.current}
                 onChange={(e) => setArtist(e.target.value)}
               />
             </FormControl>
+
+            <FormControl mb={5}>
+              <FormLabel fontWeight={"bold"}>그룹명</FormLabel>
+              <Input />
+            </FormControl>
+
             <FormControl mb={5}>
               <FormLabel fontWeight={"bold"}>노래 제목</FormLabel>
               <Input
@@ -115,33 +179,75 @@ export function SongRequest() {
                 onChange={(e) => setTitle(e.target.value)}
               />
             </FormControl>
-            <FormControl fontWeight={"bold"}>
-              장르　　　　　　　　　　　무드
-              <Flex>
-                <Select mul onChange={(e) => setGenre(e.target.value)} mr={3}>
-                  {genreList !== null &&
-                    genreList.map((genreList) => (
-                      <option>{genreList.genre}</option>
-                    ))}
-                </Select>
 
-                <Select onChange={(e) => setMood(e.target.value)}>
-                  {moodList !== null &&
-                    moodList.map((moodList) => (
-                      <option>{moodList.mainMood}</option>
-                    ))}
-                </Select>
-              </Flex>
+            <FormControl mb={5}>
+              <FormLabel fontWeight={"bold"}>앨범</FormLabel>
+              <Input />
+            </FormControl>
+
+            <FormControl mb={5}>
+              <FormLabel fontWeight={"bold"}>출시일</FormLabel>
+              <Input type="date" />
+            </FormControl>
+
+            <FormControl mb={10}>
+              <FormLabel fontWeight={"bold"}>가사</FormLabel>
+              <Textarea />
+            </FormControl>
+
+            <hr />
+
+            <FormControl mt={10} fontWeight={"bold"}>
+              <Select
+                mb={2}
+                onChange={(e) => {
+                  handleGenre(e.target.value);
+                  setGenre(e.target.value);
+                }}
+                placeholder="장르를 선택하세요."
+              >
+                {/*<option disabled>장르를 선택하세요</option>*/}
+                {genreList !== null &&
+                  genreList.map((genreList) => (
+                    <option value={genreList.genre}>{genreList.genre}</option>
+                  ))}
+              </Select>
+              <Text color={"indianred"} mb={9}>
+                선택하신 장르는 {selectGenre.join(", ")} 입니다.
+              </Text>
+
+              <Select
+                mb={2}
+                onChange={(e) => {
+                  handleMood(e.target.value);
+                  setMood(e.target.value);
+                }}
+                placeholder="무드를 선택하세요."
+              >
+                {/*<option>무드를 선택하세요</option>*/}
+                {moodList !== null &&
+                  moodList.map((moodList) => (
+                    <option value={moodList.mainMood}>
+                      {moodList.mainMood}
+                    </option>
+                  ))}
+              </Select>
+              <Text color={"indianred"}>
+                선택하신 무드는 {selectMood.join(", ")} 입니다.
+              </Text>
             </FormControl>
             <br />
           </ModalBody>
 
           <ModalFooter>
             <Box fontWeight={"bold"} fontSize={"large"}>
-              입력 하시겠습니까? 😉　　　　　　　　　
+              입력 하시겠습니까? 😉
             </Box>
-            <Button colorScheme="purple" mr={3}>
-              <FontAwesomeIcon icon={faFloppyDisk} />
+            <Button onClick={handleInsert} colorScheme="purple" mr={3}>
+              저장
+            </Button>
+            <Button onClick={onClose} background={"lightblue"}>
+              닫기
             </Button>
           </ModalFooter>
           <br />
