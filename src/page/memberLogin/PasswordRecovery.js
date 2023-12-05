@@ -80,7 +80,7 @@ function PasswordRecovery({ isOpen, onClose, securityQuestions }) {
               value={selectedSecurityQuestion}
               onChange={(e) => setSecurityQuestion(e.target.value)}
             >
-              {securityQuestions.map((question, index) => (
+              {securityQuestions && securityQuestions.map((question, index) => (
                 <option key={index} value={question}>
                   {question}
                 </option>

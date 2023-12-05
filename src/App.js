@@ -21,6 +21,7 @@ import {Suggestion} from "./page/main/Suggestion";
 import ChartPage from "./page/main/ChartPage";
 import MemberInfo from "./page/memberLogin/MemberInfo";
 import MemberDelete from "./page/memberLogin/MemberDelete";
+import MyFavoritePlaylist from "./page/main/MyFavoritePlaylist";
 
 const routes = createBrowserRouter(
     createRoutesFromElements(
@@ -41,6 +42,7 @@ const routes = createBrowserRouter(
                 <Route path="chartpage" element={<ChartPage/>}/>
                 <Route path="memberinfo" element={<MemberInfo/>}/>
                 <Route path="delete" element={<MemberDelete />} />
+                <Route path="myFavorite" element={<MyFavoritePlaylist />} />
             </Route>
             ,
         </Route>,

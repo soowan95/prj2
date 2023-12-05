@@ -14,11 +14,13 @@ import {
 import {LoginContext} from "../../component/LoginProvider";
 import axios from "axios";
 import {useNavigate, useSearchParams} from "react-router-dom";
+import PasswordRecovery from "./PasswordRecovery";
 
 
 export function MemberInfo() {
     const {fetchLogin, login} = useContext(LoginContext);
     const {isOpen, onOpen, onClose} = useDisclosure();
+    const {isOpen: isPasswordModalOpen, onOpen: onPasswordModalOpen, onClose: onPasswordModalClose} = useDisclosure();
     const [nickName, setNickName] = useState("");
     const [email, setEmail] = useState("");
     const [nickNameAvailable, setNickNameAvailable] = useState(false);
@@ -143,7 +145,7 @@ export function MemberInfo() {
                                 내가 좋아하는 플레이리스트
                             </CardBody>
                             <CardFooter>
-                                <Button colorScheme="facebook">
+                                <Button colorScheme="facebook" onClick={()=>navigate("/main/myFavorite")}>
                                     좋아요 표시한 플레이리스트
                                 </Button>
                             </CardFooter>
@@ -193,7 +195,7 @@ export function MemberInfo() {
                             <Button variant="ghost" onClick={handleEmailCheck} isDisabled={emailChecked}>중복확인</Button>
                         </Flex>
                         비밀번호 <br/>
-                        <Button variant="ghost" colorScheme="whatsapp" >비밀번호 변경하기</Button>
+                        <Button variant="ghost" colorScheme="whatsapp" onClick={onPasswordModalOpen} >비밀번호 변경하기</Button>
                     </ModalBody>
                     <ModalFooter gap={5}>
                         <Button colorScheme="blue" onClick={handleSubmit}
@@ -206,6 +208,7 @@ export function MemberInfo() {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
+            <PasswordRecovery isOpen={isPasswordModalOpen} onClose={onPasswordModalClose} />
         </Center>
     )
 }

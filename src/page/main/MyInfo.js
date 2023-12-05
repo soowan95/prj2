@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Button,
   Popover,
   PopoverArrow,
@@ -27,9 +28,7 @@ export function MyInfo() {
   return (
     <Popover>
       <PopoverTrigger>
-        <Button fontSize={"1.7rem"}>
-          <FontAwesomeIcon icon={faUser} />
-        </Button>
+        <Avatar src='https://bit.ly/broken-link' _hover={{cursor:"pointer"}}/>
       </PopoverTrigger>
       <PopoverContent>
         <PopoverArrow />
