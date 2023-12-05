@@ -1,4 +1,13 @@
-import { Box, Flex } from "@chakra-ui/react";
+import {
+  Box,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  Flex,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { useContext, useRef, useState } from "react";
 import { SongContext } from "../../layout/MainLayout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,10 +17,13 @@ import PlayComp from "../../component/PlayComp";
 
 export function Top100Page() {
   const [similar, setSimilar] = useState(null);
+  const playerTitle = useRef("");
 
   const { top100 } = useContext(SongContext);
 
   const thisId = useRef(0);
+
+  const songDrawer = useDisclosure();
 
   const params = new URLSearchParams();
 
@@ -47,7 +59,14 @@ export function Top100Page() {
               alignItems={"center"}
               width={"100%"}
             >
-              <Box>{song.title}</Box>
+              <Box
+                onClick={() => {
+                  playerTitle.current = song.title;
+                  songDrawer.onOpen();
+                }}
+              >
+                {song.title}
+              </Box>
               <Box>{song.artistName}</Box>
               <Box>{song.genre}</Box>
               <Box>{song.mood}</Box>
@@ -77,7 +96,20 @@ export function Top100Page() {
               ))}
           </Box>
         ))}
-      <PlayComp />
+      <Drawer
+        placement="bottom"
+        isOpen={songDrawer.isOpen}
+        onClose={songDrawer.onClose}
+      >
+        <DrawerOverlay>
+          <DrawerContent>
+            <DrawerHeader>{playerTitle.current}</DrawerHeader>
+            <DrawerBody>
+              <PlayComp top100={top100} playerTitle={playerTitle} />
+            </DrawerBody>
+          </DrawerContent>
+        </DrawerOverlay>
+      </Drawer>
     </Box>
   );
 }
