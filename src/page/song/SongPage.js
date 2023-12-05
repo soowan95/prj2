@@ -1,6 +1,20 @@
 import React, {useEffect, useRef, useState} from "react";
 import axios from "axios";
-import {Box, Flex, FormLabel, Heading, Image, Table, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
+import {
+  Box, Button,
+  Flex,
+  FormControl,
+  FormLabel,
+  Heading,
+  Image,
+  Table,
+  Tbody,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tr
+} from "@chakra-ui/react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faComputerMouse} from "@fortawesome/free-solid-svg-icons";
 import Counter from "./Counter";
@@ -121,6 +135,8 @@ function SongPage(props) {
           </Box>
         </Box>
       </Box>
+
+
 
     </Box>
 
