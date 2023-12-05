@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import {LoginContext} from "../../component/LoginProvider";
 import axios from "axios";
-import PasswordRecovery from "./PasswordRecovery";
+import {useNavigate, useSearchParams} from "react-router-dom";
 
 
 export function MemberInfo() {
@@ -24,10 +24,36 @@ export function MemberInfo() {
     const [nickNameAvailable, setNickNameAvailable] = useState(false);
     const [emailAvailable, setEmailAvailable] = useState(false);
     const toast = useToast();
+    const navigate = useNavigate();
+    const [member, setMember] = useState(null);
+    const [params] = useSearchParams();
+
 
     useEffect(() => {
-        fetchLogin();
+        axios.get("/api/member"+params.toString())
+            .then((response)=> {
+                setMember(response.data);
+                setEmail(response.data.email);
+                setNickName(response.data.nickName);
+            })
     }, []);
+
+    //기존 이메일과 같은지 확인
+    let sameOriginEmail = false;
+    if (member !== null) {
+        sameOriginEmail = member.email ===email;
+    }
+
+    let emailChecked = sameOriginEmail || emailAvailable;
+
+    //기존 별명과 같은지 확인
+    let sameOriginNickName = false;
+    if (member !== null) {
+        sameOriginNickName = member.nickName === email;
+    }
+
+    let nickNameChecked = sameOriginNickName || nickNameAvailable;
+
 
     function handleNickNameCheck() {
         const params = new URLSearchParams();
@@ -75,9 +101,22 @@ export function MemberInfo() {
     }
 
 
-    function handlePassword() {
-        return (<PasswordRecovery />);
+    function handleSubmit() {
+        axios.put("/api/member/edit", {
+            id:login.id,email,nickName
+        })
+            .then(()=> {
+                toast({
+                    description:"수정되었습니다",
+                    status:"success"
+                })
+                onClose();
+                window.location.reload(0);
+            })
+        .catch((error)=>console.log(error))
     }
+
+
 
 
 
@@ -87,7 +126,7 @@ export function MemberInfo() {
         <Center mt={50}>
             <Card mt={50} w="2xl" h="2xl">
                 <CardHeader>
-                    <Heading>member info</Heading>
+                    <Heading>{login.nickName} 님</Heading>
                 </CardHeader>
                 <CardBody style={{textAlign: "center"}}>
                     <Flex gap={5}>
@@ -125,7 +164,7 @@ export function MemberInfo() {
                                 RELIEVE 회원을 탈퇴합니다.
                             </CardBody>
                             <CardFooter>
-                                <Button colorScheme="facebook">회원탈퇴</Button>
+                                <Button colorScheme="facebook" onClick={()=>navigate("/main/delete")}>회원탈퇴</Button>
                             </CardFooter>
                         </Card>
                     </Flex>
@@ -133,19 +172,11 @@ export function MemberInfo() {
             </Card>
 
 
-            {/* 비밀번호 수정 모달 */}
-
-
-
-
-
-
-
             {/* 개인정보 수정 모달 */}
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay/>
                 <ModalContent>
-                    <ModalHeader>개인정보 수정</ModalHeader>
+                    <ModalHeader>{login.nickName} 님 정보 수정</ModalHeader>
                     <ModalCloseButton/>
                     <ModalBody>
                         아이디
@@ -154,18 +185,19 @@ export function MemberInfo() {
                         닉네임
                         <Flex gap={3}>
                             <Input type="text" value={nickName} onChange={(e)=> {setNickName(e.target.value); setNickNameAvailable(false);}} />
-                            <Button variant="ghost" onClick={handleNickNameCheck}>중복확인</Button>
+                            <Button variant="ghost" onClick={handleNickNameCheck} isDisabled={nickNameChecked}>중복확인</Button>
                         </Flex>
                         이메일
                         <Flex gap={3}>
                             <Input type="text" value={email} onChange={(e)=>setEmail(e.target.value)} />
-                            <Button variant="ghost" onClick={handleEmailCheck}>중복확인</Button>
+                            <Button variant="ghost" onClick={handleEmailCheck} isDisabled={emailChecked}>중복확인</Button>
                         </Flex>
                         비밀번호 <br/>
-                        <Button variant="ghost" colorScheme="whatsapp" onClick={handlePassword}>비밀번호 변경하기</Button>
+                        <Button variant="ghost" colorScheme="whatsapp" >비밀번호 변경하기</Button>
                     </ModalBody>
                     <ModalFooter gap={5}>
-                        <Button colorScheme="blue">
+                        <Button colorScheme="blue" onClick={handleSubmit}
+                        isDisabled={!emailChecked || !nickNameChecked}>
                             수정
                         </Button>
                         <Button colorScheme="red" onClick={onClose}>
