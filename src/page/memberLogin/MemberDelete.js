@@ -96,7 +96,7 @@ export function MemberDelete() {
 
                                 <Button colorScheme="red" isDisabled={password !== passwordCheck}
                                 onClick={handleMemberDelete}>탈퇴</Button>
-                                <Button colorScheme="blue">취소</Button>
+                                <Button colorScheme="blue" onClick={()=>navigate(-1)}>취소</Button>
                             </CardFooter>
                         </Card>
                     </Center>

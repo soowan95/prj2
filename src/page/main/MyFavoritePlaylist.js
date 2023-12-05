@@ -27,7 +27,7 @@ export function MyFavoritePlaylist() {
 
     useEffect(() => {
         params.set("id",login.id)
-        axios.get("/api/myList/favorite"+params.toString())
+        axios.get("/api/myList/favorite?"+params.toString())
             .then((response)=>setList(response.data))
     }, []);
 
@@ -48,7 +48,7 @@ export function MyFavoritePlaylist() {
                                         _hover={{cursor: "pointer"}}
                                     >
                                         <Image
-                                            src="https://p7.hiclipart.com/preview/866/624/854/spoti…load-playlist-streaming-media-black-and-white.jpg"/>
+                                            src="https://pics.craiyon.com/2023-07-21/5e99d5b0b25c43fb90d62633f33f1a41.webp"/>
                                     </CardHeader>
                                     <CardBody>
                                         <Heading
@@ -64,9 +64,9 @@ export function MyFavoritePlaylist() {
                                     <Divider color="gray"/>
                                     <CardFooter>
                                         <FontAwesomeIcon icon={faRecordVinyl}/>
-                                        <Text>$곡</Text>
+                                        <Text>%곡</Text>
                                         <Spacer/>
-                                        <Text>생성일 : </Text>
+                                        <Text>생성자 : {song?.memberId} 님</Text>
                                     </CardFooter>
                                 </Card>
                             </Box>
