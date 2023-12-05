@@ -20,6 +20,7 @@ import {SearchPage} from "./page/main/SearchPage";
 import {Suggestion} from "./page/main/Suggestion";
 import ChartPage from "./page/main/ChartPage";
 import MemberInfo from "./page/memberLogin/MemberInfo";
+import MemberDelete from "./page/memberLogin/MemberDelete";
 
 const routes = createBrowserRouter(
     createRoutesFromElements(
@@ -39,7 +40,7 @@ const routes = createBrowserRouter(
                 <Route path="recommended" element={<RecommendedList/>}/>
                 <Route path="chartpage" element={<ChartPage/>}/>
                 <Route path="memberinfo" element={<MemberInfo/>}/>
-
+                <Route path="delete" element={<MemberDelete />} />
             </Route>
             ,
         </Route>,
