@@ -53,6 +53,11 @@ export function SongRequest() {
   const [selectGenre, updateSelectGenre] = useImmer([]);
   const [selectMood, updateSelectMood] = useImmer([]);
 
+  // 파일 업로드
+  const [file, setFile] = useState(null);
+
+
+
   useEffect(() => {
     axios.get("/api/song/requestList").then((response) => {
       setRequestList(response.data);
@@ -65,7 +70,7 @@ export function SongRequest() {
     // ok -> 성공 토스트 띄우면서 모달 닫기
     // error -> 오류 토스트 띄우면서 그대로 있기
     axios
-      .post("/api/song/insert")
+      .postForm("/api/song/insert",{file})
       .then(() => {
         toast({
           description: "저장이 완료 되었습니다☺️",
@@ -190,9 +195,15 @@ export function SongRequest() {
               <Input type="date" />
             </FormControl>
 
-            <FormControl mb={10}>
+            <FormControl mb={5}>
               <FormLabel fontWeight={"bold"}>가사</FormLabel>
               <Textarea />
+            </FormControl>
+
+            <FormControl mb={10}>
+              <FormLabel fontWeight={"bold"}>사진</FormLabel>
+
+              <Input type="file" accept="image/*" onChange={(e)=>setFile(e.target.files[0])}/>
             </FormControl>
 
             <hr />

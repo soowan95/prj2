@@ -102,7 +102,7 @@ function SongPage(props) {
         {/*<SongList album={album.current} />*/}
         <Box>
           <br/>
-          <Heading size={"md"}>수록곡</Heading>
+          <Heading size={"md"}>곡 정보</Heading>
           <br/>
           <Box>
             <Table>
