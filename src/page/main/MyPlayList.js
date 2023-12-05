@@ -11,18 +11,21 @@ import {
     Flex,
     Heading,
     Image,
-    Spacer,
-    Text,
+    Spacer, Table, Tbody, Td,
+    Text, Th, Thead, Tr,
 } from "@chakra-ui/react";
 import axios from "axios";
 import {useLocation, useNavigate} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faRecordVinyl} from "@fortawesome/free-solid-svg-icons";
 import {LoginContext} from "../../component/LoginProvider";
+import ChartPage from "./ChartPage";
 
 export function MyPlayList() {
     const navigate = useNavigate();
     const [list, setList] = useState(null);
+    const [songList, setSongList] = useState(null);
+
 
     const {login} = useContext(LoginContext);
     const location = useLocation();
@@ -33,6 +36,14 @@ export function MyPlayList() {
         axios.get("/api/myList/get?" + params).then(({data}) => setList(data));
     }, [location]);
 
+
+    function handleChart() {
+
+        axios
+            .get("/api/song/chartlist")
+            .then(() => navigate("/main/chartpage"))
+
+    }
 
     return (
         <>
@@ -47,6 +58,7 @@ export function MyPlayList() {
                                 <Card w="xs">
                                     <CardHeader
                                         _hover={{cursor: "pointer"}}
+                                        onClick={handleChart}
                                     >
                                         <Image
                                             src="https://cdn.dribbble.com/users/5783048/screenshots/13902636/skull_doodle_4x.jpg"/>
@@ -58,6 +70,7 @@ export function MyPlayList() {
                                                 cursor: "pointer",
                                                 textDecoration: "underline",
                                             }}
+                                            onClick={handleChart}
                                         >
                                             {song?.listName}
                                         </Heading>

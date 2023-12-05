@@ -11,14 +11,18 @@ import {
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { useContext } from "react";
+import {useContext, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import {LoginContext} from "../../component/LoginProvider";
 
 export function MyInfo() {
-  const {login} = useContext(LoginContext);
+  const {login, fetchLogin} = useContext(LoginContext);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchLogin();
+  }, []);
 
   return (
     <Popover>
@@ -40,11 +44,9 @@ export function MyInfo() {
           <br />
           <Button onClick={() => navigate("/main/myplaylist")} variant="ghost">
             나의 재생목록
-          </Button>{" "}
+          </Button>
           <br />
-          <Button variant="ghost">나의 좋아요 목록</Button>
-          <br />
-          <Button variant="ghost">내 정보 수정</Button>
+          <Button variant="ghost" onClick={()=>navigate("/main/memberinfo")}>내 정보</Button>
         </PopoverBody>
         <PopoverFooter>로그아웃</PopoverFooter>
       </PopoverContent>
