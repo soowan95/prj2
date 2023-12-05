@@ -108,7 +108,7 @@ function PlayComp({ top100, playerTitle }) {
           {elapsedTime} / {totalDuration}
         </Box>
         <ReactPlayer
-          style={{ position: "absolute", left: "50%" }}
+          style={{ position: "absolute", left: "-100%" }}
           ref={songInfo}
           playing={isPlaying}
           url={top100.map((a) => a.songUrl)}
