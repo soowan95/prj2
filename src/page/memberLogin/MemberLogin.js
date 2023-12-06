@@ -31,6 +31,7 @@ import {
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import PasswordRecovery from "./PasswordRecovery";
+import FoundPassword from "./FoundPassword";
 import MemberSignup from "./MemberSignup";
 import { LoginContext } from "../../component/LoginProvider";
 import KakaoLoginComp from "../../component/KakaoLoginComp";
@@ -42,6 +43,7 @@ export function MemberLogin() {
   const { fetchLogin, isAuthenticated } = useContext(LoginContext);
 
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const fp = useDisclosure();
   const pr = useDisclosure();
   const ms = useDisclosure();
 
@@ -142,10 +144,18 @@ export function MemberLogin() {
             </Button>
 
             <KakaoLoginComp />
-
-
           </ModalFooter>
           <ModalFooter>
+            <Button
+              w={"150px"}
+              size={"xs"}
+              mr={1}
+              onClick={() => {
+                fp.onOpen();
+              }}
+            >
+              비밀번호 찾기
+            </Button>
             <Button
               w={"150px"}
               size={"xs"}
@@ -154,7 +164,7 @@ export function MemberLogin() {
                 pr.onOpen();
               }}
             >
-              비밀번호변경
+              비밀번호 재설정
             </Button>
             <Button
               w={"100px"}
@@ -169,6 +179,11 @@ export function MemberLogin() {
           </ModalFooter>
         </ModalContent>
       </Modal>
+      <FoundPassword
+        isOpen={fp.isOpen}
+        onClose={fp.onClose}
+        securityQuestions={securityQuestionList}
+      />
       <PasswordRecovery
         isOpen={pr.isOpen}
         onClose={pr.onClose}
