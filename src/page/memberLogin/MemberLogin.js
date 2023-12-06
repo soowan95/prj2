@@ -139,24 +139,32 @@ export function MemberLogin() {
             >
               로그인
             </Button>
+
+            <KakaoLoginComp />
+
+
+          </ModalFooter>
+          <ModalFooter>
             <Button
+              w={"150px"}
               size={"xs"}
               mr={1}
               onClick={() => {
                 pr.onOpen();
               }}
             >
-              비밀번호찾기
+              비밀번호변경
             </Button>
             <Button
+              w={"100px"}
               size={"xs"}
+              mr={1}
               onClick={() => {
                 ms.onOpen();
               }}
             >
               회원가입
             </Button>
-            <KakaoLoginComp />
           </ModalFooter>
         </ModalContent>
       </Modal>

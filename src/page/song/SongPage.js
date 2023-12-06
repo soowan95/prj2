@@ -1,20 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import axios from "axios";
-import { Box, Flex, FormLabel, Heading, Image } from "@chakra-ui/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faComputerMouse } from "@fortawesome/free-solid-svg-icons";
+import {
+  Box, Button,
+  Flex,
+  FormControl,
+  FormLabel,
+  Heading,
+  Image,
+  Table,
+  Tbody,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tr
+} from "@chakra-ui/react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faComputerMouse} from "@fortawesome/free-solid-svg-icons";
 import Counter from "./Counter";
-import { useParams } from "react-router-dom";
+import {useParams} from "react-router-dom";
+import SongList from "./SongList";
 
 function SongPage(props) {
   const [songData, setSongData] = useState({});
-  const { id } = useParams();
+  const [albumList, setAlbumList] = useState(null);
+  const {id} = useParams();
 
   useEffect(() => {
-    axios.get("/api/song/" + id).then(({ data }) => setSongData(data));
+    axios.get("/api/song/" + id).then(({data}) => {
+      setSongData(data);
+      axios.get("/api/song/albumList?album=" + data.album)
+        .then(({data}) => setAlbumList(data));
+    });
   }, []);
 
-  console.log(songData);
   return (
     <Box mt={"100px"}>
       <Flex>
@@ -77,7 +96,51 @@ function SongPage(props) {
           </Box>
         </Box>
       </Flex>
+
+
+      <Box>
+        {/*<SongList album={album.current} />*/}
+        <Box>
+          <br/>
+          <Heading size={"md"}>곡 정보</Heading>
+          <br/>
+          <Box>
+            <Table>
+              <Thead>
+                <Tr>
+                  <Th>번호</Th>
+                  <Th>제목</Th>
+                  <Th>가수</Th>
+                  <Th>앨범명</Th>
+                  <Th>출시일</Th>
+                  <Th>장르</Th>
+                </Tr>
+              </Thead>
+
+              <Tbody>
+                {albumList !== null &&
+                  albumList.map((album=>(
+
+                    <Tr>
+                      <Td>{album.id}</Td>
+                      <Td>{album.title}</Td>
+                      <Td>{album.name}</Td>
+                      <Td>{album.album}</Td>
+                      <Td>{album.release}</Td>
+                      <Td>{album.genre}</Td>
+                    </Tr>
+                  )))}
+              </Tbody>
+            </Table>
+          </Box>
+        </Box>
+      </Box>
+
+
+
     </Box>
+
+
   );
 }
 

@@ -55,6 +55,11 @@ export function SongRequest() {
   const [selectGenre, updateSelectGenre] = useImmer([]);
   const [selectMood, updateSelectMood] = useImmer([]);
 
+  // 파일 업로드
+  const [file, setFile] = useState(null);
+
+
+
   useEffect(() => {
     setIsUpdate(false);
     axios.get("/api/song/requestList").then((response) => {
@@ -68,7 +73,8 @@ export function SongRequest() {
     // ok -> 성공 토스트 띄우면서 모달 닫기
     // error -> 오류 토스트 띄우면서 그대로 있기
     axios
-      .post("/api/song/insert", {
+      .postForm("/api/song/insert",{
+        file
         title: title.current,
         artistName: artist.current,
         mood: selectMood.join(", "),
@@ -218,9 +224,15 @@ export function SongRequest() {
               />
             </FormControl>
 
-            <FormControl mb={10}>
+            <FormControl mb={5}>
               <FormLabel fontWeight={"bold"}>가사</FormLabel>
               <Textarea onChange={(e) => (lyric.current = e.target.value)} />
+            </FormControl>
+
+            <FormControl mb={10}>
+              <FormLabel fontWeight={"bold"}>사진</FormLabel>
+
+              <Input type="file" accept="image/*" onChange={(e)=>setFile(e.target.files[0])}/>
             </FormControl>
 
             <hr />
@@ -267,7 +279,7 @@ export function SongRequest() {
 
           <ModalFooter>
             <Box fontWeight={"bold"} fontSize={"large"}>
-              입력 하시겠습니까? 😉
+              입력 하시겠습니까? 😉　　　　　　　
             </Box>
             <Button onClick={handleInsert} colorScheme="purple" mr={3}>
               저장
