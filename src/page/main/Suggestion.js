@@ -15,10 +15,8 @@ import {
   PopoverBody,
   PopoverCloseButton,
   PopoverContent,
-  PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
-  position,
   Stack,
   Text,
   Tooltip,
@@ -56,9 +54,6 @@ export function Suggestion() {
   const [password, setPassword] = useState("");
   const toast = useToast();
   const navigate = useNavigate();
-  const [isLike, setIsLike] = useState(false);
-  const [board, setBoard] = useState(null);
-  const [like, setLike] = useState(null);
   const [likeList, setLikeList] = useState([]);
   const [allList, setAllList] = useState(null);
   const [isLogin, setIsLogin] = useState(false);
@@ -69,6 +64,7 @@ export function Suggestion() {
       for (const allListElement of allList) {
         axios
           .get("/api/board/" + allListElement.id)
+
           .then((response) =>
             setLikeList((s) => {
               if (
@@ -126,10 +122,8 @@ export function Suggestion() {
             }
           }),
         );
-      })
-      //좋아요 누를때마다 콘솔에 like랑 countlike
-      .catch(() => console.log("bad"))
-      .finally(() => console.log("done"));
+      });
+    //좋아요 누를때마다 콘솔에 like랑 countlike
   }
   return (
     <>
