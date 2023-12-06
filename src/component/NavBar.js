@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Button, Flex, useToast } from "@chakra-ui/react";
+import { Box, Button, Center, Image, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -28,19 +28,19 @@ export function NavBar() {
   }
 
   return (
-    <Flex>
-      <Button colorScheme="purple" mr={5} onClick={() => navigate("/main")}>
-        MAIN
-      </Button>
-      <MemberLogin />
-
-      {isAuthenticated() && (
-        <Button colorScheme="purple" onClick={handleLogout}>
-          로그아웃
-          <FontAwesomeIcon icon={faRightFromBracket} />
-        </Button>
-      )}
-    </Flex>
+    <>
+      <Box>
+        <Center>
+          <MemberLogin />
+          {isAuthenticated() && (
+            <Button colorScheme="purple" onClick={handleLogout}>
+              로그아웃
+              <FontAwesomeIcon icon={faRightFromBracket} />
+            </Button>
+          )}
+        </Center>
+      </Box>
+    </>
   );
 }
 

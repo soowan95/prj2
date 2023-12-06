@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Button,
   Popover,
   PopoverArrow,
@@ -9,30 +10,32 @@ import {
   PopoverHeader,
   PopoverTrigger,
 } from "@chakra-ui/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { useContext, useEffect, useState } from "react";
-import axios from "axios";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../../component/LoginProvider";
 
 export function MyInfo() {
-  const [loginInfo, setLoginInfo] = useState(null);
+  const { login, fetchLogin } = useContext(LoginContext);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchLogin();
+  }, []);
 
   return (
     <Popover>
       <PopoverTrigger>
-        <Button fontSize={"1.7rem"}>
-          <FontAwesomeIcon icon={faUser} />
-        </Button>
+        <Avatar
+          src="https://bit.ly/broken-link"
+          _hover={{ cursor: "pointer" }}
+        />
       </PopoverTrigger>
       <PopoverContent>
         <PopoverArrow />
         <PopoverCloseButton />
         <PopoverHeader>
-          {loginInfo ? <>{loginInfo.nickName} 님 환영합니다</> : "로딩 중..."}
+          {login ? <>{login.nickName} 님 환영합니다</> : "로딩 중..."}
         </PopoverHeader>
         <PopoverBody>
           <Button variant="ghost" onClick={() => navigate("/main/recommended")}>
@@ -41,11 +44,11 @@ export function MyInfo() {
           <br />
           <Button onClick={() => navigate("/main/myplaylist")} variant="ghost">
             나의 재생목록
-          </Button>{" "}
+          </Button>
           <br />
-          <Button variant="ghost">나의 좋아요 목록</Button>
-          <br />
-          <Button variant="ghost">내 정보 수정</Button>
+          <Button variant="ghost" onClick={() => navigate("/main/memberinfo")}>
+            내 정보
+          </Button>
         </PopoverBody>
         <PopoverFooter>로그아웃</PopoverFooter>
       </PopoverContent>

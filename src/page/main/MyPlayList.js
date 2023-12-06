@@ -36,7 +36,6 @@ function LikeContainer({ onClick, listId }) {
 export function MyPlayList() {
   const navigate = useNavigate();
   const [list, setList] = useState(null);
-  const [like, setLike] = useState(null);
 
   const { login } = useContext(LoginContext);
   const location = useLocation();
@@ -52,6 +51,9 @@ export function MyPlayList() {
       .post("/api/like", { memberId: login.id, likelistId: playListId }) // 로그인 아이디랑 playlistId 아이디
       .then(() => console.log("잘됨"));
     //   .catch(() => console.log("bad"));
+    
+  function handleChart() {
+    axios.get("/api/song/chartlist").then(() => navigate("/main/chartpage"));
   }
 
   return (
@@ -65,7 +67,10 @@ export function MyPlayList() {
             <Box gap={5} key={song?.id}>
               <Box mt={30}>
                 <Card w="xs">
-                  <CardHeader _hover={{ cursor: "pointer" }}>
+                  <CardHeader
+                    _hover={{ cursor: "pointer" }}
+                    onClick={handleChart}
+                  >
                     <Image src="https://cdn.dribbble.com/users/5783048/screenshots/13902636/skull_doodle_4x.jpg" />
                   </CardHeader>
                   <CardBody>
@@ -75,6 +80,7 @@ export function MyPlayList() {
                         cursor: "pointer",
                         textDecoration: "underline",
                       }}
+                      onClick={handleChart}
                     >
                       {song?.listName}
                     </Heading>

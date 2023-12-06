@@ -19,6 +19,10 @@ import { RecommendedList } from "./page/main/RecommendedList";
 import { SearchPage } from "./page/main/SearchPage";
 import { Suggestion } from "./page/main/Suggestion";
 import ChartPage from "./page/main/ChartPage";
+import MemberInfo from "./page/memberLogin/MemberInfo";
+import MemberDelete from "./page/memberLogin/MemberDelete";
+import MyFavoritePlaylist from "./page/main/MyFavoritePlaylist";
+import SongList from "./page/song/SongList";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -26,7 +30,6 @@ const routes = createBrowserRouter(
       <Route path="/" element={<HomeLayout />}>
         <Route path="login" element={<MemberLogin />} />
         <Route path="kakaoLogin" element={<KakaoLogin />} />,
-        <Route path="chartpage" element={<ChartPage />} />
       </Route>
       <Route path="main" element={<MainLayout />}>
         <Route path="myinfo" element={<MyInfo />} />
@@ -34,12 +37,15 @@ const routes = createBrowserRouter(
         <Route path="search" element={<SearchPage />} />
         <Route path="myplaylist" element={<MyPlayList />} />
         <Route path="requestlist" element={<SongRequest />} />
+        <Route path="albumList" element={<SongList />} />
         <Route path="song/:id" element={<SongPage />} />
         <Route path="recommended" element={<RecommendedList />} />
         <Route path="suggestion" element={<Suggestion />} />
-
+        <Route path="chartpage" element={<ChartPage />} />
+        <Route path="memberinfo" element={<MemberInfo />} />
+        <Route path="delete" element={<MemberDelete />} />
+        <Route path="myFavorite" element={<MyFavoritePlaylist />} />
       </Route>
-      ,
     </Route>,
   ),
 );

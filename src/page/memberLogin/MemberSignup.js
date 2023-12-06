@@ -18,7 +18,6 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
-import PasswordRecovery from "./PasswordRecovery";
 
 export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
   // securityQuestionList를 함수 외부에서 선언

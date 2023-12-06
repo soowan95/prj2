@@ -118,7 +118,10 @@ function SongRequestComp() {
               <Button
                 position={"relative"}
                 left={"70%"}
-                onClick={handleSongRequestButton}
+                onClick={() => {
+                  handleSongRequestButton();
+                  songRequestModal.onClose();
+                }}
                 isDisabled={isExist}
               >
                 요청
