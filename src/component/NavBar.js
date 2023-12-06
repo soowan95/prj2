@@ -29,7 +29,7 @@ export function NavBar() {
 
   return (
     <>
-      <Box>
+      <Box mt={10}>
         <Center>
           <MemberLogin />
           {isAuthenticated() && (

@@ -6,6 +6,7 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
+  Center,
   Divider,
   Flex,
   Heading,
@@ -36,6 +37,7 @@ function LikeContainer({ onClick, listId }) {
 export function MyPlayList() {
   const navigate = useNavigate();
   const [list, setList] = useState(null);
+  const [myPlaylist, setMyPlaylist] = useState(null);
 
   const { login } = useContext(LoginContext);
   const location = useLocation();
@@ -54,57 +56,61 @@ export function MyPlayList() {
 
   //   .catch(() => console.log("bad"));
 
-  function handleChart() {
-    axios.get("/api/song/chartlist").then(() => navigate("/main/chartpage"));
+  function handleChart(listId) {
+    axios
+      .get("/api/myList/favoriteListName?listId=" + listId)
+      .then((response) => setMyPlaylist(response.data));
   }
 
   return (
-    <>
+    <Box mt={50}>
       <Divider />
       <Heading ml={10}>{login.nickName} 님의 재생목록</Heading>
       <Divider />
-      <Flex gap={5}>
-        {list !== null &&
-          list.map((song) => (
-            <Box gap={5} key={song?.id}>
-              <Box mt={30}>
-                <Card w="xs">
-                  <CardHeader
-                    _hover={{ cursor: "pointer" }}
-                    onClick={handleChart}
-                  >
-                    <Image src="https://cdn.dribbble.com/users/5783048/screenshots/13902636/skull_doodle_4x.jpg" />
-                  </CardHeader>
-                  <CardBody>
-                    <Heading
-                      size="md"
-                      _hover={{
-                        cursor: "pointer",
-                        textDecoration: "underline",
-                      }}
-                      onClick={handleChart}
+      <Center mt={50}>
+        <Flex gap={5}>
+          {list !== null &&
+            list.map((song) => (
+              <Box gap={5} key={song?.id}>
+                <Box mt={30}>
+                  <Card w="xs">
+                    <CardHeader
+                      _hover={{ cursor: "pointer" }}
+                      onClick={() => handleChart(song.listId)}
                     >
-                      {song?.listName}
-                    </Heading>
-                  </CardBody>
-                  <Divider color="gray" />
-                  <CardFooter>
-                    {/*<FontAwesomeIcon icon={faRecordVinyl}/>*/}
-                    <Text>$곡</Text>
-                    <Spacer />
-                    <Flex>
-                      <LikeContainer
-                        onClick={handleLike}
-                        listId={song.listId}
-                      ></LikeContainer>
-                      <Box>{song.countLike}</Box>
-                    </Flex>
-                  </CardFooter>
-                </Card>
+                      <Image src="https://cdn.dribbble.com/users/5783048/screenshots/13902636/skull_doodle_4x.jpg" />
+                    </CardHeader>
+                    <CardBody>
+                      <Heading
+                        size="md"
+                        _hover={{
+                          cursor: "pointer",
+                          textDecoration: "underline",
+                        }}
+                        onClick={() => handleChart(song.listId)}
+                      >
+                        {song?.listName}
+                      </Heading>
+                    </CardBody>
+                    <Divider color="gray" />
+                    <CardFooter>
+                      {/*<FontAwesomeIcon icon={faRecordVinyl}/>*/}
+                      <Text>{song?.songs}곡</Text>
+                      <Spacer />
+                      <Flex>
+                        <LikeContainer
+                          onClick={handleLike}
+                          listId={song.listId}
+                        ></LikeContainer>
+                        <Box>{song.countLike}</Box>
+                      </Flex>
+                    </CardFooter>
+                  </Card>
+                </Box>
               </Box>
-            </Box>
-          ))}
-      </Flex>
-    </>
+            ))}
+        </Flex>
+      </Center>
+    </Box>
   );
 }
