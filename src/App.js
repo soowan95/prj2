@@ -22,6 +22,7 @@ import ChartPage from "./page/main/ChartPage";
 import MemberInfo from "./page/memberLogin/MemberInfo";
 import MemberDelete from "./page/memberLogin/MemberDelete";
 import MyFavoritePlaylist from "./page/main/MyFavoritePlaylist";
+import SongList from "./page/song/SongList";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -37,6 +38,7 @@ const routes = createBrowserRouter(
         <Route path="search" element={<SearchPage />} />
         <Route path="myplaylist" element={<MyPlayList />} />
         <Route path="requestlist" element={<SongRequest />} />
+        <Route path="albumList" element={<SongList />} />
         <Route path="song/:id" element={<SongPage />} />
         <Route path="recommended" element={<RecommendedList />} />
         <Route path="chartpage" element={<ChartPage />} />
