@@ -1,3 +1,5 @@
+import {CommentContainer} from "../../component/CommentContainer";
+import {MemberLogin} from "../memberLogin/MemberLogin";
 import React, {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import {
@@ -96,8 +98,7 @@ function SongPage(props) {
           </Box>
         </Box>
       </Flex>
-
-
+      <CommentContainer songId={id} />
       <Box>
         {/*<SongList album={album.current} />*/}
         <Box>
@@ -135,12 +136,7 @@ function SongPage(props) {
           </Box>
         </Box>
       </Box>
-
-
-
     </Box>
-
-
   );
 }
 

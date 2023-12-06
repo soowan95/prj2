@@ -13,6 +13,7 @@ import { SongContext } from "../../layout/MainLayout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClone } from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
+import {useNavigate} from "react-router-dom";
 import PlayComp from "../../component/PlayComp";
 
 export function Top100Page() {
@@ -26,6 +27,8 @@ export function Top100Page() {
   const songDrawer = useDisclosure();
 
   const params = new URLSearchParams();
+
+  const navigate = useNavigate();
 
   function handleSimilarButton(genre, mood, id) {
     params.set("genre", genre);
@@ -44,6 +47,10 @@ export function Top100Page() {
     }
   }
 
+  function handleSongClick(songId) {
+    navigate(`/main/song/${songId}`);
+  }
+
   return (
     <Box mt={"100px"}>
       {top100 !== null &&
@@ -53,6 +60,9 @@ export function Top100Page() {
             m={"3px auto"}
             width={"70%"}
             border={"1px solid black"}
+            // hover 및 클릭 기능 추가
+            style={{cursor: "pointer"}}
+            onClick={() => handleSongClick(song.id)}
           >
             <Flex
               justifyContent={"space-between"}
