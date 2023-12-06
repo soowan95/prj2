@@ -17,7 +17,7 @@ import PlayComp from "../../component/PlayComp";
 
 export function Top100Page() {
   const [similar, setSimilar] = useState(null);
-  const playerTitle = useRef("");
+  const [songIndex, setSongIndex] = useState(null);
 
   const { top100 } = useContext(SongContext);
 
@@ -61,7 +61,7 @@ export function Top100Page() {
             >
               <Box
                 onClick={() => {
-                  playerTitle.current = song.title;
+                  setSongIndex(song.indexForPlay);
                   songDrawer.onOpen();
                 }}
               >
@@ -96,20 +96,13 @@ export function Top100Page() {
               ))}
           </Box>
         ))}
-      <Drawer
-        placement="bottom"
+      <PlayComp
+        index={songIndex}
+        setIndex={setSongIndex}
         isOpen={songDrawer.isOpen}
         onClose={songDrawer.onClose}
-      >
-        <DrawerOverlay>
-          <DrawerContent>
-            <DrawerHeader>{playerTitle.current}</DrawerHeader>
-            <DrawerBody>
-              <PlayComp top100={top100} playerTitle={playerTitle} />
-            </DrawerBody>
-          </DrawerContent>
-        </DrawerOverlay>
-      </Drawer>
+        top100={top100}
+      />
     </Box>
   );
 }

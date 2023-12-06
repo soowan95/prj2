@@ -1,6 +1,11 @@
 import {
   Box,
   Button,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
   Flex,
   Slider,
   SliderFilledTrack,
@@ -19,7 +24,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MdGraphicEq } from "react-icons/md";
 
-function PlayComp({ top100, playerTitle }) {
+function PlayComp({ isOpen, onClose, top100, index, setIndex }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [rerenderCount, setRerenderCount] = useState(0);
 
@@ -68,53 +73,72 @@ function PlayComp({ top100, playerTitle }) {
   }
 
   return (
-    <Box overflow={"hidden"}>
-      <Slider
-        aria-label="slider-ex-4"
-        min={0}
-        max={duration}
-        value={currentTime}
-        onChange={(e) => songInfo.current.seekTo(e)}
-      >
-        <SliderTrack bg="red.100">
-          <SliderFilledTrack bg="tomato" />
-        </SliderTrack>
-        <SliderThumb boxSize={6}>
-          <Box color="tomato" as={MdGraphicEq} />
-        </SliderThumb>
-      </Slider>
-      <Flex position={"relative"} border={"1px solid black"}>
-        <Button>
-          <FontAwesomeIcon icon={faBackward} />
-        </Button>
-        <Button onClick={handleRewind}>
-          <FontAwesomeIcon icon={faRotateLeft} />
-        </Button>
-        <Button
-          onClick={() => {
-            setIsPlaying(!isPlaying);
-            setRerenderCount(0);
-          }}
-        >
-          <FontAwesomeIcon icon={faPlay} />
-        </Button>
-        <Button onClick={handleForward}>
-          <FontAwesomeIcon icon={faRotateRight} />
-        </Button>
-        <Button>
-          <FontAwesomeIcon icon={faForward} />
-        </Button>
-        <Box lineHeight={"40px"}>
-          {elapsedTime} / {totalDuration}
-        </Box>
-        <ReactPlayer
-          style={{ position: "absolute", left: "-100%" }}
-          ref={songInfo}
-          playing={isPlaying}
-          url={top100.map((a) => a.songUrl)}
-        />
-      </Flex>
-    </Box>
+    <Drawer
+      placement="bottom"
+      isOpen={isOpen}
+      onClose={() => {
+        setIsPlaying(false);
+        songInfo.current.seekTo(0);
+        onClose();
+      }}
+    >
+      <DrawerOverlay>
+        <DrawerContent>
+          <DrawerHeader>
+            {top100 !== null && top100.at(index).title}
+          </DrawerHeader>
+          <DrawerBody>
+            <Box overflow={"hidden"}>
+              <Slider
+                aria-label="slider-ex-4"
+                min={0}
+                max={duration}
+                value={currentTime}
+                onChange={(e) => songInfo.current.seekTo(e)}
+              >
+                <SliderTrack bg="red.100">
+                  <SliderFilledTrack bg="tomato" />
+                </SliderTrack>
+                <SliderThumb boxSize={6}>
+                  <Box color="tomato" as={MdGraphicEq} />
+                </SliderThumb>
+              </Slider>
+              <Flex position={"relative"} border={"1px solid black"}>
+                <Button>
+                  <FontAwesomeIcon icon={faBackward} />
+                </Button>
+                <Button onClick={handleRewind}>
+                  <FontAwesomeIcon icon={faRotateLeft} />
+                </Button>
+                <Button
+                  onClick={() => {
+                    setIsPlaying(!isPlaying);
+                    setRerenderCount(0);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faPlay} />
+                </Button>
+                <Button onClick={handleForward}>
+                  <FontAwesomeIcon icon={faRotateRight} />
+                </Button>
+                <Button>
+                  <FontAwesomeIcon icon={faForward} />
+                </Button>
+                <Box lineHeight={"40px"}>
+                  {elapsedTime} / {totalDuration}
+                </Box>
+                <ReactPlayer
+                  style={{ position: "absolute", left: "-100%" }}
+                  ref={songInfo}
+                  playing={isPlaying}
+                  url={top100 !== null && top100.at(index).songUrl}
+                />
+              </Flex>
+            </Box>
+          </DrawerBody>
+        </DrawerContent>
+      </DrawerOverlay>
+    </Drawer>
   );
 }
 
