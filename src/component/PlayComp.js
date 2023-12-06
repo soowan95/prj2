@@ -104,11 +104,11 @@ function PlayComp({ isOpen, onClose, top100, index, setIndex }) {
                 </SliderThumb>
               </Slider>
               <Flex position={"relative"} border={"1px solid black"}>
-                {index !== 0 &&
+                {index !== 0 && (
                   <Button>
                     <FontAwesomeIcon icon={faBackward} />
                   </Button>
-                }
+                )}
                 <Button onClick={handleRewind}>
                   <FontAwesomeIcon icon={faRotateLeft} />
                 </Button>
