@@ -148,12 +148,7 @@ function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
                 </Tooltip>
               </Slider>
               <Flex position={"relative"}>
-                <Box
-                  mx={4}
-                  lineHeight={"40px"}
-                  isDisabled={index === 0}
-                  onClick={handlePreSong}
-                >
+                <Box mx={4} lineHeight={"40px"} onClick={handlePreSong}>
                   <FontAwesomeIcon icon={faBackward} />
                 </Box>
                 <Box mr={4} lineHeight={"40px"} onClick={handleRewind}>
@@ -176,12 +171,7 @@ function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
                 <Box mr={4} lineHeight={"40px"} onClick={handleForward}>
                   <FontAwesomeIcon icon={faRotateRight} />
                 </Box>
-                <Box
-                  mr={4}
-                  lineHeight={"40px"}
-                  isDisabled={songList !== null && index >= songList.length - 1}
-                  onClick={handleNextSong}
-                >
+                <Box mr={4} lineHeight={"40px"} onClick={handleNextSong}>
                   <FontAwesomeIcon icon={faForward} />
                 </Box>
                 <Box lineHeight={"40px"}>
