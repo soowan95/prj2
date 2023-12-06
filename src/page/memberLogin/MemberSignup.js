@@ -35,8 +35,6 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
 
   const [idAvailable, setIdAvailable] = useState(false);
 
-  const [isPasswordRecoveryOpen, setIsPasswordRecoveryOpen] = useState(false);
-
   const toast = useToast();
 
   let submitAvailable = true;
@@ -110,10 +108,6 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
           });
         }
       });
-  }
-
-  function handleForgotPassword() {
-    setIsPasswordRecoveryOpen(true);
   }
 
   return (
@@ -197,8 +191,6 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
           >
             가입
           </Button>
-
-          <Button onClick={handleForgotPassword}>비밀번호 찾기</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
