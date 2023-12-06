@@ -10,6 +10,7 @@ import {
   Flex,
   Heading,
   Image,
+  list,
   Spacer,
   Text,
 } from "@chakra-ui/react";
@@ -23,11 +24,13 @@ import {
 import { LoginContext } from "../../component/LoginProvider";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 
-function LikeContainer({ onClick, listId }) {
+function LikeContainer({ onClick, listId, isLike }) {
   return (
     <>
       <Button variant="ghost" size="xl" onClick={() => onClick(listId)}>
-        <FontAwesomeIcon icon={faHeart} size="xl" />
+        {isLike && <FontAwesomeIcon icon={fullHeart} size="xl" />}
+        {isLike || <FontAwesomeIcon icon={faHeart} size="xl" />}
+        {/*<FontAwesomeIcon icon={isLike ? fullHeart : faHeart} />*/}
       </Button>
     </>
   );
@@ -36,6 +39,7 @@ function LikeContainer({ onClick, listId }) {
 export function MyPlayList() {
   const navigate = useNavigate();
   const [list, setList] = useState(null);
+  const [reRend, setReRend] = useState(0);
 
   const { login } = useContext(LoginContext);
   const location = useLocation();
@@ -44,28 +48,42 @@ export function MyPlayList() {
     const params = new URLSearchParams();
     params.set("id", login.id);
     axios.get("/api/myList/get?" + params).then(({ data }) => setList(data));
-  }, [location]);
+  }, [reRend, location]);
+
+  // useEffect(() => {
+  //   axios
+  //     .get("/api/like/board/" + id)
+  //     .then((response) => setIsLike(response.data));
+  // }, []);
 
   function handleLike(playListId) {
-    axios
-      .post("/api/like", { memberId: login.id, likelistId: playListId }) // 로그인 아이디랑 playlistId 아이디
-      .then(() => console.log("잘됨"));
+    axios.post("/api/like", {
+      memberId: login.id,
+      likelistId: playListId, // handliLike의 파라미터playListId로 받지만 모른다 하지만
+      // onClick={handleLike} 밑에 이걸 보면 onClick이 가르키는 것은
+      // <Button variant="ghost" size="xl" onClick={() => onClick(listId)}> 즉 nClick(listId) listId 이다
+    });
+    setReRend((reRend) => reRend + 1);
+  }
 
-    //   .catch(() => console.log("bad"));
+  function handleChart() {
+    axios.get("/api/song/chartlist").then(() => navigate("/main/chartpage"));
+  }
 
-    function handleChart() {
-      axios.get("/api/song/chartlist").then(() => navigate("/main/chartpage"));
-    }
-
-    return (
-      <>
-        <Divider />
-        <Heading ml={10}>{login.nickName} 님의 재생목록</Heading>
-        <Divider />
-        <Flex gap={5}>
-          {list !== null &&
-            list.map((song) => (
-              <Box gap={5} key={song?.id}>
+  return (
+    <Box>
+      <Divider />
+      <Heading ml={10}>{login.nickName} 님의 재생목록</Heading>
+      <Divider />
+      <Flex gap={5}>
+        {list !== null &&
+          list.map(
+            (
+              memberplaylist, //SELECT a.memberId as id, a.listName, a.id listId FROM memberplaylist a
+            ) => (
+              //join member b on a.memberId = b.id
+              //where b.id = #{id}
+              <Box gap={5} key={memberplaylist.id}>
                 <Box mt={30}>
                   <Card w="xs">
                     <CardHeader
@@ -83,7 +101,7 @@ export function MyPlayList() {
                         }}
                         onClick={handleChart}
                       >
-                        {song?.listName}
+                        {memberplaylist.listName}
                       </Heading>
                     </CardBody>
                     <Divider color="gray" />
@@ -94,17 +112,18 @@ export function MyPlayList() {
                       <Flex>
                         <LikeContainer
                           onClick={handleLike}
-                          listId={song.listId}
+                          listId={memberplaylist.listId} // 리스트 아이디
+                          isLike={memberplaylist.isLike} // ture 인지 false 인지 boolean
                         ></LikeContainer>
-                        <Box>{song.countLike}</Box>
+                        <Box>{memberplaylist.countLike}</Box>
                       </Flex>
                     </CardFooter>
                   </Card>
                 </Box>
               </Box>
-            ))}
-        </Flex>
-      </>
-    );
-  }
+            ),
+          )}
+      </Flex>
+    </Box>
+  );
 }
