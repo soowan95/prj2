@@ -64,6 +64,7 @@ export function Suggestion() {
       for (const allListElement of allList) {
         axios
           .get("/api/board/" + allListElement.id)
+
           .then((response) =>
             setLikeList((s) => {
               if (
@@ -121,8 +122,8 @@ export function Suggestion() {
             }
           }),
         );
-      })
-      //좋아요 누를때마다 콘솔에 like랑 countlike
+      });
+    //좋아요 누를때마다 콘솔에 like랑 countlike
   }
   return (
     <>

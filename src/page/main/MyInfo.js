@@ -10,14 +10,12 @@ import {
   PopoverHeader,
   PopoverTrigger,
 } from "@chakra-ui/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-import {useContext, useEffect} from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {LoginContext} from "../../component/LoginProvider";
+import { LoginContext } from "../../component/LoginProvider";
 
 export function MyInfo() {
-  const {login, fetchLogin} = useContext(LoginContext);
+  const { login, fetchLogin } = useContext(LoginContext);
 
   const navigate = useNavigate();
 
@@ -28,7 +26,10 @@ export function MyInfo() {
   return (
     <Popover>
       <PopoverTrigger>
-        <Avatar src='https://bit.ly/broken-link' _hover={{cursor:"pointer"}}/>
+        <Avatar
+          src="https://bit.ly/broken-link"
+          _hover={{ cursor: "pointer" }}
+        />
       </PopoverTrigger>
       <PopoverContent>
         <PopoverArrow />
@@ -45,7 +46,9 @@ export function MyInfo() {
             나의 재생목록
           </Button>
           <br />
-          <Button variant="ghost" onClick={()=>navigate("/main/memberinfo")}>내 정보</Button>
+          <Button variant="ghost" onClick={() => navigate("/main/memberinfo")}>
+            내 정보
+          </Button>
         </PopoverBody>
         <PopoverFooter>로그아웃</PopoverFooter>
       </PopoverContent>

@@ -80,11 +80,12 @@ function PasswordRecovery({ isOpen, onClose, securityQuestions }) {
               value={selectedSecurityQuestion}
               onChange={(e) => setSecurityQuestion(e.target.value)}
             >
-              {securityQuestions && securityQuestions.map((question, index) => (
-                <option key={index} value={question}>
-                  {question}
-                </option>
-              ))}
+              {securityQuestions &&
+                securityQuestions.map((question, index) => (
+                  <option key={index} value={question}>
+                    {question}
+                  </option>
+                ))}
             </Select>
           </FormControl>
           <FormControl mb={5}>

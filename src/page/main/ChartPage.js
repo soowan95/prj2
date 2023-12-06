@@ -7,7 +7,7 @@ export function ChartPage() {
   useEffect(() => {
     axios
       .get("/api/song/chartlist")
-      .then((response) => setSongList(response.data))
+      .then((response) => setSongList(response.data));
   }, []);
   return (
     <Box>
