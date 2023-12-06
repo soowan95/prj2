@@ -50,59 +50,61 @@ export function MyPlayList() {
     axios
       .post("/api/like", { memberId: login.id, likelistId: playListId }) // 로그인 아이디랑 playlistId 아이디
       .then(() => console.log("잘됨"));
-    //   .catch(() => console.log("bad"));
-    
-  function handleChart() {
-    axios.get("/api/song/chartlist").then(() => navigate("/main/chartpage"));
-  }
 
-  return (
-    <>
-      <Divider />
-      <Heading ml={10}>{login.nickName} 님의 재생목록</Heading>
-      <Divider />
-      <Flex gap={5}>
-        {list !== null &&
-          list.map((song) => (
-            <Box gap={5} key={song?.id}>
-              <Box mt={30}>
-                <Card w="xs">
-                  <CardHeader
-                    _hover={{ cursor: "pointer" }}
-                    onClick={handleChart}
-                  >
-                    <Image src="https://cdn.dribbble.com/users/5783048/screenshots/13902636/skull_doodle_4x.jpg" />
-                  </CardHeader>
-                  <CardBody>
-                    <Heading
-                      size="md"
-                      _hover={{
-                        cursor: "pointer",
-                        textDecoration: "underline",
-                      }}
+    //   .catch(() => console.log("bad"));
+
+    function handleChart() {
+      axios.get("/api/song/chartlist").then(() => navigate("/main/chartpage"));
+    }
+
+    return (
+      <>
+        <Divider />
+        <Heading ml={10}>{login.nickName} 님의 재생목록</Heading>
+        <Divider />
+        <Flex gap={5}>
+          {list !== null &&
+            list.map((song) => (
+              <Box gap={5} key={song?.id}>
+                <Box mt={30}>
+                  <Card w="xs">
+                    <CardHeader
+                      _hover={{ cursor: "pointer" }}
                       onClick={handleChart}
                     >
-                      {song?.listName}
-                    </Heading>
-                  </CardBody>
-                  <Divider color="gray" />
-                  <CardFooter>
-                    {/*<FontAwesomeIcon icon={faRecordVinyl}/>*/}
-                    <Text>$곡</Text>
-                    <Spacer />
-                    <Flex>
-                      <LikeContainer
-                        onClick={handleLike}
-                        listId={song.listId}
-                      ></LikeContainer>
-                      <Box>{song.countLike}</Box>
-                    </Flex>
-                  </CardFooter>
-                </Card>
+                      <Image src="https://cdn.dribbble.com/users/5783048/screenshots/13902636/skull_doodle_4x.jpg" />
+                    </CardHeader>
+                    <CardBody>
+                      <Heading
+                        size="md"
+                        _hover={{
+                          cursor: "pointer",
+                          textDecoration: "underline",
+                        }}
+                        onClick={handleChart}
+                      >
+                        {song?.listName}
+                      </Heading>
+                    </CardBody>
+                    <Divider color="gray" />
+                    <CardFooter>
+                      {/*<FontAwesomeIcon icon={faRecordVinyl}/>*/}
+                      <Text>$곡</Text>
+                      <Spacer />
+                      <Flex>
+                        <LikeContainer
+                          onClick={handleLike}
+                          listId={song.listId}
+                        ></LikeContainer>
+                        <Box>{song.countLike}</Box>
+                      </Flex>
+                    </CardFooter>
+                  </Card>
+                </Box>
               </Box>
-            </Box>
-          ))}
-      </Flex>
-    </>
-  );
+            ))}
+        </Flex>
+      </>
+    );
+  }
 }

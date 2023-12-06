@@ -58,8 +58,6 @@ export function SongRequest() {
   // 파일 업로드
   const [file, setFile] = useState(null);
 
-
-
   useEffect(() => {
     setIsUpdate(false);
     axios.get("/api/song/requestList").then((response) => {
@@ -73,8 +71,8 @@ export function SongRequest() {
     // ok -> 성공 토스트 띄우면서 모달 닫기
     // error -> 오류 토스트 띄우면서 그대로 있기
     axios
-      .postForm("/api/song/insert",{
-        file
+      .postForm("/api/song/insert", {
+        file,
         title: title.current,
         artistName: artist.current,
         mood: selectMood.join(", "),
@@ -232,7 +230,11 @@ export function SongRequest() {
             <FormControl mb={10}>
               <FormLabel fontWeight={"bold"}>사진</FormLabel>
 
-              <Input type="file" accept="image/*" onChange={(e)=>setFile(e.target.files[0])}/>
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setFile(e.target.files[0])}
+              />
             </FormControl>
 
             <hr />
