@@ -36,16 +36,18 @@ export function SongRequest() {
   const [requestList, setRequestList] = useState(null);
   const { isOpen, onClose, onOpen } = useDisclosure();
 
-  const [artist, setArtist] = useState("");
-  const [title, setTitle] = useState("");
-
-  const [genre, setGenre] = useState(null);
   const [genreList, setGenreList] = useState(null);
-  const [mood, setMood] = useState(null);
   const [moodList, setMoodList] = useState(null);
+  const [isUpdate, setIsUpdate] = useState(false);
 
   const artistName = useRef("");
   const songTitle = useRef("");
+  const artist = useRef("");
+  const title = useRef("");
+  const group = useRef("");
+  const album = useRef("");
+  const release = useRef("");
+  const lyric = useRef("");
 
   const toast = useToast();
   const navigate = useNavigate();
@@ -53,25 +55,50 @@ export function SongRequest() {
   const [selectGenre, updateSelectGenre] = useImmer([]);
   const [selectMood, updateSelectMood] = useImmer([]);
 
+  // 파일 업로드
+  const [file, setFile] = useState(null);
+
+
+
   useEffect(() => {
+    setIsUpdate(false);
     axios.get("/api/song/requestList").then((response) => {
       setRequestList(response.data);
     });
     axios.get("/api/song/genre").then(({ data }) => setGenreList(data));
     axios.get("/api/song/mood").then(({ data }) => setMoodList(data));
-  }, []);
+  }, [isUpdate]);
 
   function handleInsert() {
     // ok -> 성공 토스트 띄우면서 모달 닫기
     // error -> 오류 토스트 띄우면서 그대로 있기
     axios
-      .post("/api/song/insert")
+      .postForm("/api/song/insert",{
+        file
+        title: title.current,
+        artistName: artist.current,
+        mood: selectMood.join(", "),
+        genre: selectGenre.join(", "),
+        artistGroup: group.current,
+        album: album.current,
+        release: release.current,
+        lyric: lyric.current,
+        requestTitle: songTitle.current,
+        requestArtist: artistName.current,
+      })
       .then(() => {
         toast({
           description: "저장이 완료 되었습니다☺️",
           status: "success",
         });
+        setIsUpdate(true);
         onClose();
+        updateSelectGenre((draft) => {
+          draft.splice(0, draft.length);
+        });
+        updateSelectMood((draft) => {
+          draft.splice(0, draft.length);
+        });
       })
       .catch((error) => {
         toast({
@@ -128,26 +155,30 @@ export function SongRequest() {
 
           <Tbody>
             {requestList !== null &&
-              requestList.map((request) => (
-                <Tr>
-                  <Td>{request.member}</Td>
-                  <Td>{request.artist}</Td>
-                  <Td>{request.title}</Td>
-                  <Td>
-                    <Button
-                      onClick={() => {
-                        artistName.current = request.artist;
-                        songTitle.current = request.title;
-                        onOpen();
-                      }}
-                      colorScheme="purple"
-                      size={"sm"}
-                    >
-                      입력
-                    </Button>
-                  </Td>
-                </Tr>
-              ))}
+              requestList
+                .filter((a) => !a.updated)
+                .map((request) => (
+                  <Tr key={request.id}>
+                    <Td>{request.member}</Td>
+                    <Td>{request.artist}</Td>
+                    <Td>{request.title}</Td>
+                    <Td>
+                      <Button
+                        onClick={() => {
+                          artistName.current = request.artist;
+                          songTitle.current = request.title;
+                          title.current = songTitle.current;
+                          artist.current = artistName.current;
+                          onOpen();
+                        }}
+                        colorScheme="purple"
+                        size={"sm"}
+                      >
+                        입력
+                      </Button>
+                    </Td>
+                  </Tr>
+                ))}
           </Tbody>
         </Table>
       </Box>
@@ -163,36 +194,45 @@ export function SongRequest() {
               <FormLabel fontWeight={"bold"}>가수명</FormLabel>
               <Input
                 defaultValue={artistName.current}
-                onChange={(e) => setArtist(e.target.value)}
+                onChange={(e) => (artist.current = e.target.value)}
               />
             </FormControl>
 
             <FormControl mb={5}>
               <FormLabel fontWeight={"bold"}>그룹명</FormLabel>
-              <Input />
+              <Input onChange={(e) => (group.current = e.target.value)} />
             </FormControl>
 
             <FormControl mb={5}>
               <FormLabel fontWeight={"bold"}>노래 제목</FormLabel>
               <Input
                 defaultValue={songTitle.current}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e) => (title.current = e.target.value)}
               />
             </FormControl>
 
             <FormControl mb={5}>
               <FormLabel fontWeight={"bold"}>앨범</FormLabel>
-              <Input />
+              <Input onChange={(e) => (album.current = e.target.value)} />
             </FormControl>
 
             <FormControl mb={5}>
               <FormLabel fontWeight={"bold"}>출시일</FormLabel>
-              <Input type="date" />
+              <Input
+                type="date"
+                onChange={(e) => (release.current = e.target.value)}
+              />
+            </FormControl>
+
+            <FormControl mb={5}>
+              <FormLabel fontWeight={"bold"}>가사</FormLabel>
+              <Textarea onChange={(e) => (lyric.current = e.target.value)} />
             </FormControl>
 
             <FormControl mb={10}>
-              <FormLabel fontWeight={"bold"}>가사</FormLabel>
-              <Textarea />
+              <FormLabel fontWeight={"bold"}>사진</FormLabel>
+
+              <Input type="file" accept="image/*" onChange={(e)=>setFile(e.target.files[0])}/>
             </FormControl>
 
             <hr />
@@ -202,7 +242,6 @@ export function SongRequest() {
                 mb={2}
                 onChange={(e) => {
                   handleGenre(e.target.value);
-                  setGenre(e.target.value);
                 }}
                 placeholder="장르를 선택하세요."
               >
@@ -220,7 +259,6 @@ export function SongRequest() {
                 mb={2}
                 onChange={(e) => {
                   handleMood(e.target.value);
-                  setMood(e.target.value);
                 }}
                 placeholder="무드를 선택하세요."
               >
@@ -241,7 +279,7 @@ export function SongRequest() {
 
           <ModalFooter>
             <Box fontWeight={"bold"} fontSize={"large"}>
-              입력 하시겠습니까? 😉
+              입력 하시겠습니까? 😉　　　　　　　
             </Box>
             <Button onClick={handleInsert} colorScheme="purple" mr={3}>
               저장

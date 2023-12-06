@@ -1,17 +1,30 @@
-import { Box, Flex } from "@chakra-ui/react";
+import {
+  Box,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  Flex,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { useContext, useRef, useState } from "react";
 import { SongContext } from "../../layout/MainLayout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClone } from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import PlayComp from "../../component/PlayComp";
 
 export function Top100Page() {
   const [similar, setSimilar] = useState(null);
+  const [songIndex, setSongIndex] = useState(null);
 
   const { top100 } = useContext(SongContext);
 
   const thisId = useRef(0);
+
+  const songDrawer = useDisclosure();
 
   const params = new URLSearchParams();
 
@@ -56,7 +69,14 @@ export function Top100Page() {
               alignItems={"center"}
               width={"100%"}
             >
-              <Box>{song.title}</Box>
+              <Box
+                onClick={() => {
+                  setSongIndex(song.indexForPlay);
+                  songDrawer.onOpen();
+                }}
+              >
+                {song.title}
+              </Box>
               <Box>{song.artistName}</Box>
               <Box>{song.genre}</Box>
               <Box>{song.mood}</Box>
@@ -86,6 +106,13 @@ export function Top100Page() {
               ))}
           </Box>
         ))}
+      <PlayComp
+        index={songIndex}
+        setIndex={setSongIndex}
+        isOpen={songDrawer.isOpen}
+        onClose={songDrawer.onClose}
+        top100={top100}
+      />
     </Box>
   );
 }
