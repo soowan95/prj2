@@ -48,6 +48,7 @@ export function SongRequest() {
   const album = useRef("");
   const release = useRef("");
   const lyric = useRef("");
+  const songUrl = useRef("");
 
   const toast = useToast();
   const navigate = useNavigate();
@@ -56,7 +57,7 @@ export function SongRequest() {
   const [selectMood, updateSelectMood] = useImmer([]);
 
   // 파일 업로드
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState(null);
 
   useEffect(() => {
     setIsUpdate(false);
@@ -72,7 +73,7 @@ export function SongRequest() {
     // error -> 오류 토스트 띄우면서 그대로 있기
     axios
       .postForm("/api/song/insert", {
-        file,
+        files,
         title: title.current,
         artistName: artist.current,
         mood: selectMood.join(", "),
@@ -83,6 +84,7 @@ export function SongRequest() {
         lyric: lyric.current,
         requestTitle: songTitle.current,
         requestArtist: artistName.current,
+        songUrl: songUrl.current,
       })
       .then(() => {
         toast({
@@ -167,6 +169,8 @@ export function SongRequest() {
                           songTitle.current = request.title;
                           title.current = songTitle.current;
                           artist.current = artistName.current;
+                          // songUrldmf song 테이블에서 불러올수 있는가 ㅜㅜ?
+                          songUrl.current = songUrl.current;
                           onOpen();
                         }}
                         colorScheme="purple"
@@ -227,15 +231,24 @@ export function SongRequest() {
               <Textarea onChange={(e) => (lyric.current = e.target.value)} />
             </FormControl>
 
-            <FormControl mb={10}>
+            <FormControl mb={5}>
               <FormLabel fontWeight={"bold"}>사진</FormLabel>
-
+              {/* 사진 인풋 ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ ↓ */}
               <Input
                 type="file"
                 accept="image/*"
-                onChange={(e) => setFile(e.target.files[0])}
+                multiple
+                onChange={(e) => setFiles(e.target.files[0])}
               />
             </FormControl>
+
+            {/*<FormControl mb={10}>*/}
+            {/*  <FormLabel fontWeight={"bold"}>노래 URL</FormLabel>*/}
+            {/*  <Input*/}
+            {/*    type="url"*/}
+            {/*    onChange={(e) => (songUrl.current = e.target.value)}*/}
+            {/*  />*/}
+            {/*</FormControl>*/}
 
             <hr />
 
