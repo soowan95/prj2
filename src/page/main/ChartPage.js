@@ -8,7 +8,6 @@ export function ChartPage() {
     axios
       .get("/api/song/chartlist")
       .then((response) => setSongList(response.data))
-      .catch(() => console.log("bad"));
   }, []);
   return (
     <Box>

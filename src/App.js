@@ -44,7 +44,6 @@ const routes = createBrowserRouter(
                 <Route path="delete" element={<MemberDelete />} />
                 <Route path="myFavorite" element={<MyFavoritePlaylist />} />
             </Route>
-            ,
         </Route>,
     ),
 );
