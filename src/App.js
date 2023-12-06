@@ -30,7 +30,6 @@ const routes = createBrowserRouter(
       <Route path="/" element={<HomeLayout />}>
         <Route path="login" element={<MemberLogin />} />
         <Route path="kakaoLogin" element={<KakaoLogin />} />,
-        <Route path="suggestion" element={<Suggestion />} />
       </Route>
       <Route path="main" element={<MainLayout />}>
         <Route path="myinfo" element={<MyInfo />} />
@@ -41,6 +40,7 @@ const routes = createBrowserRouter(
         <Route path="albumList" element={<SongList />} />
         <Route path="song/:id" element={<SongPage />} />
         <Route path="recommended" element={<RecommendedList />} />
+        <Route path="suggestion" element={<Suggestion />} />
         <Route path="chartpage" element={<ChartPage />} />
         <Route path="memberinfo" element={<MemberInfo />} />
         <Route path="delete" element={<MemberDelete />} />

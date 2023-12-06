@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import {
   Box,
+  Button,
   Card,
   CardBody,
   CardFooter,
@@ -15,8 +16,22 @@ import {
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRecordVinyl } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHeart as fullHeart,
+  faRecordVinyl,
+} from "@fortawesome/free-solid-svg-icons";
 import { LoginContext } from "../../component/LoginProvider";
+import { faHeart } from "@fortawesome/free-regular-svg-icons";
+
+function LikeContainer({ onClick, listId }) {
+  return (
+    <>
+      <Button variant="ghost" size="xl" onClick={() => onClick(listId)}>
+        <FontAwesomeIcon icon={faHeart} size="xl" />
+      </Button>
+    </>
+  );
+}
 
 export function MyPlayList() {
   const navigate = useNavigate();
@@ -31,6 +46,12 @@ export function MyPlayList() {
     axios.get("/api/myList/get?" + params).then(({ data }) => setList(data));
   }, [location]);
 
+  function handleLike(playListId) {
+    axios
+      .post("/api/like", { memberId: login.id, likelistId: playListId }) // 로그인 아이디랑 playlistId 아이디
+      .then(() => console.log("잘됨"));
+    //   .catch(() => console.log("bad"));
+    
   function handleChart() {
     axios.get("/api/song/chartlist").then(() => navigate("/main/chartpage"));
   }
@@ -38,7 +59,7 @@ export function MyPlayList() {
   return (
     <>
       <Divider />
-      <Heading>{login.nickName} 님의 재생목록</Heading>
+      <Heading ml={10}>{login.nickName} 님의 재생목록</Heading>
       <Divider />
       <Flex gap={5}>
         {list !== null &&
@@ -66,10 +87,16 @@ export function MyPlayList() {
                   </CardBody>
                   <Divider color="gray" />
                   <CardFooter>
-                    <FontAwesomeIcon icon={faRecordVinyl} />
+                    {/*<FontAwesomeIcon icon={faRecordVinyl}/>*/}
                     <Text>$곡</Text>
                     <Spacer />
-                    <Text>생성일 : </Text>
+                    <Flex>
+                      <LikeContainer
+                        onClick={handleLike}
+                        listId={song.listId}
+                      ></LikeContainer>
+                      <Box>{song.countLike}</Box>
+                    </Flex>
                   </CardFooter>
                 </Card>
               </Box>
