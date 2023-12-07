@@ -15,17 +15,20 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
+import PasswordRecovery from "./PasswordRecovery";
 
 function FoundPassword({ isOpen, onClose, securityQuestions }) {
   const [idForRecovery, setIdForRecovery] = useState("");
   const [selectedSecurityQuestion, setSecurityQuestion] =
     useState("가장 좋아하는 색은 무엇입니까?");
   const [securityAnswer, setSecurityAnswer] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [isConfirmPasswordClicked, setIsConfirmPasswordClicked] =
     useState(false);
-  const [maskedPassword, setMaskedPassword] = useState(""); // 추가: 마스킹된 비밀번호 상태
   const [fetchedPassword, setFetchedPassword] = useState(""); // 추가: 가져온 비밀번호 상태
   const [isModalOpen, setIsModalOpen] = useState(false); // 이 state 변수도 있다고 가정합니다.
+  const [recoveryInfo, setRecoveryInfo] = useState(null);
 
   const toast = useToast();
 
@@ -41,8 +44,14 @@ function FoundPassword({ isOpen, onClose, securityQuestions }) {
 
       const originalPassword = response.data;
 
-      // 기존 비밀번호를 새로운 모달창에 절반만 보여줌
+      // 기존 비밀번호를 새로운 모달창에 앞의 절반만 보여줌
       setFetchedPassword(originalPassword);
+      // 비밀번호 확인 시 받아온 정보 저장(id, 질문, 답)
+      setRecoveryInfo({
+        id: idForRecovery,
+        question: selectedSecurityQuestion,
+        answer: securityAnswer,
+      });
       setIsModalOpen(true);
 
       toast({
@@ -63,6 +72,11 @@ function FoundPassword({ isOpen, onClose, securityQuestions }) {
         isClosable: true,
       });
     }
+  }
+
+  function navigateToMemberInfo() {
+    setIsModalOpen(false); // 비밀번호 표시 모달을 닫음
+    onClose(); // FoundPassword 모달을 닫음
   }
 
   return (
@@ -103,11 +117,23 @@ function FoundPassword({ isOpen, onClose, securityQuestions }) {
               />
             </FormControl>
           </ModalBody>
-          <Flex>
-            <Button onClick={handleConfirmPassword}>비밀번호 확인</Button>
+          <Flex justifyContent="flex-end" mr={6}>
+            <Button onClick={handleConfirmPassword} colorScheme="purple" mb={4}>
+              비밀번호 확인
+            </Button>
           </Flex>
         </ModalContent>
       </Modal>
+
+      {/* 비밀번호 재설정(PasswordRecovery) 호출 부분 */}
+      {isConfirmPasswordClicked && (
+        <PasswordRecovery
+          isOpen={true}
+          onClose={() => setIsConfirmPasswordClicked(false)}
+          securityQuestions={securityQuestions}
+          recoveryInfo={recoveryInfo}
+        />
+      )}
 
       {/* 기존 비밀번호를 알려주는 새로운 모달창 */}
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
@@ -116,7 +142,24 @@ function FoundPassword({ isOpen, onClose, securityQuestions }) {
           <ModalHeader>비밀번호 표시</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <p>비밀번호는: {fetchedPassword}</p>
+            <p style={{ marginBottom: "15px" }}>
+              비밀번호는: {fetchedPassword}
+            </p>
+            {/* 처음 로그인 창인 MemberInfo로 돌아가는 버튼 추가 */}
+            <Button onClick={navigateToMemberInfo} mr={3}>
+              로그인 화면으로 돌아가기
+            </Button>
+            {/* 비밀번호 재설정 버튼 */}
+            <Button
+              w={170}
+              onClick={() => {
+                setIsConfirmPasswordClicked(true);
+                setNewPassword(""); // 새로운 비밀번호 입력 초기화
+                setConfirmNewPassword(""); // 확인 비밀번호 입력 초기화
+              }}
+            >
+              비밀번호 재설정
+            </Button>
           </ModalBody>
         </ModalContent>
       </Modal>

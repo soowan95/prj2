@@ -3,7 +3,6 @@ import {
   Button,
   FormControl,
   FormLabel,
-  Heading,
   Input,
   Modal,
   ModalOverlay,
@@ -15,22 +14,18 @@ import {
   useDisclosure,
   useToast,
   Center,
-  Card,
   InputGroup,
   InputLeftElement,
-  InputRightElement,
 } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faBold,
   faLockOpen,
   faRightToBracket,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import PasswordRecovery from "./PasswordRecovery";
 import FoundPassword from "./FoundPassword";
 import MemberSignup from "./MemberSignup";
 import { LoginContext } from "../../component/LoginProvider";
@@ -44,7 +39,6 @@ export function MemberLogin() {
 
   const { isOpen, onClose, onOpen } = useDisclosure();
   const fp = useDisclosure();
-  const pr = useDisclosure();
   const ms = useDisclosure();
 
   const navigate = useNavigate();
@@ -149,7 +143,7 @@ export function MemberLogin() {
             <Button
               w={"150px"}
               size={"xs"}
-              mr={1}
+              mr={2}
               onClick={() => {
                 fp.onOpen();
               }}
@@ -159,17 +153,6 @@ export function MemberLogin() {
             <Button
               w={"150px"}
               size={"xs"}
-              mr={1}
-              onClick={() => {
-                pr.onOpen();
-              }}
-            >
-              비밀번호 재설정
-            </Button>
-            <Button
-              w={"100px"}
-              size={"xs"}
-              mr={1}
               onClick={() => {
                 ms.onOpen();
               }}
@@ -182,11 +165,6 @@ export function MemberLogin() {
       <FoundPassword
         isOpen={fp.isOpen}
         onClose={fp.onClose}
-        securityQuestions={securityQuestionList}
-      />
-      <PasswordRecovery
-        isOpen={pr.isOpen}
-        onClose={pr.onClose}
         securityQuestions={securityQuestionList}
       />
       <MemberSignup

@@ -15,24 +15,42 @@ import {
 import { useState } from "react";
 import axios from "axios";
 
-function PasswordRecovery({ isOpen, onClose, securityQuestions }) {
-  const [idForRecovery, setIdForRecovery] = useState("");
-  const [selectedSecurityQuestion, setSecurityQuestion] =
-    useState("가장 좋아하는 색은 무엇입니까?");
-  const [securityAnswer, setSecurityAnswer] = useState("");
+function PasswordRecovery({
+  isOpen,
+  onClose,
+  securityQuestions,
+  recoveryInfo,
+}) {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const toast = useToast();
 
   const params = new URLSearchParams();
 
   async function handlePasswordReset() {
-    params.set("id", idForRecovery);
-    params.set("q", selectedSecurityQuestion);
-    params.set("a", securityAnswer);
+    if (!recoveryInfo) {
+      return;
+    }
+
+    const { id, question, answer } = recoveryInfo;
+
+    if (newPassword !== confirmNewPassword) {
+      toast({
+        title: "오류 발생",
+        description: "새로운 비밀번호와 확인 비밀번호가 일치하지 않습니다.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    params.set("id", id);
+    params.set("q", question);
+    params.set("a", answer);
     params.set("p", newPassword);
+
     axios
       .put("/api/member/update-password?" + params)
       .then(() => {
@@ -44,11 +62,9 @@ function PasswordRecovery({ isOpen, onClose, securityQuestions }) {
           isClosable: true,
         });
         window.location.reload(0);
-
-        // 비밀번호 변경 후 모달 닫음
-        setIsModalOpen(false);
+        onClose();
       })
-      .catch(() => {
+      .catch((error) => {
         toast({
           title: "오류 발생",
           description: "비밀번호 재설정 중 오류가 발생했습니다.",
@@ -69,17 +85,11 @@ function PasswordRecovery({ isOpen, onClose, securityQuestions }) {
         <ModalBody>
           <FormControl mb={5}>
             <FormLabel>아이디</FormLabel>
-            <Input
-              value={idForRecovery}
-              onChange={(e) => setIdForRecovery(e.target.value)}
-            />
+            <Input value={recoveryInfo?.id || ""} isReadOnly />
           </FormControl>
           <FormControl mb={5}>
             <FormLabel>보안 질문</FormLabel>
-            <Select
-              value={selectedSecurityQuestion}
-              onChange={(e) => setSecurityQuestion(e.target.value)}
-            >
+            <Select value={recoveryInfo?.question || ""} isReadOnly>
               {securityQuestions &&
                 securityQuestions.map((question, index) => (
                   <option key={index} value={question}>
@@ -90,11 +100,7 @@ function PasswordRecovery({ isOpen, onClose, securityQuestions }) {
           </FormControl>
           <FormControl mb={5}>
             <FormLabel>답변</FormLabel>
-            <Input
-              type="text"
-              value={securityAnswer}
-              onChange={(e) => setSecurityAnswer(e.target.value)}
-            />
+            <Input type="text" value={recoveryInfo?.answer || ""} isReadOnly />
           </FormControl>
           <FormControl mb={5}>
             <FormLabel>새로운 비밀번호</FormLabel>
@@ -113,7 +119,14 @@ function PasswordRecovery({ isOpen, onClose, securityQuestions }) {
             />
           </FormControl>
         </ModalBody>
-        <Button onClick={handlePasswordReset} colorScheme="purple" mb={4}>
+        <Button
+          w={150}
+          onClick={handlePasswordReset}
+          colorScheme="purple"
+          mb={4}
+          ml="auto"
+          mr={6}
+        >
           비밀번호 변경
         </Button>
       </ModalContent>
