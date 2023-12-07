@@ -4,6 +4,7 @@ import {SongContext} from "../../layout/MainLayout";
 import {Box, Flex} from "@chakra-ui/react";
 import SongRequestComp from "../../component/SongRequestComp";
 import axios from "axios";
+import LiveChatComp from "../../component/LiveChatComp";
 
 export function SearchPage() {
   const { searched } = useContext(SongContext);

@@ -2,7 +2,6 @@ import * as StompJs from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
 import { useContext, useEffect, useRef, useState } from "react";
 import { Box, Button, Flex, FormControl, Input } from "@chakra-ui/react";
-import axios from "axios";
 import { LoginContext } from "./LoginProvider";
 import "../css/Scroll.css";
 
@@ -25,16 +24,20 @@ function LiveChatComp() {
       if (item.sender !== userId.current) {
         return (
           <Flex key={idx}>
-            <Box>{item.sender} : </Box>
-            <Box mr={"3px"}>{item.message}</Box>
+            <Box fontSize={"0.9rem"}>{item.sender} : </Box>
+            <Box fontSize={"0.9rem"} mr={"3px"}>
+              {item.message}
+            </Box>
             {/*<Box>{item.date}</Box>*/}
           </Flex>
         );
       } else {
         return (
           <Flex justifyContent={"right"} key={idx}>
-            <Box>{item.message} : </Box>
-            <Box mr={"3px"}>{item.sender}</Box>
+            <Box fontSize={"0.9rem"}>{item.message} : </Box>
+            <Box fontSize={"0.9rem"} mr={"3px"}>
+              {item.sender}
+            </Box>
             {/*<Box>{item.date}</Box>*/}
           </Flex>
         );
@@ -42,7 +45,7 @@ function LiveChatComp() {
     } else {
       return (
         <Flex justifyContent={"center"}>
-          <Box>{item.message}</Box>
+          <Box fontSize={"0.9rem"}>{item.message}</Box>
         </Flex>
       );
     }
@@ -128,10 +131,11 @@ function LiveChatComp() {
 
   return (
     <Box
-      width={"300px"}
+      bg={"white"}
+      width={"200px"}
       height={"500px"}
       position={"absolute"}
-      right={"30px"}
+      right={"2%"}
       top={"250px"}
     >
       <Box

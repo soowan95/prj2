@@ -15,6 +15,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { MyInfo } from "../page/main/MyInfo";
 import SongRequestComp from "../component/SongRequestComp";
 import _ from "lodash";
+import LiveChatComp from "../component/LiveChatComp";
 
 export function MainLayout() {
   const [top100, setTop100] = useState(null);
@@ -395,6 +396,7 @@ export function MainLayout() {
         )}
         <Outlet />
       </Box>
+      <LiveChatComp />
     </SongContext.Provider>
   );
 }

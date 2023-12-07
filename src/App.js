@@ -34,7 +34,6 @@ const routes = createBrowserRouter(
       </Route>
       <Route path="main" element={<MainLayout />}>
         <Route path="myinfo" element={<MyInfo />} />
-        {/*<Route index element={<LiveChatComp />} />*/}
         <Route index element={<Top100Page />} />
         <Route path="search" element={<SearchPage />} />
         <Route path="myplaylist" element={<MyPlayList />} />
