@@ -34,6 +34,13 @@ function FoundPassword({ isOpen, onClose, securityQuestions }) {
 
   const params = new URLSearchParams();
 
+  // Reset 함수(창 닫으면 입력했던 값 남아있지 않게)
+  const resetForm = () => {
+    setIdForRecovery("");
+    setSecurityQuestion("가장 좋아하는 색은 무엇입니까?");
+    setSecurityAnswer("");
+  };
+
   async function handleConfirmPassword() {
     params.set("id", idForRecovery);
     params.set("q", selectedSecurityQuestion);
@@ -53,6 +60,7 @@ function FoundPassword({ isOpen, onClose, securityQuestions }) {
         answer: securityAnswer,
       });
       setIsModalOpen(true);
+      resetForm();
 
       toast({
         title: "확인 완료",
@@ -74,17 +82,22 @@ function FoundPassword({ isOpen, onClose, securityQuestions }) {
     }
   }
 
+  function handleClose() {
+    setIsModalOpen(false);
+    onClose();
+    resetForm();
+  }
+
   function navigateToMemberInfo() {
-    setIsModalOpen(false); // 비밀번호 표시 모달을 닫음
-    onClose(); // FoundPassword 모달을 닫음
+    handleClose();
   }
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={handleClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>비밀번호 확인</ModalHeader>
+          <ModalHeader>비밀번호 찾기</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <FormControl mb={5}>
@@ -119,7 +132,7 @@ function FoundPassword({ isOpen, onClose, securityQuestions }) {
           </ModalBody>
           <Flex justifyContent="flex-end" mr={6}>
             <Button onClick={handleConfirmPassword} colorScheme="purple" mb={4}>
-              비밀번호 확인
+              찾기
             </Button>
           </Flex>
         </ModalContent>
@@ -143,23 +156,25 @@ function FoundPassword({ isOpen, onClose, securityQuestions }) {
           <ModalCloseButton />
           <ModalBody>
             <p style={{ marginBottom: "15px" }}>
-              비밀번호는: {fetchedPassword}
+              비밀번호는 : {fetchedPassword}
             </p>
             {/* 처음 로그인 창인 MemberInfo로 돌아가는 버튼 추가 */}
-            <Button onClick={navigateToMemberInfo} mr={3}>
-              로그인 화면으로 돌아가기
-            </Button>
-            {/* 비밀번호 재설정 버튼 */}
-            <Button
-              w={170}
-              onClick={() => {
-                setIsConfirmPasswordClicked(true);
-                setNewPassword(""); // 새로운 비밀번호 입력 초기화
-                setConfirmNewPassword(""); // 확인 비밀번호 입력 초기화
-              }}
-            >
-              비밀번호 재설정
-            </Button>
+            <Flex justifyContent="center">
+              <Button w={150} onClick={navigateToMemberInfo} mr={3}>
+                로그인으로
+              </Button>
+              {/* 비밀번호 재설정 버튼 */}
+              <Button
+                w={150}
+                onClick={() => {
+                  setIsConfirmPasswordClicked(true);
+                  setNewPassword(""); // 새로운 비밀번호 입력 초기화
+                  setConfirmNewPassword(""); // 확인 비밀번호 입력 초기화
+                }}
+              >
+                비밀번호 변경
+              </Button>
+            </Flex>
           </ModalBody>
         </ModalContent>
       </Modal>

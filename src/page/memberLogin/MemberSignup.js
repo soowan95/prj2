@@ -70,9 +70,6 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
           isClosable: true,
         });
         window.location.reload(0);
-
-        // 가입이 완료되면 모달을 닫음
-        // setIsModalOpen(false);
       })
       .catch(() => {
         toast({
