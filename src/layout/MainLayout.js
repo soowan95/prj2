@@ -122,18 +122,19 @@ export function MainLayout() {
   let isAlt = false;
 
   // 단축키 누른 후
-  document.onkeyup = (e) => {
-    if (e.key === "Ctrl") isCtrl = false;
-    if (e.key === "Alt") isAlt = false;
-  };
+  // document.onkeyup = (e) => {
+  //   if (e.key === "Ctrl") isCtrl = false;
+  //   if (e.key === "Alt") isAlt = false;
+  // };
 
   // 단축키 눌렀을때
-  document.onkeydown = (e) => {
-    if (e.key === "Ctrl") isCtrl = true;
-    if (e.key === "Alt") isAlt = true;
-
-    if (e.key === "Enter") document.getElementById("searchButton").click();
-  };
+  // document.onkeydown = (e) => {
+  //   if (e.key === "Ctrl") isCtrl = true;
+  //   if (e.key === "Alt") isAlt = true;
+  //
+  //   if (isAlt && e.key === "Enter")
+  //     document.getElementById("searchButton").click();
+  // };
 
   // 필터 버튼 색 바꾸기
   function handleButtonColor(e) {
