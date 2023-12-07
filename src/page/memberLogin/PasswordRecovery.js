@@ -29,6 +29,7 @@ function PasswordRecovery({
   const params = new URLSearchParams();
 
   async function handlePasswordReset() {
+    // id, question, answer 입력 값이 없을 경우 오류
     if (!recoveryInfo) {
       return;
     }
