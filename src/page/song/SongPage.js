@@ -44,7 +44,7 @@ function SongPage(props) {
         {/* 가수 이미지 출력 */}
         <Box mr={8}>
           <Image
-            src="songData.image"
+            src={songData.artistFileUrl}
             alt={`${songData.artistName}-${songData.title}`}
             boxSize="400px"
             objectFit="cover"

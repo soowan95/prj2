@@ -72,7 +72,7 @@ export function SongRequest() {
     // ok -> 성공 토스트 띄우면서 모달 닫기
     // error -> 오류 토스트 띄우면서 그대로 있기
     axios
-      .post("/api/song/insert?fileName=" + files, {
+      .postForm("/api/song/insert", {
         title: title.current,
         artistName: artist.current,
         mood: selectMood.join(", "),
@@ -84,6 +84,7 @@ export function SongRequest() {
         requestTitle: songTitle.current,
         requestArtist: artistName.current,
         songUrl: songUrl.current,
+        files: files,
       })
       .then(() => {
         toast({
@@ -104,7 +105,7 @@ export function SongRequest() {
           description: "저장 중 문제가 발생하였습니다😥",
           status: "warning",
         });
-        axios.postForm("/api/song/upload").then((response) => response.data);
+        // axios.postForm("/api/song/upload").then((response) => response.data);
       });
   }
 
@@ -238,9 +239,7 @@ export function SongRequest() {
                 type="file"
                 accept="image/*"
                 multiple
-                onChange={(e) => {
-                  setFiles(e.target.files[0].name);
-                }}
+                onChange={(e) => setFiles(e.target.files[0])}
               />
             </FormControl>
 
