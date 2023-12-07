@@ -11,8 +11,13 @@ import {
   Flex,
   Heading,
   Image,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
   Spacer,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -41,6 +46,7 @@ export function MyPlayList() {
 
   const { login } = useContext(LoginContext);
   const location = useLocation();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -111,6 +117,11 @@ export function MyPlayList() {
             ))}
         </Flex>
       </Center>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalContent>
+          <ModalHeader></ModalHeader>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }

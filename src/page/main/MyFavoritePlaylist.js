@@ -47,9 +47,8 @@ export function MyFavoritePlaylist() {
   const [params] = useSearchParams();
   const navigate = useNavigate();
   const [list, setList] = useState(null);
-  const [favoriteList, setFavoriteList] = useState(null);
   const [index, setIndex] = useState(0);
-  const currentListName = useRef("");
+  const [favoriteList, setFavoriteList] = useState(null);
 
   useEffect(() => {
     params.set("id", login.id);
@@ -58,38 +57,8 @@ export function MyFavoritePlaylist() {
       .then((response) => setList(response.data));
   }, [favoriteList]);
 
-  function handleFavoriteList(listId, listName) {
-    axios
-      .get("/api/myList/favoriteListName?listId=" + listId)
-      .then((response) => setFavoriteList(response.data));
-    currentListName.current = listName;
-    songListModal.onOpen();
-  }
-
-  function handleEditFavoriteList(songId, playlistId, listName) {
-    axios
-      .delete(
-        "/api/myList/editFavoriteList?songId=" +
-          songId +
-          "&playlistId=" +
-          playlistId,
-      )
-      .then(() => {
-        toast({
-          description: "삭제되었습니다.",
-          status: "info",
-        });
-        songListModal.onClose();
-      })
-      .catch(() => {
-        toast({
-          description: "삭제중 문제가 발생하였습니다.",
-          status: "warning",
-        });
-      })
-      .finally(() => {
-        handleFavoriteList(playlistId, listName);
-      });
+  function handleFavoriteList(listId) {
+    navigate("/main/songinmyfavoriteplaylist?listId=" + listId);
   }
 
   return (
@@ -116,9 +85,7 @@ export function MyFavoritePlaylist() {
                           cursor: "pointer",
                           textDecoration: "underline",
                         }}
-                        onClick={() =>
-                          handleFavoriteList(song.playlistId, song.listName)
-                        }
+                        onClick={() => handleFavoriteList(song.playlistId)}
                       >
                         {song?.listName}
                       </Heading>
@@ -135,64 +102,6 @@ export function MyFavoritePlaylist() {
               </Box>
             ))}
         </Flex>
-
-        {/*  추천 플레이리스트 모달 */}
-        <Modal isOpen={songListModal.isOpen} onClose={songListModal.onClose}>
-          <ModalContent>
-            <ModalHeader>{currentListName.current}</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              <Table>
-                <Thead>
-                  <Tr>
-                    <Th>곡명</Th>
-                    <Th>아티스트</Th>
-                    <Th>재생</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {favoriteList !== null &&
-                    favoriteList.map((l) => (
-                      <Tr>
-                        <Td>{l.title}</Td>
-                        <Td>{l.name}</Td>
-                        <Button
-                          borderRadius={0}
-                          variant="ghost"
-                          onClick={() => {
-                            setIndex(l.indexForPlay);
-                            playDrawer.onOpen();
-                          }}
-                        >
-                          <FontAwesomeIcon icon={faPlay} />
-                        </Button>
-                        <Button
-                          borderRadius={0}
-                          variant="ghost"
-                          onClick={() =>
-                            handleEditFavoriteList(
-                              l.songId,
-                              l.playlistId,
-                              l.listName,
-                            )
-                          }
-                        >
-                          <FontAwesomeIcon icon={faMinus} />
-                        </Button>
-                      </Tr>
-                    ))}
-                </Tbody>
-              </Table>
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-
-        <PlayComp
-          isOpen={playDrawer.isOpen}
-          onClose={playDrawer.onClose}
-          top100={favoriteList}
-          index={index}
-        />
       </Box>
     </Center>
   );

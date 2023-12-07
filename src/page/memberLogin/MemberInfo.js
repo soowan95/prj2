@@ -42,6 +42,7 @@ export function MemberInfo() {
   const navigate = useNavigate();
   const [member, setMember] = useState(null);
   const [params] = useSearchParams();
+  const [questions, setQuestions] = useState(null);
 
   useEffect(() => {
     axios.get("/api/member" + params.toString()).then((response) => {
@@ -49,6 +50,9 @@ export function MemberInfo() {
       setEmail(response.data.email);
       setNickName(response.data.nickName);
     });
+    axios
+      .get("/api/member/questions?id=" + login.id)
+      .then(({ data }) => setQuestions(data));
   }, []);
 
   function handleNickNameCheck() {
@@ -227,6 +231,7 @@ export function MemberInfo() {
       <PasswordRecovery
         isOpen={isPasswordModalOpen}
         onClose={onPasswordModalClose}
+        securityQuestions={questions}
       />
     </Center>
   );
