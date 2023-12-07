@@ -72,8 +72,7 @@ export function SongRequest() {
     // ok -> 성공 토스트 띄우면서 모달 닫기
     // error -> 오류 토스트 띄우면서 그대로 있기
     axios
-      .postForm("/api/song/insert", {
-        files,
+      .post("/api/song/insert?fileName=" + files, {
         title: title.current,
         artistName: artist.current,
         mood: selectMood.join(", "),
@@ -105,6 +104,7 @@ export function SongRequest() {
           description: "저장 중 문제가 발생하였습니다😥",
           status: "warning",
         });
+        axios.postForm("/api/song/upload").then((response) => response.data);
       });
   }
 
@@ -221,7 +221,7 @@ export function SongRequest() {
             <FormControl mb={5}>
               <FormLabel fontWeight={"bold"}>출시일</FormLabel>
               <Input
-                type="date"
+                type="datetime-local"
                 onChange={(e) => (release.current = e.target.value)}
               />
             </FormControl>
@@ -238,17 +238,19 @@ export function SongRequest() {
                 type="file"
                 accept="image/*"
                 multiple
-                onChange={(e) => setFiles(e.target.files[0])}
+                onChange={(e) => {
+                  setFiles(e.target.files[0].name);
+                }}
               />
             </FormControl>
 
-            {/*<FormControl mb={10}>*/}
-            {/*  <FormLabel fontWeight={"bold"}>노래 URL</FormLabel>*/}
-            {/*  <Input*/}
-            {/*    type="url"*/}
-            {/*    onChange={(e) => (songUrl.current = e.target.value)}*/}
-            {/*  />*/}
-            {/*</FormControl>*/}
+            <FormControl mb={10}>
+              <FormLabel fontWeight={"bold"}>노래 URL</FormLabel>
+              <Input
+                type="url"
+                onChange={(e) => (songUrl.current = e.target.value)}
+              />
+            </FormControl>
 
             <hr />
 
