@@ -1,102 +1,104 @@
 import React, { useEffect, useState } from "react";
-import {Box, Flex, FormLabel, Heading, Table, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  FormLabel,
+  Heading,
+  Image,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 import axios from "axios";
+import { useSearchParams } from "react-router-dom";
 
 export function ChartPage() {
   const [songList, setSongList] = useState(null);
-  const [allList, setAllList] = useState(null);
-// playList 다 가져오기
+  const [list, setList] = useState(null);
+  const [params] = useSearchParams();
+
   useEffect(() => {
-    axios.get("/api/myList/getAll")
-      .then(({ data}) => setAllList(data));
+    //차트의 설명을 하고 싶어서 setList를 입력
+    axios.get("/api/myList/get").then(({ data }) => {
+      setList(data);
+    });
+    axios
+      .get("/api/song/chartlist?id=" + params.get("listId"))
+      .then(({ data }) => setSongList(data));
   }, []);
 
-  // song곡들 데이터베이스에서 가져 오기
-  useEffect(() => {
-    axios
-      .get("/api/song/chartlist")
-      .then((response) => setSongList(response.data));
-  }, []);
   return (
     <>
-    {/*  /!*  플레이리스트 맨위 설명*!/*/}
-    {/*  <Flex>*/}
-    {/*    {allList !== null &&*/}
-    {/*    alllist.map((list) => (*/}
-    {/*<Box>*/}
-    {/*  <Heading fontSize="30px" color="purple">*/}
-    {/*    {list.listName}*/}
-    {/*  </Heading>*/}
-    {/*  <Box mt={4}>*/}
-    {/*    <Flex>*/}
-    {/*      <FormLabel>가수</FormLabel>*/}
-    {/*      <div>{list.listName}</div>*/}
-    {/*    </Flex>*/}
-    {/*  </Box>*/}
-    {/*  <Box mt={4}>*/}
-    {/*    <Flex>*/}
-    {/*      <FormLabel>제작사</FormLabel>*/}
-    {/*      <div>{list.listId}</div>*/}
-    {/*    </Flex>*/}
-    {/*  </Box>*/}
-    {/*  <Box mt={4}>*/}
-    {/*    <Flex>*/}
-    {/*      <FormLabel>조회수</FormLabel>*/}
-    {/*      <div>{list.listId}</div>*/}
-    {/*    </Flex>*/}
-    {/*  </Box>*/}
-    {/*  <Box mt={4}>*/}
-    {/*    <Flex>*/}
-    {/*      <FormLabel>최초생성</FormLabel>*/}
-    {/*      <div>{list.listId}</div>*/}
-    {/*    </Flex>*/}
-    {/*  </Box>*/}
-    {/*  <Box mt={4}>*/}
-    {/*    <Flex>*/}
-    {/*      <FormLabel>곡수</FormLabel>*/}
-    {/*      <div>{list.listId}</div>*/}
-    {/*    </Flex>*/}
-    {/*  </Box>*/}
-    {/*</Box>*/}
-    {/*    ))}*/}
-    {/*  </Flex>*/}
-
-
-
- {/*마이플레이리스트 차트*/}
-    <Box>
-      <h1> 게시물 목록 </h1>
       <Box>
-        <Table>
-          <Thead>
-            <Tr>
-              <Th>번호</Th>
-              <Th></Th>
-              <Th>곡정보</Th>
-              <Th></Th>
-              <Th>듣기</Th>
-              <Th>추가</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {songList === null ? (
-              <spinner />
-            ) : (
-              songList.map((song) => (
-                <Tr>
-                  <Td>{song.id}</Td>
-                  <Td>{song.title}</Td>
-                  <Td>{song.artistName}</Td>
-                  <Td>{song.album}</Td>
-                  <Td>{song.mood}</Td>
-                </Tr>
-              ))
-            )}
-          </Tbody>
-        </Table>
+        <Flex flexDirection="rew">
+          <Box mr={8} border="1px solid black">
+            <Image
+              src="https://image.genie.co.kr/Y/IMAGE/Playlist/Channel/GENIE/PLAYLIST_20231128121036.png/dims/resize/Q_80,0"
+              boxSize="400px"
+              objectFit="cover" // 이미지가 상자를 완전히 덮도록 크기 조절하는 것
+            />
+          </Box>
+
+          <Box>
+            <Heading fontSize="30px" color="purple">
+              {/*{list.memberId}*/}
+            </Heading>
+            <Flex>
+              <FormLabel>제작자</FormLabel>
+              {/*<div>{list.listName}</div>*/}
+            </Flex>
+            <Flex>
+              <FormLabel>곡수</FormLabel>
+              {/*<div>{list.listId}</div>*/}
+            </Flex>
+            <Flex>
+              <FormLabel>조회수</FormLabel>
+              {/*<div>{list.listId}</div>*/}
+            </Flex>
+            <Flex>
+              <FormLabel>업데이트</FormLabel>
+              {/*<div>{list.listId}</div>*/}
+            </Flex>
+          </Box>
+        </Flex>
       </Box>
-    </Box>
-  </>
+      {/*마이플레이리스트 차트*/}
+      <Box>
+        <h1> 게시물 목록 </h1>
+        <Box>
+          <Table>
+            <Thead>
+              <Tr>
+                <Th>번호</Th>
+                <Th></Th>
+                <Th>곡정보</Th>
+                <Th></Th>
+                <Th>듣기</Th>
+                <Th>추가</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {songList === null ? (
+                <spinner />
+              ) : (
+                songList.map((song, idx) => (
+                  <Tr>
+                    <Td>{idx + 1}</Td>
+                    <Td>{song.title}</Td>
+                    <Td>{song.artistName}</Td>
+                    <Td>{song.album}</Td>
+                    <Td>{song.mood}</Td>
+                  </Tr>
+                ))
+              )}
+            </Tbody>
+          </Table>
+        </Box>
+      </Box>
+    </>
   );
 }
 

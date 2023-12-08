@@ -40,6 +40,7 @@ export function MyPlayList() {
   const navigate = useNavigate();
   const [list, setList] = useState(null);
   const [reRend, setReRend] = useState(0);
+  const [songList, setSongList] = useState();
 
   const { login } = useContext(LoginContext);
   const location = useLocation();
@@ -47,14 +48,13 @@ export function MyPlayList() {
   useEffect(() => {
     const params = new URLSearchParams();
     params.set("id", login.id);
-    axios.get("/api/myList/get?" + params).then(({ data }) => setList(data));
-  }, [reRend, location]);
-
-  // useEffect(() => {
-  //   axios
-  //     .get("/api/like/board/" + id)
-  //     .then((response) => setIsLike(response.data));
-  // }, []);
+    axios.get("/api/myList/get?" + params).then(
+      ({ data }) => {
+        setList(data);
+      },
+      [reRend, location],
+    );
+  }, []);
 
   function handleLike(playListId) {
     axios.post("/api/like", {
@@ -64,10 +64,11 @@ export function MyPlayList() {
       // <Button variant="ghost" size="xl" onClick={() => onClick(listId)}> 즉 nClick(listId) listId 이다
     });
     setReRend((reRend) => reRend + 1);
+    // setRerend 가 0에서 클릭할때 1로 바뀌는 것 1에 의미는 없고 변화되는 것에 의미
   }
 
-  function handleChart() {
-    axios.get("/api/song/chartlist").then(() => navigate("/main/chartpage"));
+  function handleChart(listId) {
+    navigate("/main/chartpage?listId=" + listId);
   }
 
   return (
@@ -80,17 +81,17 @@ export function MyPlayList() {
           list.map(
             (
               memberplaylist, //SELECT a.memberId as id, a.listName, a.id listId FROM memberplaylist a
-            ) => (
               //join member b on a.memberId = b.id
               //where b.id = #{id}
+            ) => (
               <Box gap={5} key={memberplaylist.id}>
                 <Box mt={30}>
                   <Card w="xs">
                     <CardHeader
                       _hover={{ cursor: "pointer" }}
-                      onClick={handleChart}
+                      onClick={() => handleChart(memberplaylist.listId)}
                     >
-                      <Image src="https://cdn.dribbble.com/users/5783048/screenshots/13902636/skull_doodle_4x.jpg" />
+                      <Image src="https://image.genie.co.kr/Y/IMAGE/Playlist/Channel/GENIE/PLAYLIST_20231128121036.png/dims/resize/Q_80,0" />
                     </CardHeader>
                     <CardBody>
                       <Heading
@@ -99,7 +100,7 @@ export function MyPlayList() {
                           cursor: "pointer",
                           textDecoration: "underline",
                         }}
-                        onClick={handleChart}
+                        onClick={() => handleChart(memberplaylist.listId)}
                       >
                         {memberplaylist.listName}
                       </Heading>
@@ -107,7 +108,8 @@ export function MyPlayList() {
                     <Divider color="gray" />
                     <CardFooter>
                       {/*<FontAwesomeIcon icon={faRecordVinyl}/>*/}
-                      <Text>$곡</Text>
+                      <Box>담은 노래 개수{memberplaylist.totalSongCount}</Box>
+
                       <Spacer />
                       <Flex>
                         <LikeContainer

@@ -9,10 +9,12 @@ import {
   PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../../component/LoginProvider";
+import * as PropTypes from "prop-types";
 
 export function MyInfo() {
   const { login, fetchLogin } = useContext(LoginContext);
@@ -24,7 +26,8 @@ export function MyInfo() {
   }, []);
 
   return (
-    <Popover>
+    <Popover trigger="hover">
+      {/*//마우스를 피하면 없어지는 기능*/}
       <PopoverTrigger>
         <Avatar
           src="https://bit.ly/broken-link"
