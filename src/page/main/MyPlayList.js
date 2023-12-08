@@ -75,7 +75,8 @@ export function MyPlayList() {
         {list !== null &&
           list.map(
             (
-              memberplaylist, //SELECT a.memberId as id, a.listName, a.id listId FROM memberplaylist a
+              memberplaylist,
+              //SELECT a.memberId as id, a.listName, a.id listId FROM memberplaylist a
               //join member b on a.memberId = b.id
               //where b.id = #{id}
             ) => (
@@ -97,13 +98,14 @@ export function MyPlayList() {
                         }}
                         onClick={() => handleChart(memberplaylist.listId)}
                       >
-                        {memberplaylist.listName}
+                        {memberplaylist.listName} &nbsp; &nbsp; &nbsp; &nbsp;
+                        &nbsp;
                       </Heading>
                     </CardBody>
                     <Divider color="gray" />
                     <CardFooter>
                       {/*<FontAwesomeIcon icon={faRecordVinyl}/>*/}
-                      <Box>담은 노래 개수{memberplaylist.totalSongCount}</Box>
+                      <Box>{memberplaylist.totalSongCount}곡</Box>
 
                       <Spacer />
                       <Flex>
