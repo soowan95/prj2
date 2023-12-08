@@ -1,12 +1,24 @@
 import * as StompJs from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
 import { useContext, useEffect, useRef, useState } from "react";
-import { Box, Button, Flex, FormControl, Input } from "@chakra-ui/react";
+import {
+  Avatar,
+  AvatarBadge,
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  Input,
+  Wrap,
+  WrapItem,
+} from "@chakra-ui/react";
 import { LoginContext } from "./LoginProvider";
 import "../css/Scroll.css";
+import { faGripLines, faMinus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function LiveChatComp() {
-  const { login } = useContext(LoginContext);
+  const { login, isAuthenticated } = useContext(LoginContext);
   let [client, changeClient] = useState(null);
   const [chat, setChat] = useState("");
   const [chatList, setChatList] = useState([]);
@@ -14,7 +26,7 @@ function LiveChatComp() {
   const userId = useRef("");
   const fixScroll = useRef(null);
 
-  if (login !== null) userId.current = login.nickName;
+  if (login !== "") userId.current = login.nickName;
   else userId.current = "사용자";
 
   const CircularJSON = require("circular-json");
@@ -24,9 +36,18 @@ function LiveChatComp() {
       if (item.sender !== userId.current) {
         return (
           <Flex key={idx}>
-            <Box fontSize={"0.9rem"}>{item.sender} : </Box>
+            <Wrap mx={"5px"}>
+              <WrapItem>
+                <Avatar size={"xs"} name={item.sender}>
+                  <AvatarBadge
+                    boxSize={"0.5rem"}
+                    bg={login ? "green" : "red"}
+                  />
+                </Avatar>
+              </WrapItem>
+            </Wrap>
             <Box fontSize={"0.9rem"} mr={"3px"}>
-              {item.message}
+              : {item.message}
             </Box>
             {/*<Box>{item.date}</Box>*/}
           </Flex>
@@ -35,9 +56,13 @@ function LiveChatComp() {
         return (
           <Flex justifyContent={"right"} key={idx}>
             <Box fontSize={"0.9rem"}>{item.message} : </Box>
-            <Box fontSize={"0.9rem"} mr={"3px"}>
-              {item.sender}
-            </Box>
+            <Wrap mx={"5px"}>
+              <WrapItem>
+                <Avatar size={"xs"} name={item.sender}>
+                  <AvatarBadge boxSize={"0.5rem"} bg={"green"} />
+                </Avatar>
+              </WrapItem>
+            </Wrap>
             {/*<Box>{item.date}</Box>*/}
           </Flex>
         );
@@ -93,6 +118,15 @@ function LiveChatComp() {
   const disConnect = () => {
     if (client === null) return;
 
+    client.publish({
+      destination: "/app/chat/leave",
+      body: CircularJSON.stringify({
+        type: "LEAVE",
+        sender: userId.current,
+      }),
+    });
+
+    client.unsubscribe();
     client.deactivate();
   };
 
@@ -123,7 +157,7 @@ function LiveChatComp() {
     connect();
 
     return () => disConnect();
-  }, []);
+  }, [login]);
 
   useEffect(() => {
     fixScroll.current.scrollIntoView({ behavior: "smooth" });
@@ -138,11 +172,20 @@ function LiveChatComp() {
       right={"2%"}
       top={"250px"}
     >
+      <Flex position={"relative"} left={"80%"} w={"20px"}>
+        <Box>
+          <FontAwesomeIcon icon={faGripLines} />
+        </Box>
+        <Box>
+          <FontAwesomeIcon icon={faMinus} />
+        </Box>
+      </Flex>
       <Box
         className="scrollBox"
         overflowY={"auto"}
         border={"1px solid black"}
         height={"500px"}
+        width={"200px"}
       >
         {msgBox}
         <Box ref={fixScroll}></Box>
@@ -157,7 +200,12 @@ function LiveChatComp() {
               if (e.key === "Enter") sendChat(e, chat);
             }}
           />
-          <Button onClick={(e) => sendChat(e, chat)}>전송</Button>
+          <Button
+            isDisabled={!isAuthenticated()}
+            onClick={(e) => sendChat(e, chat)}
+          >
+            전송
+          </Button>
         </Flex>
       </FormControl>
     </Box>

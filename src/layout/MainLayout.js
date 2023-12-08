@@ -396,7 +396,6 @@ export function MainLayout() {
         )}
         <Outlet />
       </Box>
-      <LiveChatComp />
     </SongContext.Provider>
   );
 }
