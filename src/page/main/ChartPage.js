@@ -87,6 +87,7 @@ export function ChartPage() {
                 songList.map((song, idx) => (
                   <Tr>
                     <Td>{idx + 1}</Td>
+                    {/*노래 곡 아이디를 보여주는 것이 아닌 1부터 보여주는 것*/}
                     <Td>{song.title}</Td>
                     <Td>{song.artistName}</Td>
                     <Td>{song.album}</Td>

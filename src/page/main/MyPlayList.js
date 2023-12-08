@@ -48,13 +48,8 @@ export function MyPlayList() {
   useEffect(() => {
     const params = new URLSearchParams();
     params.set("id", login.id);
-    axios.get("/api/myList/get?" + params).then(
-      ({ data }) => {
-        setList(data);
-      },
-      [reRend, location],
-    );
-  }, []);
+    axios.get("/api/myList/get?" + params).then(({ data }) => setList(data));
+  }, [reRend, location]);
 
   function handleLike(playListId) {
     axios.post("/api/like", {
