@@ -12,10 +12,16 @@ import {
   useToast,
   Select,
   Flex,
+  Box,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
 import PasswordRecovery from "./PasswordRecovery";
+import memberSignup from "./MemberSignup";
+import memberInfo from "./MemberInfo";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 function FoundPassword({ isOpen, onClose, securityQuestions }) {
   const [idForRecovery, setIdForRecovery] = useState("");
@@ -27,6 +33,7 @@ function FoundPassword({ isOpen, onClose, securityQuestions }) {
   const [isConfirmPasswordClicked, setIsConfirmPasswordClicked] =
     useState(false);
   const [fetchedPassword, setFetchedPassword] = useState(""); // 추가: 가져온 비밀번호 상태
+  const [nickName, setNickName] = useState(""); // 가져온 닉네임
   const [isModalOpen, setIsModalOpen] = useState(false); // 이 state 변수도 있다고 가정합니다.
   const [recoveryInfo, setRecoveryInfo] = useState(null);
 
@@ -49,10 +56,13 @@ function FoundPassword({ isOpen, onClose, securityQuestions }) {
     try {
       const response = await axios.post("/api/member/get-password", params);
 
-      const originalPassword = response.data;
+      // 서버 응답에서 fetchedPassword와 nickName이라는 키의 값을 가져오고
+      // 서버에서의 응답은 response.data에 담겨있음
+      const { fetchedPassword, nickName } = response.data;
+      // setFetchedPassword와 setNickName은 useState 훅을 통해 정의된 상태 변수를 업데이트하는 함수
+      setFetchedPassword(fetchedPassword);
+      setNickName(nickName);
 
-      // 기존 비밀번호를 새로운 모달창에 앞의 절반만 보여줌
-      setFetchedPassword(originalPassword);
       // 비밀번호 확인 시 받아온 정보 저장(id, 질문, 답)
       setRecoveryInfo({
         id: idForRecovery,
@@ -152,15 +162,55 @@ function FoundPassword({ isOpen, onClose, securityQuestions }) {
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>비밀번호 표시</ModalHeader>
+          <ModalHeader></ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
-            <p style={{ marginBottom: "15px" }}>
-              비밀번호는 : {fetchedPassword}
-            </p>
+          <ModalBody style={{ marginTop: "50px" }}>
+            <Box
+              style={{
+                marginBottom: "20px",
+                textAlign: "center",
+              }}
+            >
+              <p
+                style={{
+                  marginBottom: "35px",
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faCircleCheck}
+                  style={{ fontSize: "35px", color: "limegreen" }}
+                />
+              </p>
+              <p style={{ fontSize: "20px", fontWeight: "bold" }}>
+                <span style={{ color: "purple" }}>{nickName}</span>님의
+                비밀번호는
+                <br />
+                <span style={{ color: "purple" }}>{fetchedPassword}</span>{" "}
+                입니다.
+              </p>
+            </Box>
+            <Box
+              style={{
+                textAlign: "center",
+                marginTop: "35px",
+                marginBottom: "50px",
+                backgroundColor: "#FAF5FF",
+                borderRadius: "5px",
+                padding: "10px",
+              }}
+            >
+              <FontAwesomeIcon icon={faCircleExclamation} /> 정보 보호를 위해
+              비밀번호의 일부만 보여집니다.
+              <br />
+            </Box>
             {/* 처음 로그인 창인 MemberInfo로 돌아가는 버튼 추가 */}
             <Flex justifyContent="center">
-              <Button w={150} onClick={navigateToMemberInfo} mr={3}>
+              <Button
+                w={150}
+                onClick={navigateToMemberInfo}
+                mr={3}
+                style={{ marginBottom: "20px" }}
+              >
                 로그인으로
               </Button>
               {/* 비밀번호 재설정 버튼 */}

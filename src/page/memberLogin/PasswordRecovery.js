@@ -11,6 +11,7 @@ import {
   Button,
   useToast,
   Select,
+  Textarea,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
@@ -104,7 +105,7 @@ function PasswordRecovery({
             <Input type="text" value={recoveryInfo?.answer || ""} isReadOnly />
           </FormControl>
           <FormControl mb={5}>
-            <FormLabel>새로운 비밀번호</FormLabel>
+            <FormLabel>새 비밀번호 입력</FormLabel>
             <Input
               type="password"
               value={newPassword}
@@ -112,7 +113,7 @@ function PasswordRecovery({
             />
           </FormControl>
           <FormControl mb={5}>
-            <FormLabel>비밀번호 확인</FormLabel>
+            <FormLabel>새 비밀번호 확인</FormLabel>
             <Input
               type="password"
               value={confirmNewPassword}
