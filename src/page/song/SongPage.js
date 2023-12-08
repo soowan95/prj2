@@ -1,9 +1,10 @@
-import {CommentContainer} from "../../component/CommentContainer";
-import {MemberLogin} from "../memberLogin/MemberLogin";
-import React, {useEffect, useRef, useState} from "react";
+import { CommentContainer } from "../../component/CommentContainer";
+import { MemberLogin } from "../memberLogin/MemberLogin";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import {
-  Box, Button,
+  Box,
+  Button,
   Flex,
   FormControl,
   FormLabel,
@@ -15,24 +16,25 @@ import {
   Text,
   Th,
   Thead,
-  Tr
+  Tr,
 } from "@chakra-ui/react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faComputerMouse} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faComputerMouse } from "@fortawesome/free-solid-svg-icons";
 import Counter from "./Counter";
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import SongList from "./SongList";
 
 function SongPage(props) {
   const [songData, setSongData] = useState({});
   const [albumList, setAlbumList] = useState(null);
-  const {id} = useParams();
+  const { id } = useParams();
 
   useEffect(() => {
-    axios.get("/api/song/" + id).then(({data}) => {
+    axios.get("/api/song/" + id).then(({ data }) => {
       setSongData(data);
-      axios.get("/api/song/albumList?album=" + data.album)
-        .then(({data}) => setAlbumList(data));
+      axios
+        .get("/api/song/albumList?album=" + data.album)
+        .then(({ data }) => setAlbumList(data));
     });
   }, []);
 
@@ -42,7 +44,7 @@ function SongPage(props) {
         {/* 노래 사진 */}
         <Box mr={8}>
           <Image
-            src="songData.image"
+            src={songData.image}
             alt={`${songData.artistName}-${songData.title}`}
             boxSize="400px"
             objectFit="cover"
@@ -102,9 +104,9 @@ function SongPage(props) {
       <Box>
         {/*<SongList album={album.current} />*/}
         <Box>
-          <br/>
+          <br />
           <Heading size={"md"}>곡 정보</Heading>
-          <br/>
+          <br />
           <Box>
             <Table>
               <Thead>
@@ -120,8 +122,7 @@ function SongPage(props) {
 
               <Tbody>
                 {albumList !== null &&
-                  albumList.map((album=>(
-
+                  albumList.map((album) => (
                     <Tr>
                       <Td>{album.id}</Td>
                       <Td>{album.title}</Td>
@@ -130,7 +131,7 @@ function SongPage(props) {
                       <Td>{album.release}</Td>
                       <Td>{album.genre}</Td>
                     </Tr>
-                  )))}
+                  ))}
               </Tbody>
             </Table>
           </Box>
