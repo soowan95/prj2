@@ -21,13 +21,14 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComputerMouse } from "@fortawesome/free-solid-svg-icons";
 import Counter from "./Counter";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import SongList from "./SongList";
 
 function SongPage(props) {
   const [songData, setSongData] = useState({});
   const [albumList, setAlbumList] = useState(null);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get("/api/song/" + id).then(({ data }) => {
@@ -40,6 +41,16 @@ function SongPage(props) {
 
   return (
     <Box mt={"100px"}>
+      {/* 수정&삭제 버튼은 admin만 보일 수 있게 */}
+      <Button
+        onClick={() => navigate("/songEdit/" + id)}
+        background={"aliceblue"}
+        size={"sm"}
+        mb={"40px"}
+      >
+        수정
+      </Button>
+
       <Flex>
         {/* 가수 이미지 출력 */}
         <Box mr={8}>
