@@ -26,8 +26,16 @@ function CommentForm({ songId, isSubmitting, onSubmit }) {
 
   return (
     <Box>
-      <Textarea value={comment} onChange={(e) => setComment(e.target.value)} />
-      <Button onClick={handleSubmit}>쓰기</Button>
+      <Flex justifyContent="center">
+        <Textarea
+          width={"80%"}
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+        />
+        <Button height={"80px"} onClick={handleSubmit}>
+          쓰기
+        </Button>
+      </Flex>
     </Box>
   );
 }
