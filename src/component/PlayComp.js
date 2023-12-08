@@ -23,12 +23,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MdGraphicEq } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 function PlayComp({ isOpen, onClose, top100, index, setIndex }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [rerenderCount, setRerenderCount] = useState(0);
 
   const songInfo = useRef("");
+
+  const navigate = useNavigate(); // 페이지 이동
 
   function format(seconds) {
     if (isNaN(seconds)) {
@@ -72,6 +75,10 @@ function PlayComp({ isOpen, onClose, top100, index, setIndex }) {
     songInfo.current.seekTo(songInfo.current.getCurrentTime() + 10);
   }
 
+  function goToSongPage(id) {
+    navigate(`/main/song/${id}`);
+  }
+
   return (
     <Drawer
       placement="bottom"
@@ -84,7 +91,7 @@ function PlayComp({ isOpen, onClose, top100, index, setIndex }) {
     >
       <DrawerOverlay>
         <DrawerContent>
-          <DrawerHeader>
+          <DrawerHeader onClick={() => goToSongPage(top100.at(index).id)}>
             {top100 !== null && top100.at(index).title}
           </DrawerHeader>
           <DrawerBody>
@@ -96,11 +103,11 @@ function PlayComp({ isOpen, onClose, top100, index, setIndex }) {
                 value={currentTime}
                 onChange={(e) => songInfo.current.seekTo(e)}
               >
-                <SliderTrack bg="red.100">
-                  <SliderFilledTrack bg="tomato" />
+                <SliderTrack bg="purple.100">
+                  <SliderFilledTrack bg="#ae8af1" />
                 </SliderTrack>
                 <SliderThumb boxSize={6}>
-                  <Box color="tomato" as={MdGraphicEq} />
+                  <Box color="#f799c9" as={MdGraphicEq} />
                 </SliderThumb>
               </Slider>
               <Flex position={"relative"} border={"1px solid black"}>
