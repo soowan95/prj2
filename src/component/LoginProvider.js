@@ -10,7 +10,9 @@ function LogInProvider({ children }) {
   }, []);
 
   function fetchLogin() {
-    axios.get("/api/member/login").then((response) => setLogin(response.data));
+    axios.get("/api/member/login").then((response) => {
+      setLogin(response.data);
+    });
   }
 
   function isAuthenticated() {
@@ -38,7 +40,13 @@ function LogInProvider({ children }) {
   }
   return (
     <LoginContext.Provider
-      value={{ login, fetchLogin, isAuthenticated, hasAccess, isAdmin }}
+      value={{
+        login,
+        fetchLogin,
+        isAuthenticated,
+        hasAccess,
+        isAdmin,
+      }}
     >
       {children}
     </LoginContext.Provider>
