@@ -157,10 +157,6 @@ function LogInProvider({ children }) {
       }),
     });
 
-    chatList.map((a) => {
-      if (a.sender === userId.current) a.isOnline = null;
-    });
-
     client.unsubscribe();
     client.deactivate();
   };
@@ -170,11 +166,15 @@ function LogInProvider({ children }) {
       let msg = JSON.parse(message.body);
       setChatList((chats) => [...chats, msg]);
     }
+    if (message.body.isOnline) {
+      chatList.map((a) => {
+        if (message.body.isOnline.includes(a.sender)) a.isOnline = "true";
+      });
+    }
     console.log(message.body);
   };
 
   const sendChat = (e, chat) => {
-    e.preventDefault();
     if (chat !== "") {
       client.publish({
         destination: "/topic/chat/room",
@@ -182,7 +182,6 @@ function LogInProvider({ children }) {
           type: "TALK",
           sender: userId.current,
           message: chat,
-          isOnline: true,
         }),
       });
     }
