@@ -57,6 +57,17 @@ function LogInProvider({ children }) {
 
   const userId = useRef(login.nickName);
 
+  useEffect(() => {
+    if (chatList.length > 0) {
+      for (let i = 0; i < chatList.length; i++) {
+        chatList.at(i).isOnline =
+          chatList
+            .at(chatList.length - 1)
+            .isOnline.indexOf(chatList.at(i).sender) !== -1;
+      }
+    }
+  }, [chatList]);
+
   const CircularJSON = require("circular-json");
 
   const msgBox = chatList.map((item, idx) => {
@@ -166,18 +177,12 @@ function LogInProvider({ children }) {
       let msg = JSON.parse(message.body);
       setChatList((chats) => [...chats, msg]);
     }
-    if (message.body.isOnline) {
-      chatList.map((a) => {
-        if (message.body.isOnline.includes(a.sender)) a.isOnline = "true";
-      });
-    }
-    console.log(message.body);
   };
 
   const sendChat = (e, chat) => {
     if (chat !== "") {
       client.publish({
-        destination: "/topic/chat/room",
+        destination: "/app/chat/msg",
         body: CircularJSON.stringify({
           type: "TALK",
           sender: userId.current,

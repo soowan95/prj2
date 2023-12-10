@@ -30,10 +30,7 @@ function LiveChatComp() {
       right={"2%"}
       top={"250px"}
     >
-      <Flex position={"relative"} left={"80%"} w={"20px"}>
-        <Box>
-          <FontAwesomeIcon icon={faGripLines} />
-        </Box>
+      <Flex position={"relative"} left={"90%"} w={"20px"}>
         <Box>
           <FontAwesomeIcon icon={faMinus} />
         </Box>
