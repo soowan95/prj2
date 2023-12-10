@@ -8,7 +8,7 @@ import { MemberLogin } from "../page/memberLogin/MemberLogin";
 import { LoginContext } from "./LoginProvider";
 
 export function NavBar() {
-  const { fetchLogin, isAuthenticated } = useContext(LoginContext);
+  const { fetchLogin, isAuthenticated, disConnect } = useContext(LoginContext);
 
   const navigate = useNavigate();
   const toast = useToast();
@@ -21,6 +21,7 @@ export function NavBar() {
           description: "로그아웃 되었습니다🙂",
           status: "info",
         });
+        disConnect();
         navigate("/");
       })
       .finally(() => {
