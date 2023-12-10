@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../../component/LoginProvider";
 
 export function MyInfo() {
-  const { login, fetchLogin } = useContext(LoginContext);
+  const { login, fetchLogin, handleLogout } = useContext(LoginContext);
 
   const navigate = useNavigate();
 
@@ -50,7 +50,7 @@ export function MyInfo() {
             내 정보
           </Button>
         </PopoverBody>
-        <PopoverFooter>로그아웃</PopoverFooter>
+        <PopoverFooter onClick={handleLogout}>로그아웃</PopoverFooter>
       </PopoverContent>
     </Popover>
   );
