@@ -13,8 +13,9 @@ import {
   Select,
   Textarea,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
+import { LoginContext } from "../../component/LoginProvider";
 
 function PasswordRecovery({
   isOpen,
@@ -24,6 +25,8 @@ function PasswordRecovery({
 }) {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { login } = useContext(LoginContext);
 
   const toast = useToast();
 

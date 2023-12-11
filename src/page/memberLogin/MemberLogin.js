@@ -35,7 +35,7 @@ export function MemberLogin() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
 
-  const { fetchLogin, isAuthenticated } = useContext(LoginContext);
+  const { fetchLogin, isAuthenticated, connect } = useContext(LoginContext);
 
   const { isOpen, onClose, onOpen } = useDisclosure();
   const fp = useDisclosure();
@@ -56,13 +56,13 @@ export function MemberLogin() {
     axios
       .post("/api/member/login", { id, password })
       .then(() => {
+        connect();
         navigate("/main");
         toast({
           description: "로그인 되었습니다😀 ",
           status: "info",
         });
         onClose();
-        window.location.reload(0);
       })
       .catch(() => {
         toast({
@@ -78,7 +78,7 @@ export function MemberLogin() {
   return (
     <Center>
       {isAuthenticated() || (
-        <Button colorScheme="purple" mr={5} onClick={onOpen}>
+        <Button colorScheme="purple" mt={600} onClick={onOpen}>
           <FontAwesomeIcon icon={faRightToBracket} />
           로그인
         </Button>
