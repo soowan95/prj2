@@ -6,13 +6,18 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
+  Center,
   Divider,
   Flex,
   Heading,
   Image,
-  list,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
   Spacer,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -41,9 +46,11 @@ export function MyPlayList() {
   const [list, setList] = useState(null);
   const [reRend, setReRend] = useState(0);
   const [songList, setSongList] = useState();
+  const [myPlaylist, setMyPlaylist] = useState(null);
 
   const { login } = useContext(LoginContext);
   const location = useLocation();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -106,7 +113,6 @@ export function MyPlayList() {
                     <CardFooter>
                       {/*<FontAwesomeIcon icon={faRecordVinyl}/>*/}
                       <Box>{memberplaylist.totalSongCount}곡</Box>
-
                       <Spacer />
                       <Flex>
                         <LikeContainer

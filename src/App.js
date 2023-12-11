@@ -23,6 +23,9 @@ import MemberInfo from "./page/memberLogin/MemberInfo";
 import MemberDelete from "./page/memberLogin/MemberDelete";
 import MyFavoritePlaylist from "./page/main/MyFavoritePlaylist";
 import SongList from "./page/song/SongList";
+import { SongEdit } from "./page/song/SongEdit";
+import LiveChatComp from "./component/LiveChatComp";
+import SongInMyFavoritePlaylist from "./page/main/SongInMyFavoritePlaylist";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -39,12 +42,17 @@ const routes = createBrowserRouter(
         <Route path="requestlist" element={<SongRequest />} />
         <Route path="albumList" element={<SongList />} />
         <Route path="song/:id" element={<SongPage />} />
+        <Route path="songEdit/:id" element={<SongEdit />} />
         <Route path="recommended" element={<RecommendedList />} />
         <Route path="suggestion" element={<Suggestion />} />
         <Route path="chartpage" element={<ChartPage />} />
         <Route path="memberinfo" element={<MemberInfo />} />
         <Route path="delete" element={<MemberDelete />} />
         <Route path="myFavorite" element={<MyFavoritePlaylist />} />
+        <Route
+          path="songinmyfavoriteplaylist"
+          element={<SongInMyFavoritePlaylist />}
+        />
       </Route>
     </Route>,
   ),
@@ -54,6 +62,7 @@ function App(props) {
   return (
     <LoginProvider>
       <RouterProvider router={routes} />
+      <LiveChatComp />
     </LoginProvider>
   );
 }

@@ -12,8 +12,9 @@ import {
   useToast,
   Select,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
+import { LoginContext } from "../../component/LoginProvider";
 
 function PasswordRecovery({ isOpen, onClose, securityQuestions }) {
   const [idForRecovery, setIdForRecovery] = useState("");
@@ -23,6 +24,7 @@ function PasswordRecovery({ isOpen, onClose, securityQuestions }) {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { login } = useContext(LoginContext);
 
   const toast = useToast();
 
@@ -69,10 +71,7 @@ function PasswordRecovery({ isOpen, onClose, securityQuestions }) {
         <ModalBody>
           <FormControl mb={5}>
             <FormLabel>아이디</FormLabel>
-            <Input
-              value={idForRecovery}
-              onChange={(e) => setIdForRecovery(e.target.value)}
-            />
+            <Input value={login.id} readOnly color="gray" />
           </FormControl>
           <FormControl mb={5}>
             <FormLabel>보안 질문</FormLabel>
