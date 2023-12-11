@@ -24,6 +24,7 @@ import MemberDelete from "./page/memberLogin/MemberDelete";
 import MyFavoritePlaylist from "./page/main/MyFavoritePlaylist";
 import SongList from "./page/song/SongList";
 import LiveChatComp from "./component/LiveChatComp";
+import SongInMyFavoritePlaylist from "./page/main/SongInMyFavoritePlaylist";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -46,6 +47,10 @@ const routes = createBrowserRouter(
         <Route path="memberinfo" element={<MemberInfo />} />
         <Route path="delete" element={<MemberDelete />} />
         <Route path="myFavorite" element={<MyFavoritePlaylist />} />
+        <Route
+          path="songinmyfavoriteplaylist"
+          element={<SongInMyFavoritePlaylist />}
+        />
       </Route>
     </Route>,
   ),

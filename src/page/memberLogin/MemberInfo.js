@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Button,
   Card,
@@ -7,6 +7,8 @@ import {
   CardHeader,
   Center,
   Flex,
+  FormControl,
+  FormLabel,
   Heading,
   Input,
   Modal,
@@ -40,6 +42,7 @@ export function MemberInfo() {
   const navigate = useNavigate();
   const [member, setMember] = useState(null);
   const [params] = useSearchParams();
+  const [questions, setQuestions] = useState(null);
 
   useEffect(() => {
     axios.get("/api/member" + params.toString()).then((response) => {
@@ -47,23 +50,10 @@ export function MemberInfo() {
       setEmail(response.data.email);
       setNickName(response.data.nickName);
     });
+    axios
+      .get("/api/member/questions?id=" + login.id)
+      .then(({ data }) => setQuestions(data));
   }, []);
-
-  //기존 이메일과 같은지 확인
-  let sameOriginEmail = false;
-  if (member !== null) {
-    sameOriginEmail = member.email === email;
-  }
-
-  let emailChecked = sameOriginEmail || emailAvailable;
-
-  //기존 별명과 같은지 확인
-  let sameOriginNickName = false;
-  if (member !== null) {
-    sameOriginNickName = member.nickName === email;
-  }
-
-  let nickNameChecked = sameOriginNickName || nickNameAvailable;
 
   function handleNickNameCheck() {
     const params = new URLSearchParams();
@@ -72,7 +62,7 @@ export function MemberInfo() {
     axios
       .get("/api/member/check?" + params)
       .then(() => {
-        setNickNameAvailable(true);
+        setNickNameAvailable(false);
         toast({
           description: "이미 사용중인 닉네임입니다.",
           status: "warning",
@@ -80,8 +70,9 @@ export function MemberInfo() {
       })
       .catch((error) => {
         if (error.response.status === 404) {
+          setNickNameAvailable(true);
           toast({
-            description: "사용 가능한 별명입니다.",
+            description: "사용 가능한 닉네임입니다.",
             status: "success",
           });
         }
@@ -95,8 +86,9 @@ export function MemberInfo() {
     axios
       .get("/api/member/check?" + params)
       .then(() => {
+        setEmailAvailable(false);
         toast({
-          description: "이미 사용중인 email입니다.",
+          description: "이미 사용중인 이메일입니다.",
           status: "warning",
         });
       })
@@ -104,7 +96,7 @@ export function MemberInfo() {
         if (error.response.status === 404) {
           setEmailAvailable(true);
           toast({
-            description: "사용 가능한 email입니다.",
+            description: "사용 가능한 이메일입니다.",
             status: "success",
           });
         }
@@ -160,12 +152,6 @@ export function MemberInfo() {
           <br />
           <Flex gap={5}>
             <Card w="sm" h="250px">
-              <CardBody mt={50}>내가 좋아하는 음악</CardBody>
-              <CardFooter>
-                <Button colorScheme="facebook">좋아요 표시한 음악</Button>
-              </CardFooter>
-            </Card>
-            <Card w="sm" h="250px">
               <CardBody mt={50}>RELIEVE 회원을 탈퇴합니다.</CardBody>
               <CardFooter>
                 <Button
@@ -187,42 +173,42 @@ export function MemberInfo() {
           <ModalHeader>{login.nickName} 님 정보 수정</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            아이디
-            <Input type="text" value={login.id} readOnly color="gray" />
-            <br />
-            닉네임
-            <Flex gap={3}>
-              <Input
-                type="text"
-                value={nickName}
-                onChange={(e) => {
-                  setNickName(e.target.value);
-                  setNickNameAvailable(false);
-                }}
-              />
-              <Button
-                variant="ghost"
-                onClick={handleNickNameCheck}
-                isDisabled={nickNameChecked}
-              >
-                중복확인
-              </Button>
-            </Flex>
-            이메일
-            <Flex gap={3}>
-              <Input
-                type="text"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <Button
-                variant="ghost"
-                onClick={handleEmailCheck}
-                isDisabled={emailChecked}
-              >
-                중복확인
-              </Button>
-            </Flex>
+            <FormControl>
+              <FormLabel>아이디</FormLabel>
+              <Input type="text" value={login.id} readOnly color="gray" />
+            </FormControl>
+            <FormControl isInvalid={!nickNameAvailable} mb={5}>
+              <FormLabel>닉네임</FormLabel>
+              <Flex gap={3}>
+                <Input
+                  type="text"
+                  value={nickName}
+                  onChange={(e) => {
+                    setNickName(e.target.value);
+                    setNickNameAvailable(false);
+                  }}
+                />
+                <Button variant="ghost" onClick={handleNickNameCheck}>
+                  중복확인
+                </Button>
+              </Flex>
+            </FormControl>
+            <FormControl inInvalid={!emailAvailable}>
+              <FormLabel>이메일</FormLabel>
+              <Flex gap={3}>
+                <Input
+                  type="text"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setEmailAvailable(false);
+                  }}
+                />
+                <Button variant="ghost" onClick={handleEmailCheck}>
+                  중복확인
+                </Button>
+              </Flex>
+            </FormControl>
             비밀번호 <br />
             <Button
               variant="ghost"
@@ -233,11 +219,7 @@ export function MemberInfo() {
             </Button>
           </ModalBody>
           <ModalFooter gap={5}>
-            <Button
-              colorScheme="blue"
-              onClick={handleSubmit}
-              isDisabled={!emailChecked || !nickNameChecked}
-            >
+            <Button colorScheme="blue" onClick={handleSubmit}>
               수정
             </Button>
             <Button colorScheme="red" onClick={onClose}>
@@ -249,6 +231,7 @@ export function MemberInfo() {
       <PasswordRecovery
         isOpen={isPasswordModalOpen}
         onClose={onPasswordModalClose}
+        securityQuestions={questions}
       />
     </Center>
   );
