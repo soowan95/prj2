@@ -81,16 +81,19 @@ function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
   function handleForward() {
     songInfo.current.seekTo(songInfo.current.getCurrentTime() + 10);
   }
-  
+
   function goToSongPage(id) {
     navigate(`/main/song/${id}`);
-    
+  }
+
   function handlePreSong() {
-    setIndex(index - 1);
+    if (index - 1 > 0) setIndex(index - 1);
+    else setIndex(songList.length - 1);
   }
 
   function handleNextSong() {
-    setIndex(index + 1);
+    if (index + 1 < songList.length) setIndex(index + 1);
+    else setIndex(0);
   }
 
   function handleSongEnded() {
@@ -124,8 +127,8 @@ function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
     >
       <DrawerOverlay>
         <DrawerContent>
-          <DrawerHeader onClick={() => goToSongPage(top100.at(index).id)}>
-            {top100 !== null && top100.at(index).title}
+          <DrawerHeader onClick={() => goToSongPage(songList.at(index).id)}>
+            {songList !== null && songList.at(index).title}
           </DrawerHeader>
           <DrawerBody>
             <Box overflow={"hidden"}>

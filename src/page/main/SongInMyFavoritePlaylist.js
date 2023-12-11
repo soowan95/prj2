@@ -40,7 +40,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export function SongInMyFavoritePlaylist() {
+function SongInMyFavoritePlaylist() {
   const { login } = useContext(LoginContext);
   const toast = useToast();
   const navigate = useNavigate();
@@ -52,6 +52,7 @@ export function SongInMyFavoritePlaylist() {
   const listIndex = useRef(0);
 
   useEffect(() => {
+    console.log("ok");
     axios
       .get("/api/myList/favoriteListName?" + params)
       .then((response) => setFavoriteList(response.data));
@@ -154,8 +155,9 @@ export function SongInMyFavoritePlaylist() {
         <PlayComp
           isOpen={playModal.isOpen}
           onClose={playModal.onClose}
-          top100={favoriteList}
+          songList={favoriteList}
           index={index}
+          setIndex={setIndex}
         />
       </Card>
 
