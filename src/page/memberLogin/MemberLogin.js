@@ -82,7 +82,7 @@ export function MemberLogin() {
   return (
     <Center>
       {isAuthenticated() || (
-        <Button colorScheme="purple" mr={5} onClick={onOpen}>
+        <Button colorScheme="purple" mt={600} onClick={onOpen}>
           <FontAwesomeIcon icon={faRightToBracket} />
           로그인
         </Button>
@@ -142,8 +142,6 @@ export function MemberLogin() {
             </Button>
 
             <KakaoLoginComp />
-
-
           </ModalFooter>
           <ModalFooter>
             <Button

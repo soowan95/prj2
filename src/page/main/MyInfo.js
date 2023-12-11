@@ -9,24 +9,38 @@ import {
   PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
+  useToast,
 } from "@chakra-ui/react";
 import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../../component/LoginProvider";
+import axios from "axios";
 
 export function MyInfo() {
-  const { login, fetchLogin } = useContext(LoginContext);
-
+  const { login, fetchLogin, isAuthenticated } = useContext(LoginContext);
+  const toast = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchLogin();
   }, []);
 
+  function handleLogOut() {
+    axios.post("/api/member/logout").then(() => {
+      toast({
+        description: "로그아웃 되었습니다",
+        status: "success",
+      });
+      window.location.reload(0);
+    });
+    navigate("/");
+  }
+
   return (
     <Popover>
       <PopoverTrigger>
         <Avatar
+          name={login.nickName}
           src="https://bit.ly/broken-link"
           _hover={{ cursor: "pointer" }}
         />
@@ -35,7 +49,7 @@ export function MyInfo() {
         <PopoverArrow />
         <PopoverCloseButton />
         <PopoverHeader>
-          {login ? <>{login.nickName} 님 환영합니다</> : "로딩 중..."}
+          {login ? <> {login.nickName} 님 환영합니다</> : "로그인 해주세요."}
         </PopoverHeader>
         <PopoverBody>
           <Button variant="ghost" onClick={() => navigate("/main/recommended")}>
@@ -50,7 +64,13 @@ export function MyInfo() {
             내 정보
           </Button>
         </PopoverBody>
-        <PopoverFooter>로그아웃</PopoverFooter>
+        <PopoverFooter>
+          {isAuthenticated() && (
+            <Button variant="ghost" onClick={handleLogOut}>
+              로그아웃
+            </Button>
+          )}
+        </PopoverFooter>
       </PopoverContent>
     </Popover>
   );
