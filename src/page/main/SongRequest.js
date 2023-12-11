@@ -295,7 +295,7 @@ export function SongRequest() {
 
           <ModalFooter>
             <Box fontWeight={"bold"} fontSize={"large"}>
-              입력 하시겠습니까? 😉　　　　　　　
+              입력 하시겠습니까? 😉
             </Box>
             <Button onClick={handleInsert} colorScheme="purple" mr={3}>
               저장
