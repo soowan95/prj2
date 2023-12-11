@@ -102,52 +102,69 @@ function CommentItem({
   return (
     <Flex justify="center">
       <Box w="90%" key={comment.id}>
-        <Flex justifyContent="space-between">
+        <Flex justifyContent="space-between" marginBottom={"10px"}>
           <Heading size="xs">{comment.memberNickName}</Heading>
           <Text fontSize="xs">{comment.inserted}</Text>
         </Flex>
         <Flex justifyContent="space-between" alignItems="center">
-          <Box flex={1}>
-            <Text sx={{ whiteSpace: "pre-wrap" }} pt="2" fontSize="sm">
-              {comment.comment}
-            </Text>
-            {isEditing && (
-              <Box>
+          {isEditing ? (
+            <Box justifyContent="space-between" alignItems="center" w="100%">
+              <Text
+                sx={{ whiteSpace: "pre-wrap" }}
+                pt="2"
+                fontSize="sm"
+                marginBottom={"10px"}
+              >
+                {comment.comment}
+              </Text>
+              <Flex justifyContent="space-between" alignItems="center" w="100%">
                 <Textarea
                   value={commentEdited}
                   onChange={(e) => setCommentEdited(e.target.value)}
+                  w={"100%"}
+                  resize="vertical" // 선택사항: 세로 크기 조절을 허용합니다
                 />
-                <Button isDisabled={isSubmitting} onClick={handleSubmit}>
-                  수정
-                </Button>
-              </Box>
-            )}
-          </Box>
-
-          {/* 권한이 있어야지만 삭제 버튼 생성 */}
-          {hasAccess(comment.memberId) && (
-            <Box>
-              {isEditing || (
-                <Button size="xs" onClick={() => setIsEditing(true)}>
-                  <FontAwesomeIcon icon={faPenToSquare} />
-                </Button>
-              )}
-              {isEditing && (
                 <Button
-                  size="xs"
+                  size="sm"
                   colorScheme="gray"
                   onClick={() => setIsEditing(false)}
                 >
                   <NotAllowedIcon />
                 </Button>
+                <Button
+                  size="sm"
+                  isDisabled={isSubmitting}
+                  onClick={handleSubmit}
+                >
+                  수정
+                </Button>
+              </Flex>
+            </Box>
+          ) : (
+            <Box w="80%">
+              <Text sx={{ whiteSpace: "pre-wrap" }} pt="2" fontSize="sm">
+                {comment.comment}
+              </Text>
+            </Box>
+          )}
+
+          {hasAccess(comment.memberId) && (
+            <Box marginTop={"10px"}>
+              {isEditing || (
+                <Box>
+                  <Button size="sm" onClick={() => setIsEditing(true)}>
+                    <FontAwesomeIcon icon={faPenToSquare} />
+                  </Button>
+
+                  <Button
+                    onClick={() => onDeleteModalOpen(comment.id)}
+                    size="sm"
+                    colorScheme="purple"
+                  >
+                    <FontAwesomeIcon icon={faTrashCan} />
+                  </Button>
+                </Box>
               )}
-              <Button
-                onClick={() => onDeleteModalOpen(comment.id)}
-                size="xs"
-                colorScheme="purple"
-              >
-                <FontAwesomeIcon icon={faTrashCan} />
-              </Button>
             </Box>
           )}
         </Flex>
