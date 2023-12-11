@@ -11,21 +11,28 @@ import {
   SliderFilledTrack,
   SliderThumb,
   SliderTrack,
+  Spinner,
+  Tooltip,
 } from "@chakra-ui/react";
 import ReactPlayer from "react-player";
 import { useRef, useState } from "react";
 import {
   faBackward,
   faForward,
+  faPause,
   faPlay,
+  faRepeat,
   faRotateLeft,
   faRotateRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MdGraphicEq } from "react-icons/md";
 
-function PlayComp({ isOpen, onClose, top100, index, setIndex }) {
+function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isRepeat, setIsRepeat] = useState(true);
+  const [isBuffer, setIsBuffer] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
   const [rerenderCount, setRerenderCount] = useState(0);
 
   const songInfo = useRef("");
@@ -72,12 +79,39 @@ function PlayComp({ isOpen, onClose, top100, index, setIndex }) {
     songInfo.current.seekTo(songInfo.current.getCurrentTime() + 10);
   }
 
+  function handlePreSong() {
+    setIndex(index - 1);
+  }
+
+  function handleNextSong() {
+    setIndex(index + 1);
+  }
+
+  function handleSongEnded() {
+    setIndex(index + 1);
+    if (songList !== null && index === songList.length - 1) {
+      setIndex(0);
+      if (!isRepeat) setIsPlaying(!isPlaying);
+    }
+  }
+
+  function handleBuffer() {
+    setIsBuffer(!isBuffer);
+  }
+
+  function handleShowTooltip() {
+    setShowTooltip(!showTooltip);
+  }
+
   return (
     <Drawer
       placement="bottom"
       isOpen={isOpen}
       onClose={() => {
         setIsPlaying(false);
+        setIsRepeat(true);
+        setIsBuffer(false);
+        setShowTooltip(false);
         songInfo.current.seekTo(0);
         onClose();
       }}
@@ -85,7 +119,7 @@ function PlayComp({ isOpen, onClose, top100, index, setIndex }) {
       <DrawerOverlay>
         <DrawerContent>
           <DrawerHeader>
-            {top100 !== null && top100.at(index).title}
+            {songList !== null && songList.at(index).title}
           </DrawerHeader>
           <DrawerBody>
             <Box overflow={"hidden"}>
@@ -95,44 +129,72 @@ function PlayComp({ isOpen, onClose, top100, index, setIndex }) {
                 max={duration}
                 value={currentTime}
                 onChange={(e) => songInfo.current.seekTo(e)}
+                onMouseEnter={handleShowTooltip}
+                onMouseLeave={handleShowTooltip}
               >
                 <SliderTrack bg="red.100">
                   <SliderFilledTrack bg="tomato" />
                 </SliderTrack>
-                <SliderThumb boxSize={6}>
-                  <Box color="tomato" as={MdGraphicEq} />
-                </SliderThumb>
+                <Tooltip
+                  color="tomato"
+                  bg="none"
+                  placement="top"
+                  isOpen={showTooltip}
+                  label={elapsedTime}
+                >
+                  <SliderThumb boxSize={6}>
+                    <Box color="tomato" as={MdGraphicEq} />
+                  </SliderThumb>
+                </Tooltip>
               </Slider>
-              <Flex position={"relative"} border={"1px solid black"}>
-                <Button>
+              <Flex position={"relative"}>
+                <Box mx={4} lineHeight={"40px"} onClick={handlePreSong}>
                   <FontAwesomeIcon icon={faBackward} />
-                </Button>
-                <Button onClick={handleRewind}>
+                </Box>
+                <Box mr={4} lineHeight={"40px"} onClick={handleRewind}>
                   <FontAwesomeIcon icon={faRotateLeft} />
-                </Button>
-                <Button
+                </Box>
+                <Box
+                  mr={4}
+                  lineHeight={"40px"}
                   onClick={() => {
                     setIsPlaying(!isPlaying);
                     setRerenderCount(0);
                   }}
                 >
-                  <FontAwesomeIcon icon={faPlay} />
-                </Button>
-                <Button onClick={handleForward}>
+                  {isBuffer ? (
+                    <Spinner size={"xs"} />
+                  ) : (
+                    <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
+                  )}
+                </Box>
+                <Box mr={4} lineHeight={"40px"} onClick={handleForward}>
                   <FontAwesomeIcon icon={faRotateRight} />
-                </Button>
-                <Button>
+                </Box>
+                <Box mr={4} lineHeight={"40px"} onClick={handleNextSong}>
                   <FontAwesomeIcon icon={faForward} />
-                </Button>
+                </Box>
                 <Box lineHeight={"40px"}>
                   {elapsedTime} / {totalDuration}
                 </Box>
                 <ReactPlayer
                   style={{ position: "absolute", left: "-100%" }}
+                  onEnded={handleSongEnded}
+                  onBuffer={handleBuffer}
+                  onBufferEnd={handleBuffer}
                   ref={songInfo}
                   playing={isPlaying}
-                  url={top100 !== null && top100.at(index).songUrl}
+                  url={songList !== null && songList.at(index).songUrl}
                 />
+                <Box
+                  lineHeight={"40px"}
+                  position={"absolute"}
+                  opacity={isRepeat ? 1 : 0.3}
+                  right={5}
+                  onClick={() => setIsRepeat(!isRepeat)}
+                >
+                  <FontAwesomeIcon icon={faRepeat} />
+                </Box>
               </Flex>
             </Box>
           </DrawerBody>

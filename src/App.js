@@ -23,6 +23,7 @@ import MemberInfo from "./page/memberLogin/MemberInfo";
 import MemberDelete from "./page/memberLogin/MemberDelete";
 import MyFavoritePlaylist from "./page/main/MyFavoritePlaylist";
 import SongList from "./page/song/SongList";
+import LiveChatComp from "./component/LiveChatComp";
 import SongInMyFavoritePlaylist from "./page/main/SongInMyFavoritePlaylist";
 
 const routes = createBrowserRouter(
@@ -59,6 +60,7 @@ function App(props) {
   return (
     <LoginProvider>
       <RouterProvider router={routes} />
+      <LiveChatComp />
     </LoginProvider>
   );
 }
