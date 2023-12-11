@@ -55,8 +55,8 @@ export function MemberLogin() {
   function handleLogin() {
     axios
       .post("/api/member/login", { id, password })
-      .then(() => {
-        connect();
+      .then(({ data }) => {
+        connect(data.nickName);
         navigate("/main");
         toast({
           description: "로그인 되었습니다😀 ",

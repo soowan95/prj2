@@ -118,7 +118,7 @@ function LogInProvider({ children }) {
     }
   });
 
-  const connect = () => {
+  const connect = (nickName) => {
     const clientdata = new StompJs.Client({
       brokerURL: "ws://localhost:8080/ws/chat",
       connectHeaders: {
@@ -143,7 +143,7 @@ function LogInProvider({ children }) {
         destination: "/app/chat/enter",
         body: CircularJSON.stringify({
           type: "ENTER",
-          sender: userId.current,
+          sender: nickName,
         }),
       });
     };
@@ -199,12 +199,6 @@ function LogInProvider({ children }) {
   useEffect(() => {
     fixScroll.current.scrollIntoView({ behavior: "smooth" });
   }, [chatList]);
-
-  useEffect(() => {
-    connect();
-
-    return () => disConnect();
-  }, []);
 
   return (
     <LoginContext.Provider

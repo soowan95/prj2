@@ -35,7 +35,7 @@ const routes = createBrowserRouter(
         <Route path="kakaoLogin" element={<KakaoLogin />} />,
       </Route>
       <Route path="main" element={<MainLayout />}>
-        <Route path="myinfo" element={<MyInfo />} />
+        {/*<Route path="myinfo" element={<MyInfo />} />*/}
         <Route index element={<Top100Page />} />
         <Route path="search" element={<SearchPage />} />
         <Route path="myplaylist" element={<MyPlayList />} />

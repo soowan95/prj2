@@ -1,11 +1,14 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { LoginContext } from "../../component/LoginProvider";
 
 function KakaoLogin() {
   const location = useLocation();
   const navigate = useNavigate();
   const KAKAO_CODE = location.search.split("=")[1];
+
+  const { connect } = useContext(LoginContext);
 
   const getKakaoToken = () => {
     fetch(`https://kauth.kakao.com/oauth/token`, {
@@ -31,7 +34,10 @@ function KakaoLogin() {
                   email: data.kakao_account.email,
                   nickName: data.properties.nickname,
                 })
-                .then(() => navigate("/main"));
+                .then(() => {
+                  connect(data.properties.nickname);
+                  navigate("/main");
+                });
             });
         }
       });
