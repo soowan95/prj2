@@ -149,7 +149,6 @@ export function SongRequest() {
         <Table>
           <Thead>
             <Tr>
-              {/* TODO: 수정 예정 */}
               <Th w={"200px"}>요청자 ID</Th>
               <Th>가수</Th>
               <Th>노래 제목</Th>
@@ -185,6 +184,18 @@ export function SongRequest() {
                     </Td>
                   </Tr>
                 ))}
+            {requestList !== null &&
+              requestList
+                // 사용자의 요청 목록이 없는 경우
+                .filter(
+                  (request) => !request.updated && request.member === login.id,
+                ).length === 0 && (
+                <Tr>
+                  <Td colSpan={4}>
+                    <Text>요청한 내역이 없습니다.</Text>
+                  </Td>
+                </Tr>
+              )}
           </Tbody>
         </Table>
       </Box>
