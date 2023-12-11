@@ -9,6 +9,7 @@ import {
   PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import { useContext, useEffect } from "react";
@@ -37,7 +38,8 @@ export function MyInfo() {
   }
 
   return (
-    <Popover>
+    <Popover trigger="hover">
+      {/*//마우스를 피하면 없어지는 기능*/}
       <PopoverTrigger>
         <Avatar
           name={login.nickName}
