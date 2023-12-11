@@ -93,9 +93,9 @@ export function MyFavoritePlaylist() {
                     <Divider color="gray" />
                     <CardFooter>
                       <FontAwesomeIcon icon={faRecordVinyl} />
-                      <Text>{song?.songs} 곡</Text>
+                      <Text>{song?.songs} SONGS</Text>
                       <Spacer />
-                      <Text>생성자 : {song?.memberId} 님</Text>
+                      <Text>ID : {song?.memberId} </Text>
                     </CardFooter>
                   </Card>
                 </Box>

@@ -18,7 +18,8 @@ import { LoginContext } from "../../component/LoginProvider";
 import axios from "axios";
 
 export function MyInfo() {
-  const { login, fetchLogin, isAuthenticated } = useContext(LoginContext);
+  const { login, fetchLogin, isAuthenticated, disConnect } =
+    useContext(LoginContext);
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -28,6 +29,7 @@ export function MyInfo() {
 
   function handleLogOut() {
     axios.post("/api/member/logout").then(() => {
+      disConnect();
       toast({
         description: "로그아웃 되었습니다",
         status: "success",
@@ -54,7 +56,10 @@ export function MyInfo() {
           {login ? <> {login.nickName} 님 환영합니다</> : "로그인 해주세요."}
         </PopoverHeader>
         <PopoverBody>
-          <Button variant="ghost" onClick={() => navigate("/main/recommended")}>
+          <Button
+            variant="ghost"
+            onClick={() => navigate("/main/recommendplaylist")}
+          >
             추천 플레이리스트
           </Button>
           <br />
