@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -31,11 +31,13 @@ import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 import { useImmer } from "use-immer";
+import { LoginContext } from "../../component/LoginProvider";
 
 export function SongRequest() {
   const [requestList, setRequestList] = useState(null);
   const { isOpen, onClose, onOpen } = useDisclosure();
-
+  const { login, fetchLogin, isAuthenticated, disConnect } =
+    useContext(LoginContext);
   const [genreList, setGenreList] = useState(null);
   const [moodList, setMoodList] = useState(null);
   const [isUpdate, setIsUpdate] = useState(false);
@@ -157,7 +159,8 @@ export function SongRequest() {
           <Tbody>
             {requestList !== null &&
               requestList
-                .filter((a) => !a.updated)
+                // 로그인 된 사용자의 요청 목록만 보이게 만들기
+                .filter((a) => !a.updated && a.member === login.id)
                 .map((request) => (
                   <Tr key={request.id}>
                     <Td>{request.member}</Td>
