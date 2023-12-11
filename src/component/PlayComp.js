@@ -27,6 +27,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MdGraphicEq } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -36,6 +37,8 @@ function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
   const [rerenderCount, setRerenderCount] = useState(0);
 
   const songInfo = useRef("");
+
+  const navigate = useNavigate(); // 페이지 이동
 
   function format(seconds) {
     if (isNaN(seconds)) {
@@ -78,7 +81,10 @@ function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
   function handleForward() {
     songInfo.current.seekTo(songInfo.current.getCurrentTime() + 10);
   }
-
+  
+  function goToSongPage(id) {
+    navigate(`/main/song/${id}`);
+    
   function handlePreSong() {
     setIndex(index - 1);
   }
@@ -118,8 +124,8 @@ function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
     >
       <DrawerOverlay>
         <DrawerContent>
-          <DrawerHeader>
-            {songList !== null && songList.at(index).title}
+          <DrawerHeader onClick={() => goToSongPage(top100.at(index).id)}>
+            {top100 !== null && top100.at(index).title}
           </DrawerHeader>
           <DrawerBody>
             <Box overflow={"hidden"}>
@@ -132,8 +138,8 @@ function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
                 onMouseEnter={handleShowTooltip}
                 onMouseLeave={handleShowTooltip}
               >
-                <SliderTrack bg="red.100">
-                  <SliderFilledTrack bg="tomato" />
+                <SliderTrack bg="purple.100">
+                  <SliderFilledTrack bg="#ae8af1" />
                 </SliderTrack>
                 <Tooltip
                   color="tomato"
@@ -143,7 +149,7 @@ function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
                   label={elapsedTime}
                 >
                   <SliderThumb boxSize={6}>
-                    <Box color="tomato" as={MdGraphicEq} />
+                    <Box color="#f799c9" as={MdGraphicEq} />
                   </SliderThumb>
                 </Tooltip>
               </Slider>

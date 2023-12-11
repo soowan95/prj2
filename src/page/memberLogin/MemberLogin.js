@@ -3,7 +3,6 @@ import {
   Button,
   FormControl,
   FormLabel,
-  Heading,
   Input,
   Modal,
   ModalOverlay,
@@ -15,22 +14,19 @@ import {
   useDisclosure,
   useToast,
   Center,
-  Card,
   InputGroup,
   InputLeftElement,
-  InputRightElement,
 } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faBold,
   faLockOpen,
   faRightToBracket,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import PasswordRecovery from "./PasswordRecovery";
+import FoundPassword from "./FoundPassword";
 import MemberSignup from "./MemberSignup";
 import { LoginContext } from "../../component/LoginProvider";
 import KakaoLoginComp from "../../component/KakaoLoginComp";
@@ -42,7 +38,7 @@ export function MemberLogin() {
   const { fetchLogin, isAuthenticated, connect } = useContext(LoginContext);
 
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const pr = useDisclosure();
+  const fp = useDisclosure();
   const ms = useDisclosure();
 
   const navigate = useNavigate();
@@ -147,17 +143,16 @@ export function MemberLogin() {
             <Button
               w={"150px"}
               size={"xs"}
-              mr={1}
+              mr={2}
               onClick={() => {
-                pr.onOpen();
+                fp.onOpen();
               }}
             >
-              비밀번호변경
+              비밀번호 찾기
             </Button>
             <Button
-              w={"100px"}
+              w={"150px"}
               size={"xs"}
-              mr={1}
               onClick={() => {
                 ms.onOpen();
               }}
@@ -167,9 +162,9 @@ export function MemberLogin() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <PasswordRecovery
-        isOpen={pr.isOpen}
-        onClose={pr.onClose}
+      <FoundPassword
+        isOpen={fp.isOpen}
+        onClose={fp.onClose}
         securityQuestions={securityQuestionList}
       />
       <MemberSignup
