@@ -64,9 +64,9 @@ function CommentItem({
   const [commentEdited, setCommentEdited] = useState(comment.comment);
 
   const { hasAccess } = useContext(LoginContext);
-
   const toast = useToast();
 
+  // 댓글 수정 제출 핸들러
   function handleSubmit() {
     setIsSubmitting(true);
 
@@ -103,12 +103,15 @@ function CommentItem({
     <Flex justify="center">
       <Box w="90%" key={comment.id}>
         <Flex justifyContent="space-between" marginBottom={"10px"}>
+          {/* 댓글 작성자(닉네임)와 작성일 */}
           <Heading size="xs">{comment.memberNickName}</Heading>
           <Text fontSize="xs">{comment.inserted}</Text>
         </Flex>
         <Flex justifyContent="space-between" alignItems="center">
+          {/* 댓글 편집 모드일 때 */}
           {isEditing ? (
             <Box justifyContent="space-between" alignItems="center" w="100%">
+              {/* 기존 댓글 내용 */}
               <Text
                 sx={{ whiteSpace: "pre-wrap" }}
                 pt="2"
@@ -118,12 +121,13 @@ function CommentItem({
                 {comment.comment}
               </Text>
               <Flex justifyContent="space-between" alignItems="center" w="100%">
+                {/* 댓글 수정 부분 */}
                 <Textarea
                   value={commentEdited}
                   onChange={(e) => setCommentEdited(e.target.value)}
                   w={"100%"}
-                  resize="vertical" // 선택사항: 세로 크기 조절을 허용합니다
                 />
+                {/* 취소 버튼 */}
                 <Button
                   size="sm"
                   colorScheme="gray"
@@ -131,6 +135,7 @@ function CommentItem({
                 >
                   <NotAllowedIcon />
                 </Button>
+                {/* 수정 완료 버튼 */}
                 <Button
                   size="sm"
                   isDisabled={isSubmitting}
@@ -141,13 +146,16 @@ function CommentItem({
               </Flex>
             </Box>
           ) : (
+            // 댓글 편집 모드가 아닐 경우
             <Box w="80%">
+              {/* 댓글 내용 */}
               <Text sx={{ whiteSpace: "pre-wrap" }} pt="2" fontSize="sm">
                 {comment.comment}
               </Text>
             </Box>
           )}
 
+          {/* 댓글 작성자가 권한이 있을 경우 */}
           {hasAccess(comment.memberId) && (
             <Box marginTop={"10px"}>
               {isEditing || (
@@ -211,7 +219,6 @@ export function CommentContainer({ songId }) {
 
   const { isOpen, onClose, onOpen } = useDisclosure();
 
-  // const [id, setId] = useState(0);
   // useRef : 컴포넌트에서 임시로 값을 저장하는 용도로 사용
   const commentIdRef = useRef(0);
 
@@ -224,15 +231,18 @@ export function CommentContainer({ songId }) {
       const params = new URLSearchParams();
       params.set("id", songId);
 
+      // 댓글 목록 불러오기
       axios
         .get("/api/comment/list?" + params)
         .then((response) => setCommentList(response.data));
     }
   }, [isSubmitting]);
 
+  // 댓글 작성 핸들러
   function handleSubmit(comment) {
     setIsSubmitting(true);
 
+    // 댓글 추가 요청
     axios
       .post("/api/comment/add", comment)
       .then(() => {
@@ -252,8 +262,11 @@ export function CommentContainer({ songId }) {
       });
   }
 
+  // 댓글 삭제 핸들러
   function handleDelete() {
     setIsSubmitting(true);
+
+    // 댓글 삭제 요청
     axios
       .delete("/api/comment/" + commentIdRef.current)
       .then(() => {
@@ -298,6 +311,7 @@ export function CommentContainer({ songId }) {
           onSubmit={handleSubmit}
         />
       )}
+      {/* 댓글 리스트 표시 */}
       <CommentList
         songId={songId}
         commentList={commentList}
