@@ -11,7 +11,9 @@ export function SongEdit() {
   const { id } = useParams();
 
   useEffect(() => {
-    axios.get("/api/song/" + id).then((response) => updateSong(response.data));
+    axios
+      .get("/api/song/songEdit/" + id)
+      .then((response) => updateSong(response.data));
   }, [id, updateSong]);
 
   return (
