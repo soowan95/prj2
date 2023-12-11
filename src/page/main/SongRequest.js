@@ -152,6 +152,8 @@ export function SongRequest() {
               <Th w={"200px"}>요청자 ID</Th>
               <Th>가수</Th>
               <Th>노래 제목</Th>
+              <Th>수정</Th>
+              <Th>진행 상태</Th>
             </Tr>
           </Thead>
 
@@ -182,6 +184,7 @@ export function SongRequest() {
                         입력
                       </Button>
                     </Td>
+                    <Td>처리중</Td>
                   </Tr>
                 ))}
             {requestList !== null &&
@@ -196,6 +199,24 @@ export function SongRequest() {
                   </Td>
                 </Tr>
               )}
+            {requestList !== null &&
+              // 이미 입력이 완료되어 처리된 요청 목록 표시
+              requestList
+                .filter(
+                  (request) => request.member === login.id && request.updated,
+                )
+                .map((request) => (
+                  <Tr key={request.id}>
+                    <Td>{request.member}</Td>
+                    <Td>{request.artist}</Td>
+                    <Td>{request.title}</Td>
+                    <Td></Td>
+                    <Td>
+                      {/* 여기에 이미 처리된 요청에 대한 버튼 또는 마크업을 추가할 수 있습니다. */}
+                      <Button size="sm">입력 완료</Button>
+                    </Td>
+                  </Tr>
+                ))}
           </Tbody>
         </Table>
       </Box>
