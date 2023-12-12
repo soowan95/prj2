@@ -57,20 +57,7 @@ function SongPage(props) {
 
             {/* 수정&삭제 버튼은 admin만 보일 수 있게 */}
             <Button
-              onClick={() =>
-                navigate(
-                  "/main/songEdit?title=" +
-                    songData.title +
-                    "&artistName=" +
-                    songData.artistName +
-                    "&album=" +
-                    songData.album +
-                    "&artistGroup=" +
-                    songData.artistGroup +
-                    "&url=" +
-                    songData.artistFileUrl,
-                )
-              }
+              onClick={() => navigate("/main/songEdit/" + id)}
               background={"aliceblue"}
               size={"xs"}
               mt={"10px"}

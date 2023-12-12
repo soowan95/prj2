@@ -19,14 +19,27 @@ import SongRequest from "../main/SongRequest";
 export function SongEdit() {
   const toast = useToast();
   const navigate = useNavigate();
-  const [songData, setSongData] = useState({});
-  const [song, updateSong] = useImmer({});
+
+  const [songData, updateSongData] = useImmer({});
+  const [albumList, setAlbumList] = useState(null);
+
+  // const [song, updateSong] = useImmer({});
   const [params] = useSearchParams();
   const { id } = useParams();
 
   // 수정할 파일 업로드
   const [uploadFile, setUploadFile] = useState(null);
   console.log(songData);
+
+  useEffect(() => {
+    axios.get("/api/song/" + id).then(({ data }) => {
+      updateSongData(data);
+      axios
+        .get("/api/song/albumList?album=" + data.album)
+        .then(({ data }) => setAlbumList(data));
+    });
+  }, []);
+
   function handleSubmit() {
     // 저장 버튼 클릭시
     // PUT /api/main/song/id
@@ -51,7 +64,7 @@ export function SongEdit() {
           status: "success",
         });
         // 수정이 완료되면 /main/song/id로 가고싶음....(= 내가 방금 수정한 페이지가 뜨게)
-        navigate("/songEdit/" + id);
+        navigate("/main/songEdit/" + id);
       })
       .catch((error) => {
         toast({
@@ -67,26 +80,34 @@ export function SongEdit() {
         <br />
         <Flex>
           <Box mr={8}>
-            <Image src={params.get("url")} boxSize="400px" objectFit="cover" />
+            <Image src={songData.url} boxSize="400px" objectFit="cover" />
           </Box>
 
           {/* 수정할 데이터 */}
           <Box>
             <FormControl>
               <FormLabel>노래 제목</FormLabel>
-              <Input defaultValue={params.get("title")} />
+              <Input
+                defaultValue={songData.title}
+                onChange={(e) =>
+                  updateSongData((draft) => {
+                    draft.title = e.target.value;
+                  })
+                }
+              />
             </FormControl>
 
             <Box mt={4}>
               <FormControl>
                 <FormLabel>가수</FormLabel>
                 <Input
-                  defaultValue={params.get("artistName")}
-                  onChange={(e) =>
-                    // updateSong((draft) => {
-                    //   draft.artistName = e.target.value;
-                    // })
-                    params.set("artistName", e.target.value)
+                  defaultValue={songData.artistName}
+                  onChange={
+                    (e) =>
+                      updateSongData((draft) => {
+                        draft.artistName = e.target.value;
+                      })
+                    // params.set("artistName", e.target.value)
                   }
                 />
                 {/*<div>{songData.artistName}</div>*/}
@@ -97,9 +118,9 @@ export function SongEdit() {
               <FormControl>
                 <FormLabel>앨범명</FormLabel>
                 <Input
-                  defaultValue={params.get("album")}
+                  defaultValue={songData.album}
                   onChange={(e) => {
-                    updateSong((draft) => {
+                    updateSongData((draft) => {
                       draft.album = e.target.value;
                     });
                   }}
@@ -112,9 +133,9 @@ export function SongEdit() {
               <FormControl>
                 <FormLabel>그룹명</FormLabel>
                 <Input
-                  defaultValue={params.get("artistGroup")}
+                  defaultValue={songData.artistGroup}
                   onChange={(e) =>
-                    updateSong((draft) => {
+                    updateSongData((draft) => {
                       draft.artistGroup = e.target.value;
                     })
                   }
