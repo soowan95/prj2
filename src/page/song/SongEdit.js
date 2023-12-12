@@ -25,6 +25,7 @@ export function SongEdit() {
   const [uploadFile, setUploadFile] = useState(null);
 
   useEffect(() => {
+    console.log(song);
     axios
       .get(
         "/api/song/songEdit?artistName=" +
@@ -82,9 +83,10 @@ export function SongEdit() {
                 <Input
                   value={params.get("artistName")}
                   onChange={(e) =>
-                    updateSong((draft) => {
-                      draft.artistName = e.target.value;
-                    })
+                    // updateSong((draft) => {
+                    //   draft.artistName = e.target.value;
+                    // })
+                    params.set("artistName", e.target.value)
                   }
                 />
                 {/*<div>{songData.artistName}</div>*/}

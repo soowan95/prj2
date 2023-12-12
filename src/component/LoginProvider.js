@@ -16,6 +16,24 @@ export const LoginContext = createContext(null);
 function LogInProvider({ children }) {
   const [login, setLogin] = useState("");
 
+  function requestList() {
+    if (isAdmin()) {
+      // 관리자일 때만 요청을 보냅니다.
+      axios
+        .get("/api/requestList")
+        .then((response) => {
+          // 요청에 대한 처리를 진행
+          console.log("Request List:", response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching request list:", error);
+        });
+    } else {
+      // 관리자가 아닌 경우에는 권한이 없음을 알리는 메시지를 출력
+      console.log("관리자만 요청 목록을 볼 수 있습니다.");
+    }
+  }
+
   useEffect(() => {
     fetchLogin();
   }, []);
@@ -32,6 +50,7 @@ function LogInProvider({ children }) {
   }
 
   function isAdmin() {
+    console.log(login);
     if (login.auth) {
       return login.auth.some((elem) => elem.name === "admin");
     }
@@ -221,6 +240,7 @@ function LogInProvider({ children }) {
         sendChat,
         msgBox,
         fixScroll,
+        requestList,
       }}
     >
       {children}
