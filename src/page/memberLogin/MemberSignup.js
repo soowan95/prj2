@@ -15,6 +15,7 @@ import {
   Flex,
   useToast,
   Select,
+  FormHelperText,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
@@ -27,6 +28,7 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
   const [passwordCheck, setPasswordCheck] = useState("");
   const [email, setEmail] = useState("");
   const [nickName, setNickName] = useState("");
+  const [emailOk, setEmailOk] = useState(false);
 
   const [selectedSecurityQuestion, setSecurityQuestion] = useState(
     securityQuestionList[0],
@@ -133,8 +135,14 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
             <Input
               type="password"
               value={password}
+              onKeyUp={(e) => {
+                e.target.value = e.target.value.replace(/[^a-zA-Z!@#0-9]/g, "");
+              }}
               onChange={(e) => setPassword(e.target.value)}
             />
+            <FormHelperText>
+              특수기호는 !,@,# 만 사용 가능합니다.
+            </FormHelperText>
           </FormControl>
           <FormControl mb={5} isInvalid={password !== passwordCheck}>
             <FormLabel>비밀번호 확인</FormLabel>
@@ -158,8 +166,22 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
             <Input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                if (
+                  email.match(
+                    /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/,
+                  )
+                )
+                  setEmailOk(true);
+                else setEmailOk(false);
+                setEmail(e.target.value);
+              }}
             />
+            {emailOk || (
+              <FormHelperText color={"red"}>
+                이메일 양식을 확인해주세요.
+              </FormHelperText>
+            )}
           </FormControl>
           <FormControl mb={5}>
             <FormLabel>보안 질문</FormLabel>
@@ -182,7 +204,7 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
         </ModalBody>
         <ModalFooter>
           <Button
-            isDisabled={!submitAvailable}
+            isDisabled={submitAvailable && !emailOk}
             onClick={handelSubmit}
             colorScheme="purple"
           >
