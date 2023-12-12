@@ -194,17 +194,11 @@ function LogInProvider({ children }) {
     setChat("");
   };
 
-  const fixScroll = useRef(null);
-
-  useEffect(() => {
-    fixScroll.current.scrollIntoView({ behavior: "smooth" });
-  }, [chatList]);
-
-  useEffect(() => {
-    connect();
-
-    return () => disConnect();
-  }, []);
+  // const fixScroll = useRef(null);
+  //
+  // useEffect(() => {
+  //   fixScroll.current.scrollIntoView({ behavior: "smooth" });
+  // }, [chatList]);
 
   return (
     <LoginContext.Provider
@@ -220,7 +214,7 @@ function LogInProvider({ children }) {
         chat,
         sendChat,
         msgBox,
-        fixScroll,
+        // fixScroll,
       }}
     >
       {children}
