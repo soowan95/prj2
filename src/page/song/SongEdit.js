@@ -8,6 +8,7 @@ import {
   Image,
   Input,
   Spinner,
+  useToast,
 } from "@chakra-ui/react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useImmer } from "use-immer";
@@ -16,52 +17,55 @@ import axios from "axios";
 import SongRequest from "../main/SongRequest";
 
 export function SongEdit() {
+  const toast = useToast();
   const navigate = useNavigate();
   const [songData, setSongData] = useState({});
   const [song, updateSong] = useImmer({});
   const [params] = useSearchParams();
+  const { id } = useParams();
 
   // 수정할 파일 업로드
   const [uploadFile, setUploadFile] = useState(null);
+  console.log(songData);
+  function handleSubmit() {
+    // 저장 버튼 클릭시
+    // PUT /api/main/song/id
 
-  useEffect(() => {
-    console.log(song);
     axios
-      .get(
-        "/api/song/songEdit?artistName=" +
-          params.get("artistName") +
-          "&artistGroup=" +
-          params.get("artistGroup"),
-      )
-      .then((response) => updateSong(response.data));
-  }, [params, updateSong]);
+      .put("/api/song/songEdit", {
+        title: songData.title,
+        artistName: songData.artistName,
+        album: songData.album,
+        artistGroup: songData.artistGroup,
+        uploadFile,
 
-  // function handleSubmit() {
-  //   // 저장 버튼 클릭시
-  //   // PUT /api/song/songEdit
-  //
-  //   axios
-  //     .putForm("/api/song/songEdit/", {
-  //       title: songData.title,
-  //       artistName: songData.artistName,
-  //       album: songData.album,
-  //       artistGroup: songData.artistGroup,
-  //       uploadFile,
-  //     })
-  //     .then(() => {
-  //       // 수정이 완료되면 /main/song/id로 가고싶음....(= 내가 방금 수정한 페이지가 뜨게)
-  //       navigate("/");
-  //     });
-  // }
+        // title: "",
+        // artistName: "",
+        // album: "",
+        // artistGroup: "",
+        // uploadFile,
+      })
+      .then(() => {
+        toast({
+          description: "수정이 완료되었습니다 ☺️",
+          status: "success",
+        });
+        // 수정이 완료되면 /main/song/id로 가고싶음....(= 내가 방금 수정한 페이지가 뜨게)
+        navigate("/songEdit/" + id);
+      })
+      .catch((error) => {
+        toast({
+          description: "수정 중 문제 발생😱😱",
+          status: "warning",
+        });
+      });
+  }
 
   return (
     <Box>
       <Box>
         <br />
         <Flex>
-          {/* 삭제할 기존 사진 띄워야함.. 근데 안뜸....ㅎㅎㅎㅎ...... */}
-          {/* useImmer를 사용해보자...... */}
-
           <Box mr={8}>
             <Image src={params.get("url")} boxSize="400px" objectFit="cover" />
           </Box>
@@ -70,18 +74,14 @@ export function SongEdit() {
           <Box>
             <FormControl>
               <FormLabel>노래 제목</FormLabel>
-              <Input
-                value={params.get("title")}
-                fontSize="30px"
-                color="purple"
-              />
+              <Input defaultValue={params.get("title")} />
             </FormControl>
 
             <Box mt={4}>
               <FormControl>
                 <FormLabel>가수</FormLabel>
                 <Input
-                  value={params.get("artistName")}
+                  defaultValue={params.get("artistName")}
                   onChange={(e) =>
                     // updateSong((draft) => {
                     //   draft.artistName = e.target.value;
@@ -97,12 +97,12 @@ export function SongEdit() {
               <FormControl>
                 <FormLabel>앨범명</FormLabel>
                 <Input
-                  value={params.get("album")}
-                  onChange={(e) =>
+                  defaultValue={params.get("album")}
+                  onChange={(e) => {
                     updateSong((draft) => {
                       draft.album = e.target.value;
-                    })
-                  }
+                    });
+                  }}
                 />
                 {/*<div>{songData.album}</div>*/}
               </FormControl>
@@ -112,7 +112,7 @@ export function SongEdit() {
               <FormControl>
                 <FormLabel>그룹명</FormLabel>
                 <Input
-                  value={params.get("artistGroup")}
+                  defaultValue={params.get("artistGroup")}
                   onChange={(e) =>
                     updateSong((draft) => {
                       draft.artistGroup = e.target.value;
@@ -137,7 +137,7 @@ export function SongEdit() {
           </FormControl>
 
           <Flex gap={2}>
-            <Button>저장</Button>
+            <Button onClick={handleSubmit}>저장</Button>
             <Button onClick={() => navigate(-1)}>취소</Button>
           </Flex>
         </Box>
