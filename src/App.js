@@ -26,6 +26,7 @@ import SongList from "./page/song/SongList";
 import { SongEdit } from "./page/song/SongEdit";
 import LiveChatComp from "./component/LiveChatComp";
 import SongInMyFavoritePlaylist from "./page/main/SongInMyFavoritePlaylist";
+import MySongRequest from "./page/main/MySongRequest";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -40,6 +41,7 @@ const routes = createBrowserRouter(
         <Route path="search" element={<SearchPage />} />
         <Route path="myplaylist" element={<MyPlayList />} />
         <Route path="requestlist" element={<SongRequest />} />
+        <Route path="mySongRequestList" element={<MySongRequest />} />
         <Route path="albumList" element={<SongList />} />
         <Route path="song/:id" element={<SongPage />} />
         <Route path="songEdit/:id" element={<SongEdit />} />

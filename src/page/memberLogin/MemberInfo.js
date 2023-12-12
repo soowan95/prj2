@@ -156,7 +156,7 @@ export function MemberInfo() {
               <CardFooter>
                 <Button
                   colorScheme="facebook"
-                  onClick={() => navigate("/main/requestlist")}
+                  onClick={() => navigate("/main/mySongRequestList")}
                 >
                   요청 확인
                 </Button>

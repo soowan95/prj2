@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -31,13 +31,11 @@ import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 import { useImmer } from "use-immer";
-import { LoginContext } from "../../component/LoginProvider";
 
 export function SongRequest() {
   const [requestList, setRequestList] = useState(null);
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const { login, fetchLogin, isAuthenticated, disConnect } =
-    useContext(LoginContext);
+
   const [genreList, setGenreList] = useState(null);
   const [moodList, setMoodList] = useState(null);
   const [isUpdate, setIsUpdate] = useState(false);
@@ -141,7 +139,9 @@ export function SongRequest() {
 
   return (
     <Box>
-      <Heading size={"md"}>요청 목록</Heading>
+      <Heading size={"md"} marginLeft={"30px"} marginTop={"50px"}>
+        요청 목록
+      </Heading>
       <br />
       <br />
 
@@ -149,19 +149,17 @@ export function SongRequest() {
         <Table>
           <Thead>
             <Tr>
+              {/* TODO: 수정 예정 */}
               <Th w={"200px"}>요청자 ID</Th>
               <Th>가수</Th>
               <Th>노래 제목</Th>
-              <Th>수정</Th>
-              <Th>진행 상태</Th>
             </Tr>
           </Thead>
 
           <Tbody>
             {requestList !== null &&
               requestList
-                // 로그인 된 사용자의 요청 목록만 보이게 만들기
-                .filter((a) => !a.updated && a.member === login.id)
+                .filter((a) => !a.updated)
                 .map((request) => (
                   <Tr key={request.id}>
                     <Td>{request.member}</Td>
@@ -183,37 +181,6 @@ export function SongRequest() {
                       >
                         입력
                       </Button>
-                    </Td>
-                    <Td>처리중</Td>
-                  </Tr>
-                ))}
-            {requestList !== null &&
-              requestList
-                // 사용자의 요청 목록이 없는 경우
-                .filter(
-                  (request) => !request.updated && request.member === login.id,
-                ).length === 0 && (
-                <Tr>
-                  <Td colSpan={4}>
-                    <Text>요청한 내역이 없습니다.</Text>
-                  </Td>
-                </Tr>
-              )}
-            {requestList !== null &&
-              // 이미 입력이 완료되어 처리된 요청 목록 표시
-              requestList
-                .filter(
-                  (request) => request.member === login.id && request.updated,
-                )
-                .map((request) => (
-                  <Tr key={request.id}>
-                    <Td>{request.member}</Td>
-                    <Td>{request.artist}</Td>
-                    <Td>{request.title}</Td>
-                    <Td></Td>
-                    <Td>
-                      {/* 여기에 이미 처리된 요청에 대한 버튼 또는 마크업을 추가할 수 있습니다. */}
-                      <Button size="sm">입력 완료</Button>
                     </Td>
                   </Tr>
                 ))}
