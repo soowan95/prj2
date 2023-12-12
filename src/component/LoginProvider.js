@@ -5,6 +5,7 @@ import {
   AvatarBadge,
   Box,
   Flex,
+  Tooltip,
   Wrap,
   WrapItem,
 } from "@chakra-ui/react";
@@ -69,54 +70,6 @@ function LogInProvider({ children }) {
   }, [chatList]);
 
   const CircularJSON = require("circular-json");
-
-  const msgBox = chatList.map((item, idx) => {
-    if (item.type !== "ENTER" && item.type !== "LEAVE") {
-      if (item.sender !== userId.current) {
-        return (
-          <Flex key={idx}>
-            <Wrap mx={"5px"}>
-              <WrapItem>
-                <Avatar size={"xs"} name={item.sender}>
-                  <AvatarBadge
-                    boxSize={"0.5rem"}
-                    bg={item.isOnline ? "green" : "red"}
-                  />
-                </Avatar>
-              </WrapItem>
-            </Wrap>
-            <Box fontSize={"0.9rem"} mr={"3px"}>
-              : {item.message}
-            </Box>
-            {/*<Box>{item.date}</Box>*/}
-          </Flex>
-        );
-      } else {
-        return (
-          <Flex justifyContent={"right"} key={idx}>
-            <Box fontSize={"0.9rem"}>{item.message} : </Box>
-            <Wrap mx={"5px"}>
-              <WrapItem>
-                <Avatar size={"xs"} name={item.sender}>
-                  <AvatarBadge
-                    boxSize={"0.5rem"}
-                    bg={item.isOnline ? "green" : "red"}
-                  />
-                </Avatar>
-              </WrapItem>
-            </Wrap>
-            {/*<Box>{item.date}</Box>*/}
-          </Flex>
-        );
-      }
-    } else {
-      return (
-        <Flex justifyContent={"center"}>
-          <Box fontSize={"0.9rem"}>{item.message}</Box>
-        </Flex>
-      );
-    }
-  });
 
   const connect = (nickName) => {
     const clientdata = new StompJs.Client({
@@ -194,12 +147,6 @@ function LogInProvider({ children }) {
     setChat("");
   };
 
-  const fixScroll = useRef(null);
-
-  useEffect(() => {
-    fixScroll.current.scrollIntoView({ behavior: "smooth" });
-  }, [chatList]);
-
   return (
     <LoginContext.Provider
       value={{
@@ -213,8 +160,8 @@ function LogInProvider({ children }) {
         setChat,
         chat,
         sendChat,
-        msgBox,
-        fixScroll,
+        chatList,
+        userId,
       }}
     >
       {children}

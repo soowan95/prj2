@@ -1,5 +1,16 @@
-import { useContext, useState } from "react";
-import { Box, Button, Flex, FormControl, Input } from "@chakra-ui/react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import {
+  Avatar,
+  AvatarBadge,
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  Input,
+  Tooltip,
+  Wrap,
+  WrapItem,
+} from "@chakra-ui/react";
 import { LoginContext } from "./LoginProvider";
 import "../css/Scroll.css";
 import {
@@ -11,7 +22,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDrag } from "react-use-gesture";
 
 function LiveChatComp() {
-  const { isAuthenticated, chat, sendChat, setChat, msgBox, fixScroll } =
+  const { isAuthenticated, chat, sendChat, setChat, chatList, userId } =
     useContext(LoginContext);
 
   const [pos, setPos] = useState({ x: 0, y: 0 });
@@ -25,6 +36,72 @@ function LiveChatComp() {
         y: e.offset[1] / 20,
       });
   });
+
+  const msgBox = chatList.map((item, idx) => {
+    if (item.type !== "ENTER" && item.type !== "LEAVE") {
+      if (item.sender !== userId.current) {
+        return (
+          <Flex key={idx}>
+            <Wrap mx={"5px"}>
+              <WrapItem>
+                <Tooltip
+                  label={item.sender}
+                  placement="top"
+                  fontSize={"0.5rem"}
+                >
+                  <Avatar size={"xs"} name={item.sender}>
+                    <AvatarBadge
+                      boxSize={"0.5rem"}
+                      bg={item.isOnline ? "green" : "red"}
+                    />
+                  </Avatar>
+                </Tooltip>
+              </WrapItem>
+            </Wrap>
+            <Box fontSize={"0.9rem"} mr={"3px"}>
+              : {item.message}
+            </Box>
+            {/*<Box>{item.date}</Box>*/}
+          </Flex>
+        );
+      } else {
+        return (
+          <Flex justifyContent={"right"} key={idx}>
+            <Box fontSize={"0.9rem"}>{item.message} : </Box>
+            <Wrap mx={"5px"}>
+              <WrapItem>
+                <Tooltip
+                  label={item.sender}
+                  placement="top"
+                  fontSize={"0.5rem"}
+                >
+                  <Avatar size={"xs"} name={item.sender}>
+                    <AvatarBadge
+                      boxSize={"0.5rem"}
+                      bg={item.isOnline ? "green" : "red"}
+                    />
+                  </Avatar>
+                </Tooltip>
+              </WrapItem>
+            </Wrap>
+            {/*<Box>{item.date}</Box>*/}
+          </Flex>
+        );
+      }
+    } else {
+      return (
+        <Flex justifyContent={"center"}>
+          <Box fontSize={"0.9rem"}>{item.message}</Box>
+        </Flex>
+      );
+    }
+  });
+
+  const fixScroll = useRef(null);
+
+  useEffect(() => {
+    fixScroll.current.scrollIntoView(false);
+  }, [chatList]);
 
   return (
     <>
