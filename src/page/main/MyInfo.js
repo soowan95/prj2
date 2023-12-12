@@ -44,8 +44,9 @@ export function MyInfo() {
       {/*//마우스를 피하면 없어지는 기능*/}
       <PopoverTrigger>
         <Avatar
+          size="lg"
           name={login.nickName}
-          src="https://bit.ly/broken-link"
+          src={login.profilePhoto}
           _hover={{ cursor: "pointer" }}
         />
       </PopoverTrigger>

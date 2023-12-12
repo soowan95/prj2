@@ -74,7 +74,6 @@ export function MyFavoritePlaylist() {
                   <Card w="xs">
                     <CardHeader _hover={{ cursor: "pointer" }}>
                       <Image
-                        src="https://pics.craiyon.com/2023-07-21/5e99d5b0b25c43fb90d62633f33f1a41.webp"
                         onClick={() => handleFavoriteList(song.playlistId)}
                       />
                     </CardHeader>

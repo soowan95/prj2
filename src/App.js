@@ -26,6 +26,7 @@ import { SongEdit } from "./page/song/SongEdit";
 import LiveChatComp from "./component/LiveChatComp";
 import SongInMyFavoritePlaylist from "./page/main/SongInMyFavoritePlaylist";
 import RecommendPlaylist from "./page/main/RecommendPlaylist";
+import TopPlaylist from "./page/main/TopPlaylist";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -53,6 +54,7 @@ const routes = createBrowserRouter(
           path="songinmyfavoriteplaylist"
           element={<SongInMyFavoritePlaylist />}
         />
+        <Route path="topplaylist" element={<TopPlaylist />} />
       </Route>
     </Route>,
   ),

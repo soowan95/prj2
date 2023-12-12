@@ -10,6 +10,7 @@ import {
   FormControl,
   FormLabel,
   Heading,
+  Image,
   Input,
   Modal,
   ModalBody,
@@ -43,6 +44,10 @@ export function MemberInfo() {
   const [member, setMember] = useState(null);
   const [params] = useSearchParams();
   const [questions, setQuestions] = useState(null);
+  const [imagePreview, setImagePreview] = useState(login.profilePhoto);
+  const [profilePhoto, setProfilePhoto] = useState("");
+
+  const freader = new FileReader();
 
   useEffect(() => {
     axios.get("/api/member" + params.toString()).then((response) => {
@@ -105,10 +110,11 @@ export function MemberInfo() {
 
   function handleSubmit() {
     axios
-      .put("/api/member/edit", {
+      .putForm("/api/member/edit", {
         id: login.id,
         email,
         nickName,
+        photo: profilePhoto,
       })
       .then(() => {
         toast({
@@ -116,6 +122,7 @@ export function MemberInfo() {
           status: "success",
         });
         onClose();
+        fetchLogin();
         window.location.reload(0);
       })
       .catch((error) => console.log(error));
@@ -209,14 +216,35 @@ export function MemberInfo() {
                 </Button>
               </Flex>
             </FormControl>
-            비밀번호 <br />
-            <Button
-              variant="ghost"
-              colorScheme="whatsapp"
-              onClick={onPasswordModalOpen}
-            >
-              비밀번호 변경하기
-            </Button>
+
+            <FormControl>
+              <FormLabel>프로필 사진 변경</FormLabel>
+              <Flex>
+                <Image borderRadius="full" boxSize="100px" src={imagePreview} />
+                <Input
+                  mt={10}
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    freader.readAsDataURL(e.target.files[0]);
+                    freader.onload = (e) => {
+                      setImagePreview(e.target.result);
+                    };
+                    setProfilePhoto(e.target.files[0]);
+                  }}
+                />
+              </Flex>
+            </FormControl>
+            <FormControl>
+              <FormLabel>비밀번호</FormLabel>
+              <Button
+                variant="ghost"
+                colorScheme="whatsapp"
+                onClick={onPasswordModalOpen}
+              >
+                비밀번호 변경하기
+              </Button>
+            </FormControl>
           </ModalBody>
           <ModalFooter gap={5}>
             <Button colorScheme="blue" onClick={handleSubmit}>
