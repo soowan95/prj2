@@ -36,6 +36,7 @@ function KakaoLogin() {
                 })
                 .then(() => {
                   connect(data.properties.nickname);
+                  // localStorage.setItem("login", data.properties.nickname);
                   navigate("/main");
                 });
             });

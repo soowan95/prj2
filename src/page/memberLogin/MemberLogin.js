@@ -58,6 +58,7 @@ export function MemberLogin() {
       .then(({ data }) => {
         connect(data.nickName);
         navigate("/main");
+        // localStorage.setItem("login", data.nickName);
         toast({
           description: "로그인 되었습니다😀 ",
           status: "info",

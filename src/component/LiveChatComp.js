@@ -7,9 +7,6 @@ import {
   Flex,
   FormControl,
   Input,
-  Tooltip,
-  Wrap,
-  WrapItem,
 } from "@chakra-ui/react";
 import { LoginContext } from "./LoginProvider";
 import "../css/Scroll.css";
@@ -22,8 +19,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDrag } from "react-use-gesture";
 
 function LiveChatComp() {
-  const { isAuthenticated, chat, sendChat, setChat, chatList, userId } =
-    useContext(LoginContext);
+  const {
+    isAuthenticated,
+    chat,
+    sendChat,
+    setChat,
+    chatList,
+    userId,
+    setChatList,
+  } = useContext(LoginContext);
 
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [isMove, setIsMove] = useState(false);
@@ -40,51 +44,40 @@ function LiveChatComp() {
   const msgBox = chatList.map((item, idx) => {
     if (item.type !== "ENTER" && item.type !== "LEAVE") {
       if (item.sender !== userId.current) {
-        return (
-          <Flex key={idx}>
-            <Wrap mx={"5px"}>
-              <WrapItem>
-                <Tooltip
-                  label={item.sender}
-                  placement="top"
-                  fontSize={"0.5rem"}
-                >
-                  <Avatar size={"xs"} name={item.sender}>
-                    <AvatarBadge
-                      boxSize={"0.5rem"}
-                      bg={item.isOnline ? "green" : "red"}
-                    />
-                  </Avatar>
-                </Tooltip>
-              </WrapItem>
-            </Wrap>
-            <Box fontSize={"0.9rem"} mr={"3px"}>
-              : {item.message}
+        if (
+          chatList.at(idx - 1).sender !== item.sender ||
+          chatList.at(idx - 1).type === "ENTER" ||
+          idx <= 1
+        ) {
+          return (
+            <Box>
+              <Flex key={idx}>
+                <Avatar size={"xs"} name={item.sender}>
+                  <AvatarBadge
+                    boxSize={"0.5rem"}
+                    bg={item.isOnline ? "green" : "red"}
+                  />
+                </Avatar>
+                <Box fontSize={"0.7rem"} ml={1} lineHeight={"20px"}>
+                  {item.sender}
+                </Box>
+              </Flex>
+              <Box ml={8}>{item.message}</Box>
             </Box>
-            {/*<Box>{item.date}</Box>*/}
-          </Flex>
-        );
+          );
+        } else {
+          return (
+            <Flex key={idx}>
+              <Box ml={8}>{item.message}</Box>
+            </Flex>
+          );
+        }
       } else {
         return (
           <Flex justifyContent={"right"} key={idx}>
-            <Box fontSize={"0.9rem"}>{item.message} : </Box>
-            <Wrap mx={"5px"}>
-              <WrapItem>
-                <Tooltip
-                  label={item.sender}
-                  placement="top"
-                  fontSize={"0.5rem"}
-                >
-                  <Avatar size={"xs"} name={item.sender}>
-                    <AvatarBadge
-                      boxSize={"0.5rem"}
-                      bg={item.isOnline ? "green" : "red"}
-                    />
-                  </Avatar>
-                </Tooltip>
-              </WrapItem>
-            </Wrap>
-            {/*<Box>{item.date}</Box>*/}
+            <Box fontSize={"0.9rem"} mr={3}>
+              {item.message}
+            </Box>
           </Flex>
         );
       }
@@ -170,12 +163,22 @@ function LiveChatComp() {
               placeholder="메시지 보내기"
               onChange={(e) => setChat(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Enter") sendChat(e, chat);
+                if (e.key === "Enter") {
+                  if (chat === "/c" || chat === "/clear") {
+                    setChat("");
+                    setChatList([]);
+                  } else sendChat(e, chat);
+                }
               }}
             />
             <Button
               isDisabled={!isAuthenticated()}
-              onClick={(e) => sendChat(e, chat)}
+              onClick={(e) => {
+                if (chat === "/c" || chat === "/clear") {
+                  setChat("");
+                  setChatList([]);
+                } else sendChat(e, chat);
+              }}
             >
               전송
             </Button>

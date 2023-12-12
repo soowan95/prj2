@@ -69,6 +69,12 @@ function LogInProvider({ children }) {
     }
   }, [chatList]);
 
+  useEffect(() => {
+    if (localStorage.getItem("login")) connect(localStorage.getItem("login"));
+
+    return () => disConnect();
+  }, []);
+
   const CircularJSON = require("circular-json");
 
   const connect = (nickName) => {
@@ -106,6 +112,8 @@ function LogInProvider({ children }) {
       console.log("Additional details" + frame.body);
     };
 
+    localStorage.setItem("login", nickName);
+
     clientdata.activate();
     changeClient(clientdata);
   };
@@ -120,6 +128,8 @@ function LogInProvider({ children }) {
         sender: userId.current,
       }),
     });
+
+    localStorage.removeItem("login");
 
     client.unsubscribe();
     client.deactivate();
@@ -162,6 +172,7 @@ function LogInProvider({ children }) {
         sendChat,
         chatList,
         userId,
+        setChatList,
       }}
     >
       {children}
