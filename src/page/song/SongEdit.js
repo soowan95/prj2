@@ -43,20 +43,14 @@ export function SongEdit() {
   function handleSubmit() {
     // 저장 버튼 클릭시
     // PUT /api/main/song/id
-
     axios
       .put("/api/song/songEdit", {
+        id: id,
         title: songData.title,
         artistName: songData.artistName,
         album: songData.album,
         artistGroup: songData.artistGroup,
         uploadFile,
-
-        // title: "",
-        // artistName: "",
-        // album: "",
-        // artistGroup: "",
-        // uploadFile,
       })
       .then(() => {
         toast({
@@ -79,6 +73,8 @@ export function SongEdit() {
       <Box>
         <br />
         <Flex>
+          {/* 기존 이미지가 있을 수도 있고 없을 수도 있음 */}
+          {/* 기존 이미지 띄우기 (수정은 할 수도 있고 안 할수도 있음) */}
           <Box mr={8}>
             <Image src={songData.url} boxSize="400px" objectFit="cover" />
           </Box>
