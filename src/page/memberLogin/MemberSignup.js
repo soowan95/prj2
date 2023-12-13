@@ -15,6 +15,8 @@ import {
   Flex,
   useToast,
   Select,
+  FormHelperText,
+  Image,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
@@ -27,6 +29,9 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
   const [passwordCheck, setPasswordCheck] = useState("");
   const [email, setEmail] = useState("");
   const [nickName, setNickName] = useState("");
+  const [profilePhoto, setProfilePhoto] = useState("");
+  const [imagePreview, setImagePreview] = useState("");
+  const [nickNameAvailable, setNickNameAvailable] = useState(false);
 
   const [selectedSecurityQuestion, setSecurityQuestion] = useState(
     securityQuestionList[0],
@@ -38,6 +43,8 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
   const toast = useToast();
 
   let submitAvailable = true;
+
+  const freader = new FileReader();
 
   if (!idAvailable) {
     submitAvailable = false;
@@ -53,13 +60,14 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
 
   function handelSubmit() {
     axios
-      .post("/api/member/signup", {
+      .postForm("/api/member/signup", {
         id,
         password,
         nickName,
         email,
         securityQuestion: selectedSecurityQuestion, // 여기서 selectedSecurityQuestion을 사용
         securityAnswer,
+        profilePhoto,
       })
       .then(() => {
         toast({
@@ -107,6 +115,29 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
       });
   }
 
+  function handleNickNameCheck() {
+    const params = new URLSearchParams();
+    params.set("nickName", nickName);
+    axios
+      .get("api/member/check?" + params)
+      .then(() => {
+        setNickNameAvailable(false);
+        toast({
+          description: "이미 사용중인 닉네임입니다.",
+          status: "warning",
+        });
+      })
+      .catch((error) => {
+        if (error.response.status === 404) {
+          setNickNameAvailable(true);
+          toast({
+            description: "사용 가능한 닉네임입니다.",
+            status: "success",
+          });
+        }
+      });
+  }
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -124,7 +155,9 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
                   setIdAvailable(false);
                 }}
               />
-              <Button onClick={handleIdCheck}>중복 확인</Button>
+              <Button onClick={handleIdCheck} variant="ghost">
+                중복 확인
+              </Button>
             </Flex>
             <FormErrorMessage>아이디 중복체크를 해주세요.</FormErrorMessage>
           </FormControl>
@@ -147,11 +180,20 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
           </FormControl>
           <FormControl mb={5}>
             <FormLabel>닉네임</FormLabel>
-            <Input
-              type="text"
-              value={nickName}
-              onChange={(e) => setNickName(e.target.value)}
-            />
+            <Flex>
+              <Input
+                type="text"
+                value={nickName}
+                onChange={(e) => {
+                  setNickName(e.target.value);
+                  setNickNameAvailable(false);
+                }}
+              />
+              <Button onClick={handleNickNameCheck} variant="ghost">
+                중복확인
+              </Button>
+            </Flex>
+            <FormErrorMessage>닉네임 중복체크를 해주세요.</FormErrorMessage>
           </FormControl>
           <FormControl mb={5}>
             <FormLabel>이메일</FormLabel>
@@ -161,6 +203,22 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
               onChange={(e) => setEmail(e.target.value)}
             />
           </FormControl>
+          <FormControl mb={5}>
+            <FormLabel>프로필 사진</FormLabel>
+            <FormHelperText>3MB이내 이미지파일만 가능합니다.</FormHelperText>
+            <Image borderRadius="full" boxSize="150px" src={imagePreview} />
+          </FormControl>
+          <Input
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              freader.readAsDataURL(e.target.files[0]);
+              freader.onload = (e) => {
+                setImagePreview(e.target.result);
+              };
+              setProfilePhoto(e.target.files[0]);
+            }}
+          />
           <FormControl mb={5}>
             <FormLabel>보안 질문</FormLabel>
             <Select

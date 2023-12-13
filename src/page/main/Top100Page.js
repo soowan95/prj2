@@ -57,7 +57,6 @@ export function Top100Page() {
             m={"3px auto"}
             width={"70%"}
             border={"1px solid black"}
-            // hover 및 클릭 기능 추가
             style={{ cursor: "pointer" }}
           >
             <Flex

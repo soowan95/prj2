@@ -74,7 +74,6 @@ export function MyFavoritePlaylist() {
                   <Card w="xs">
                     <CardHeader _hover={{ cursor: "pointer" }}>
                       <Image
-                        src="https://pics.craiyon.com/2023-07-21/5e99d5b0b25c43fb90d62633f33f1a41.webp"
                         onClick={() => handleFavoriteList(song.playlistId)}
                       />
                     </CardHeader>
@@ -93,9 +92,9 @@ export function MyFavoritePlaylist() {
                     <Divider color="gray" />
                     <CardFooter>
                       <FontAwesomeIcon icon={faRecordVinyl} />
-                      <Text>{song?.songs} 곡</Text>
+                      <Text>{song?.songs} SONGS</Text>
                       <Spacer />
-                      <Text>생성자 : {song?.memberId} 님</Text>
+                      <Text>ID : {song?.memberId} </Text>
                     </CardFooter>
                   </Card>
                 </Box>
