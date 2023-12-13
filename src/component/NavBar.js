@@ -8,7 +8,8 @@ import { MemberLogin } from "../page/memberLogin/MemberLogin";
 import { LoginContext } from "./LoginProvider";
 
 export function NavBar() {
-  const { fetchLogin, isAuthenticated, disConnect } = useContext(LoginContext);
+  const { fetchLogin, isAuthenticated, disConnect, isAdmin } =
+    useContext(LoginContext);
 
   const navigate = useNavigate();
   const toast = useToast();

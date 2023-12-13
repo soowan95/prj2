@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -20,7 +20,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHeart as fullHeart,
@@ -47,6 +47,8 @@ export function MyPlayList() {
   const [reRend, setReRend] = useState(0);
   const [songList, setSongList] = useState();
   const [myPlaylist, setMyPlaylist] = useState(null);
+  const count = useRef(0);
+  // useRef는 .current 프로퍼티로 전달된 인자로 초기화된 변경 가능한 ref 객체를 반환합니다.
 
   const { login } = useContext(LoginContext);
   const location = useLocation();
@@ -59,7 +61,7 @@ export function MyPlayList() {
   }, [reRend, location]);
 
   function handleLike(playListId) {
-    axios.post("/api/like", {
+    axios.post("/api" + "/like", {
       memberId: login.id,
       likelistId: playListId, // handliLike의 파라미터playListId로 받지만 모른다 하지만
       // onClick={handleLike} 밑에 이걸 보면 onClick이 가르키는 것은
@@ -70,7 +72,20 @@ export function MyPlayList() {
   }
 
   function handleChart(listId) {
-    navigate("/main/chartpage?listId=" + listId);
+    axios
+      .put("/api/myList/hitscount?id=" + listId, {
+        memberId: login.id,
+        listId: listId,
+      })
+      .then(({ data }) => (count.current = data))
+      .catch(() => console.log("잘 안됨"))
+      .finally(() =>
+        navigate(
+          "/main/chartpage?listId=" + listId + "&count=" + count.current,
+          // &count은 &를 사용하여 여러 퀴리 매개변수를 하나의 문자열을 이어 붙일 수 있다
+          // 즉 listId와 count의 값을 가지게 된다
+        ),
+      );
   }
 
   return (
@@ -103,7 +118,9 @@ export function MyPlayList() {
                           cursor: "pointer",
                           textDecoration: "underline",
                         }}
-                        onClick={() => handleChart(memberplaylist.listId)}
+                        onClick={() => {
+                          handleChart(memberplaylist.listId);
+                        }}
                       >
                         {memberplaylist.listName} &nbsp; &nbsp; &nbsp; &nbsp;
                         &nbsp;

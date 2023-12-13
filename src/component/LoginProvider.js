@@ -146,7 +146,7 @@ function LogInProvider({ children }) {
 
     setChat("");
   };
-
+  
   return (
     <LoginContext.Provider
       value={{

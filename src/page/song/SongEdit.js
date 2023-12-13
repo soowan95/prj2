@@ -1,23 +1,167 @@
-import { Box, Input, Spinner } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import {
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  FormLabel,
+  Heading,
+  Image,
+  Input,
+  Spinner,
+  useToast,
+} from "@chakra-ui/react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useImmer } from "use-immer";
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import SongRequest from "../main/SongRequest";
 
 export function SongEdit() {
-  const [song, updateSong] = useImmer(null);
-  // /songEdit/:id
+  const toast = useToast();
+  const navigate = useNavigate();
+
+  const [songData, updateSongData] = useImmer({});
+  const [albumList, setAlbumList] = useState(null);
+
+  // const [song, updateSong] = useImmer({});
+  const [params] = useSearchParams();
   const { id } = useParams();
 
+  // 수정할 파일 업로드
+  const [uploadFile, setUploadFile] = useState(null);
+  console.log(songData);
+
   useEffect(() => {
-    axios.get("/api/song/" + id).then((response) => updateSong(response.data));
-  }, [id, updateSong]);
+    axios.get("/api/song/" + id).then(({ data }) => {
+      updateSongData(data);
+      axios
+        .get("/api/song/albumList?album=" + data.album)
+        .then(({ data }) => setAlbumList(data));
+    });
+  }, []);
+
+  function handleSubmit() {
+    // 저장 버튼 클릭시
+    // PUT /api/main/song/id
+
+    axios
+      .put("/api/song/songEdit", {
+        title: songData.title,
+        artistName: songData.artistName,
+        album: songData.album,
+        artistGroup: songData.artistGroup,
+        uploadFile,
+
+        // title: "",
+        // artistName: "",
+        // album: "",
+        // artistGroup: "",
+        // uploadFile,
+      })
+      .then(() => {
+        toast({
+          description: "수정이 완료되었습니다 ☺️",
+          status: "success",
+        });
+        // 수정이 완료되면 /main/song/id로 가고싶음....(= 내가 방금 수정한 페이지가 뜨게)
+        navigate("/main/songEdit/" + id);
+      })
+      .catch((error) => {
+        toast({
+          description: "수정 중 문제 발생😱😱",
+          status: "warning",
+        });
+      });
+  }
 
   return (
     <Box>
       <Box>
-        <Input type="file" />
+        <br />
+        <Flex>
+          <Box mr={8}>
+            <Image src={songData.url} boxSize="400px" objectFit="cover" />
+          </Box>
+
+          {/* 수정할 데이터 */}
+          <Box>
+            <FormControl>
+              <FormLabel>노래 제목</FormLabel>
+              <Input
+                defaultValue={songData.title}
+                onChange={(e) =>
+                  updateSongData((draft) => {
+                    draft.title = e.target.value;
+                  })
+                }
+              />
+            </FormControl>
+
+            <Box mt={4}>
+              <FormControl>
+                <FormLabel>가수</FormLabel>
+                <Input
+                  defaultValue={songData.artistName}
+                  onChange={
+                    (e) =>
+                      updateSongData((draft) => {
+                        draft.artistName = e.target.value;
+                      })
+                    // params.set("artistName", e.target.value)
+                  }
+                />
+                {/*<div>{songData.artistName}</div>*/}
+              </FormControl>
+            </Box>
+
+            <Box mt={4}>
+              <FormControl>
+                <FormLabel>앨범명</FormLabel>
+                <Input
+                  defaultValue={songData.album}
+                  onChange={(e) => {
+                    updateSongData((draft) => {
+                      draft.album = e.target.value;
+                    });
+                  }}
+                />
+                {/*<div>{songData.album}</div>*/}
+              </FormControl>
+            </Box>
+
+            <Box mt={4}>
+              <FormControl>
+                <FormLabel>그룹명</FormLabel>
+                <Input
+                  defaultValue={songData.artistGroup}
+                  onChange={(e) =>
+                    updateSongData((draft) => {
+                      draft.artistGroup = e.target.value;
+                    })
+                  }
+                />
+                {/*<div>{songData.artistGroup}</div>*/}
+              </FormControl>
+            </Box>
+          </Box>
+        </Flex>
+
+        {/* 수정할 사진 (= 새로 넣을 사진) */}
+        <Box>
+          <FormControl>
+            <FormLabel>이미지</FormLabel>
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setUploadFile(e.target.files)}
+            />
+          </FormControl>
+
+          <Flex gap={2}>
+            <Button onClick={handleSubmit}>저장</Button>
+            <Button onClick={() => navigate(-1)}>취소</Button>
+          </Flex>
+        </Box>
       </Box>
     </Box>
   );
