@@ -69,7 +69,11 @@ export function ChartPage() {
                 </FormLabel>
               </Flex>
               <Flex>
-                <FormLabel>조회수</FormLabel>
+                <FormLabel>
+                  조회수
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  {params.get("count")}회
+                </FormLabel>
               </Flex>
               <Flex>
                 <FormLabel>업데이트</FormLabel>

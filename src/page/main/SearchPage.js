@@ -15,7 +15,8 @@ export function SearchPage() {
 
 
   const goToSongPage = (songId) => {
-    axios.put("/api/song/plusSongPoint", {id:songId}).then(() => console.log("ok"))
+    axios.put("/api/song/plusSongPoint", {id:songId})
+      .then(() => console.log("ok"))
     navigate(`/main/song/${songId}`);
   };
 
