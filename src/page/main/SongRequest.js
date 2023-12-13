@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {
   Box,
   Button,
@@ -31,6 +31,7 @@ import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 import { useImmer } from "use-immer";
+import {LoginContext} from "../../component/LoginProvider";
 
 export function SongRequest() {
   const [requestList, setRequestList] = useState(null);
@@ -55,6 +56,9 @@ export function SongRequest() {
 
   const [selectGenre, updateSelectGenre] = useImmer([]);
   const [selectMood, updateSelectMood] = useImmer([]);
+
+  const { fetchLogin, isAuthenticated, disConnect, isAdmin } =
+    useContext(LoginContext);
 
   // 파일 업로드
   const [files, setFiles] = useState(null);
@@ -137,6 +141,12 @@ export function SongRequest() {
     }
   }
 
+
+
+  if (!isAdmin()) {
+    navigate(-1);
+    return null;
+  }
   return (
     <Box>
       <Heading size={"md"} marginLeft={"30px"} marginTop={"50px"}>
