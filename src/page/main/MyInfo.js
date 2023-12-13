@@ -44,8 +44,9 @@ export function MyInfo() {
       {/*//마우스를 피하면 없어지는 기능*/}
       <PopoverTrigger>
         <Avatar
+          size="lg"
           name={login.nickName}
-          src="https://bit.ly/broken-link"
+          src={login.profilePhoto}
           _hover={{ cursor: "pointer" }}
         />
       </PopoverTrigger>
@@ -56,7 +57,10 @@ export function MyInfo() {
           {login ? <> {login.nickName} 님 환영합니다</> : "로그인 해주세요."}
         </PopoverHeader>
         <PopoverBody>
-          <Button variant="ghost" onClick={() => navigate("/main/recommended")}>
+          <Button
+            variant="ghost"
+            onClick={() => navigate("/main/recommendplaylist")}
+          >
             추천 플레이리스트
           </Button>
           <br />
