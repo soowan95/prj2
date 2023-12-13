@@ -58,11 +58,11 @@ function MySongRequest() {
                   </Tr>
                 ))}
             {requestList !== null &&
-              requestList
-                // 사용자의 요청 목록이 없는 경우
-                .filter(
-                  (request) => !request.updated && request.member === login.id,
-                ).length === 0 && (
+              requestList.filter(
+                (request) => !request.updated && request.member === login.id,
+              ).length === 0 &&
+              requestList.length === 0 && (
+                // 사용자가 요청한 기록이 전혀 없을 때만 메시지 표시
                 <Tr>
                   <Td colSpan={4}>
                     <Text>요청한 내역이 없습니다.</Text>
