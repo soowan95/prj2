@@ -159,6 +159,17 @@ export function MemberInfo() {
           <br />
           <Flex gap={5}>
             <Card w="sm" h="250px">
+              <CardBody mt={50}>정보 요청 현황을 확인합니다.</CardBody>
+              <CardFooter>
+                <Button
+                  colorScheme="facebook"
+                  onClick={() => navigate("/main/mySongRequestList")}
+                >
+                  요청 확인
+                </Button>
+              </CardFooter>
+            </Card>
+            <Card w="sm" h="250px">
               <CardBody mt={50}>RELIEVE 회원을 탈퇴합니다.</CardBody>
               <CardFooter>
                 <Button

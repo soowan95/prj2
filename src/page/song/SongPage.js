@@ -42,16 +42,6 @@ function SongPage(props) {
 
   return (
     <Box mt={"100px"}>
-      {/* 수정&삭제 버튼은 admin만 보일 수 있게 */}
-      <Button
-        onClick={() => navigate("/songEdit/" + id)}
-        background={"aliceblue"}
-        size={"sm"}
-        mb={"40px"}
-      >
-        수정
-      </Button>
-
       <Flex>
         {/* 가수 이미지 출력 */}
         <Box mr={8}>
