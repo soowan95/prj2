@@ -1,17 +1,7 @@
 import React, { createContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import {
-  Avatar,
-  AvatarBadge,
-  Box,
-  Flex,
-  Tooltip,
-  Wrap,
-  WrapItem,
-} from "@chakra-ui/react";
 import * as StompJs from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
-import CircularJSON from "circular-json";
 
 export const LoginContext = createContext(null);
 function LogInProvider({ children }) {

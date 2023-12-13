@@ -62,7 +62,6 @@ function App(props) {
   return (
     <LoginProvider>
       <RouterProvider router={routes} />
-      <LiveChatComp />
     </LoginProvider>
   );
 }

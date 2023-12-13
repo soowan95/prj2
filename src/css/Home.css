@@ -1,0 +1,7 @@
+body {
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: -40px;
+    overflow: hidden;
+}

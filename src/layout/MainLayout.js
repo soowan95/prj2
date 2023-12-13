@@ -401,6 +401,7 @@ export function MainLayout() {
           </FormControl>
         )}
         <Outlet />
+        <LiveChatComp />
       </Box>
     </SongContext.Provider>
   );
