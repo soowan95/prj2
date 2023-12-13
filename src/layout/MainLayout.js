@@ -173,7 +173,13 @@ export function MainLayout() {
 
   return (
     <SongContext.Provider value={{ top100, searched }}>
-      <Box position={"relative"} width={"100%"} m={0}>
+      <Box
+        position={"relative"}
+        width={"100%"}
+        m={0}
+        overflowX={"hidden"}
+        h={"2000px"}
+      >
         {/* 메인 로고 */}
         <Button
           size={"L"}
@@ -395,6 +401,7 @@ export function MainLayout() {
           </FormControl>
         )}
         <Outlet />
+        <LiveChatComp />
       </Box>
     </SongContext.Provider>
   );

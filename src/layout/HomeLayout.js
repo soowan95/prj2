@@ -1,12 +1,13 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Image } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 import React from "react";
 import NavBar from "../component/NavBar";
+import "../css/Home.css";
 
 export function HomeLayout() {
   return (
     <Box
-      mx={{ base: 0, md: 10, lg: 40 }}
+      m={0}
       width={"100%"}
       height={"1000px"}
       style={{ backgroundSize: "100%" }}

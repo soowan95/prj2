@@ -16,3 +16,9 @@
         background: #ccc;
     }
 }
+
+.chatBox:hover {
+    .moveIcon {
+        opacity: 0.5;
+    }
+}

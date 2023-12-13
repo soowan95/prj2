@@ -1,16 +1,7 @@
 import React, { createContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import {
-  Avatar,
-  AvatarBadge,
-  Box,
-  Flex,
-  Wrap,
-  WrapItem,
-} from "@chakra-ui/react";
 import * as StompJs from "@stomp/stompjs";
 import * as SockJS from "sockjs-client";
-import CircularJSON from "circular-json";
 
 export const LoginContext = createContext(null);
 function LogInProvider({ children }) {
@@ -68,57 +59,15 @@ function LogInProvider({ children }) {
     }
   }, [chatList]);
 
+  useEffect(() => {
+    if (localStorage.getItem("login")) connect(localStorage.getItem("login"));
+
+    return () => disConnect();
+  }, []);
+
   const CircularJSON = require("circular-json");
 
-  const msgBox = chatList.map((item, idx) => {
-    if (item.type !== "ENTER" && item.type !== "LEAVE") {
-      if (item.sender !== userId.current) {
-        return (
-          <Flex key={idx}>
-            <Wrap mx={"5px"}>
-              <WrapItem>
-                <Avatar size={"xs"} name={item.sender}>
-                  <AvatarBadge
-                    boxSize={"0.5rem"}
-                    bg={item.isOnline ? "green" : "red"}
-                  />
-                </Avatar>
-              </WrapItem>
-            </Wrap>
-            <Box fontSize={"0.9rem"} mr={"3px"}>
-              : {item.message}
-            </Box>
-            {/*<Box>{item.date}</Box>*/}
-          </Flex>
-        );
-      } else {
-        return (
-          <Flex justifyContent={"right"} key={idx}>
-            <Box fontSize={"0.9rem"}>{item.message} : </Box>
-            <Wrap mx={"5px"}>
-              <WrapItem>
-                <Avatar size={"xs"} name={item.sender}>
-                  <AvatarBadge
-                    boxSize={"0.5rem"}
-                    bg={item.isOnline ? "green" : "red"}
-                  />
-                </Avatar>
-              </WrapItem>
-            </Wrap>
-            {/*<Box>{item.date}</Box>*/}
-          </Flex>
-        );
-      }
-    } else {
-      return (
-        <Flex justifyContent={"center"}>
-          <Box fontSize={"0.9rem"}>{item.message}</Box>
-        </Flex>
-      );
-    }
-  });
-
-  const connect = () => {
+  const connect = (nickName) => {
     const clientdata = new StompJs.Client({
       brokerURL: "ws://localhost:8080/ws/chat",
       connectHeaders: {
@@ -143,7 +92,7 @@ function LogInProvider({ children }) {
         destination: "/app/chat/enter",
         body: CircularJSON.stringify({
           type: "ENTER",
-          sender: userId.current,
+          sender: nickName,
         }),
       });
     };
@@ -152,6 +101,8 @@ function LogInProvider({ children }) {
       console.log("Broker repoerted error: " + frame.headers["message"]);
       console.log("Additional details" + frame.body);
     };
+
+    localStorage.setItem("login", nickName);
 
     clientdata.activate();
     changeClient(clientdata);
@@ -167,6 +118,8 @@ function LogInProvider({ children }) {
         sender: userId.current,
       }),
     });
+
+    localStorage.removeItem("login");
 
     client.unsubscribe();
     client.deactivate();
@@ -193,13 +146,7 @@ function LogInProvider({ children }) {
 
     setChat("");
   };
-
-  // const fixScroll = useRef(null);
-  //
-  // useEffect(() => {
-  //   fixScroll.current.scrollIntoView({ behavior: "smooth" });
-  // }, [chatList]);
-
+  
   return (
     <LoginContext.Provider
       value={{
@@ -213,8 +160,9 @@ function LogInProvider({ children }) {
         setChat,
         chat,
         sendChat,
-        msgBox,
-        // fixScroll,
+        chatList,
+        userId,
+        setChatList,
       }}
     >
       {children}
