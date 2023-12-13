@@ -1,37 +1,60 @@
 import { CommentContainer } from "../../component/CommentContainer";
-import { MemberLogin } from "../memberLogin/MemberLogin";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import {
   Box,
   Button,
   Center,
+  Divider,
   Flex,
   FormControl,
   FormLabel,
   Heading,
   Image,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Radio,
+  RadioGroup,
   Table,
   Tbody,
   Td,
   Text,
   Th,
   Thead,
+  Tooltip,
   Tr,
+  useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBold, faComputerMouse } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBold,
+  faComputerMouse,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import Counter from "./Counter";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import SongList from "./SongList";
 import KakaoShareComp from "../../component/KakaoShareComp";
 import { number } from "sockjs-client/lib/utils/random";
+import { LoginContext } from "../../component/LoginProvider";
 
 function SongPage(props) {
   const [songData, setSongData] = useState({});
   const [albumList, setAlbumList] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { login } = useContext(LoginContext);
+  const [addPlaylist, setAddPlaylist] = useState(null);
+  const [value, setValue] = useState(1);
+  const toast = useToast();
+  console.log(value);
 
   useEffect(() => {
     axios.get("/api/song/" + id).then(({ data }) => {
@@ -41,6 +64,36 @@ function SongPage(props) {
         .then(({ data }) => setAlbumList(data));
     });
   }, []);
+
+  function handleAddModal() {
+    const params = new URLSearchParams();
+    params.set("id", login.id);
+    axios
+      .get("/api/myList/get?" + params.toString())
+      .then((response) => setAddPlaylist(response.data));
+    onOpen();
+  }
+
+  function handleSavePlaylist() {
+    axios
+      .postForm("/api/myList/insertMyPlaylist", {
+        listId: value,
+        id: id,
+      })
+      .then(() => {
+        toast({
+          description: "저장이 완료되었습니다.",
+          status: "success",
+        });
+        onClose();
+      })
+      .catch(() => {
+        toast({
+          description: "저장중 문제가 발생하였습니다.",
+          status: "warning",
+        });
+      });
+  }
 
   return (
     <Box mt={"100px"}>
@@ -77,6 +130,15 @@ function SongPage(props) {
                 description={songData.genre + "&" + songData.mood}
                 imageUrl={songData.artistFileUrl}
               />
+              <Tooltip label="플레이리스트에 추가" fontSize="0.6rem">
+                <Button
+                  variant="ghost"
+                  borderRadius="full"
+                  onClick={handleAddModal}
+                >
+                  <FontAwesomeIcon icon={faPlus} />
+                </Button>
+              </Tooltip>
             </Flex>
             <Box mt={4}>
               <Flex>
@@ -167,6 +229,58 @@ function SongPage(props) {
           </Box>
         </Center>
       </Box>
+
+      {/* 플레이리스트 추가 모달 */}
+      <Center>
+        <Tooltip label="플레이리스트에 추가" fontSize="0.6rem">
+          <Button variant="ghost" borderRadius="full" onClick={onOpen}>
+            <FontAwesomeIcon icon={faPlus} />
+          </Button>
+        </Tooltip>
+
+        {/* 플레이리스트 추가 모달 */}
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>플레이리스트 선택</ModalHeader>
+            <ModalCloseButton />
+            <Divider />
+            <ModalBody>
+              <Table>
+                <Thead>
+                  <Tr>
+                    <Th>플레이리스트</Th>
+                    <Th>곡 수</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {addPlaylist !== null &&
+                    addPlaylist.map((listSongs) => (
+                      <Tr>
+                        <RadioGroup value={value} onChange={setValue}>
+                          <Td>
+                            <Radio value={listSongs.listId}>
+                              {listSongs.listName}
+                            </Radio>
+                          </Td>
+                        </RadioGroup>
+                        <Td>{listSongs.totalSongCount} 곡</Td>
+                      </Tr>
+                    ))}
+                </Tbody>
+              </Table>
+            </ModalBody>
+            <ModalFooter>
+              <Button colorScheme="facebook" onClick={handleSavePlaylist}>
+                저장
+              </Button>
+              <Button colorScheme="red" onClick={onClose}>
+                취소
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </Center>
     </Box>
   );
 }
