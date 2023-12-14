@@ -51,7 +51,7 @@ function SongPage(props) {
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { login } = useContext(LoginContext);
-  const [addPlaylist, setAddPlaylist] = useState(null);
+  const [addPlaylist, setAddPlaylist] = useState([]);
   const [value, setValue] = useState(1);
   const toast = useToast();
   console.log(value);
@@ -254,7 +254,7 @@ function SongPage(props) {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {addPlaylist !== null &&
+                  {addPlaylist.length !== 0 ? (
                     addPlaylist.map((listSongs) => (
                       <Tr>
                         <RadioGroup value={value} onChange={setValue}>
@@ -266,7 +266,13 @@ function SongPage(props) {
                         </RadioGroup>
                         <Td>{listSongs.totalSongCount} 곡</Td>
                       </Tr>
-                    ))}
+                    ))
+                  ) : (
+                    <Center>
+                      <Text>플레이리스트가 없습니다.</Text>
+                      <Button>플레이리스트 만들기</Button>
+                    </Center>
+                  )}
                 </Tbody>
               </Table>
             </ModalBody>
