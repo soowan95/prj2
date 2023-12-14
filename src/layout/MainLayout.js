@@ -16,6 +16,7 @@ import { MyInfo } from "../page/main/MyInfo";
 import SongRequestComp from "../component/SongRequestComp";
 import _ from "lodash";
 import LiveChatComp from "../component/LiveChatComp";
+import "../css/Fonts.css";
 
 export function MainLayout() {
   const [top100, setTop100] = useState(null);
@@ -23,6 +24,7 @@ export function MainLayout() {
   const [moods, setMoods] = useState(null);
   const [genres, setGenres] = useState(null);
   const [searchCategory, setSearchCategory] = useState("가수");
+  const [selectedCategory, setSelectedCategory] = useState("가수");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [autoComplete, setAutoComplete] = useState(null);
 
@@ -144,9 +146,17 @@ export function MainLayout() {
     e.target.style.color = e.target.style.color === "white" ? "black" : "white";
   }
 
+  // 스타일을 동적으로 설정하는 함수
+  const getButtonStyle = (category) => ({
+    fontFamily: "YClover-Bold",
+    color: selectedCategory === category ? "white" : "black",
+    background: selectedCategory === category ? "purple" : "white",
+  });
+
   // 검색창 카테고리 바꾸기
   function handleSearchCategoryButton(e) {
     setSearchCategory(e.target.value);
+    setSelectedCategory(e.target.value); // 클릭된 버튼의 타입으로 상태 업데이트
   }
 
   // 검색 버튼
@@ -179,7 +189,11 @@ export function MainLayout() {
         m={0}
         overflowX={"hidden"}
         h={"2000px"}
+        // 배경화면~!!!!!!
+        // bgImage={`url(${process.env.PUBLIC_URL}/img/solidcolor.png)`}
+        bgImage={`url(${process.env.PUBLIC_URL}/img/background.jpg)`}
       >
+        <img src={process.env.PUBLIC_URL + "/solidcolor.png"} />
         {/* 메인 로고 */}
         <Button
           size={"L"}
@@ -188,6 +202,8 @@ export function MainLayout() {
             position: "relative",
             left: "50%",
             transform: "translate(-50%)",
+            fontFamily: "Spicy Rice",
+            color: "purple",
           }}
           fontSize={"3rem"}
           onClick={() => {
@@ -289,18 +305,21 @@ export function MainLayout() {
             <Flex width={"70%"} m={"0 auto"}>
               <Button
                 value={"가수"}
+                style={getButtonStyle("가수")}
                 onClick={(e) => handleSearchCategoryButton(e)}
               >
                 가수
               </Button>
               <Button
                 value={"제목"}
+                style={getButtonStyle("제목")}
                 onClick={(e) => handleSearchCategoryButton(e)}
               >
                 제목
               </Button>
               <Button
                 value={"가사"}
+                style={getButtonStyle("가사")}
                 onClick={(e) => handleSearchCategoryButton(e)}
               >
                 가사
@@ -344,6 +363,7 @@ export function MainLayout() {
                   height={"45px"}
                   width={"5%"}
                   onClick={handleSearchButton}
+                  style={{ fontFamily: "YClover-Bold" }}
                 >
                   검색
                 </Button>
