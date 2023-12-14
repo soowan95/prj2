@@ -63,6 +63,11 @@ function SongPage(props) {
   const [playlistName, setPlaylistName] = useState("");
   const isSubmit = useRef(true);
 
+  // 플레이리스트 이미지 삽입
+  const [imagePreview, setImagePreview] = useState(login.profilePhoto);
+  const [coverImage, setCoverImage] = useState("");
+  const freader = new FileReader();
+
   // ↓ 더보기 버튼 생성 useState
   const [showMore, setShowMore] = useState(false);
 
@@ -106,9 +111,10 @@ function SongPage(props) {
 
   function handleCreatePlaylist() {
     axios
-      .post("/api/myList/createPlaylist", {
+      .postForm("/api/myList/createPlaylist", {
         listName: playlistName,
         memberId: login.id,
+        coverimage: coverImage,
       })
       .then(() => {
         toast({
@@ -384,6 +390,24 @@ function SongPage(props) {
                 </Button>
               </Flex>
               <Text textAlign="left">{inputCount} / 15</Text>
+            </ModalBody>
+            <ModalBody>
+              <Text>사진 설정</Text>
+              <Flex>
+                <Image boxSize="100px" src={imagePreview} />
+                <Input
+                  mt={10}
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    freader.readAsDataURL(e.target.files[0]);
+                    freader.onload = (e) => {
+                      setImagePreview(e.target.result);
+                    };
+                    setCoverImage(e.target.files[0]);
+                  }}
+                />
+              </Flex>
             </ModalBody>
             <ModalFooter>
               <Button

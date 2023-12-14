@@ -38,7 +38,6 @@ export function MyInfo() {
     });
     navigate("/");
   }
-
   return (
     <Popover trigger="hover">
       {/*//마우스를 피하면 없어지는 기능*/}
