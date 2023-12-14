@@ -52,7 +52,7 @@ function LiveChatComp() {
           return (
             <Box>
               <Flex key={idx}>
-                <Avatar size={"xs"} name={item.sender}>
+                <Avatar size={"xs"} name={item.sender} src={item.profile}>
                   <AvatarBadge
                     boxSize={"0.5rem"}
                     bg={item.isOnline ? "green" : "red"}
