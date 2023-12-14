@@ -60,7 +60,7 @@ export function Top100Page() {
             style={{ cursor: "pointer" }}
           >
             <Flex
-              justifyContent={"space-between"}
+              justifyContent={"center"}
               alignItems={"center"}
               width={"100%"}
             >
@@ -69,34 +69,37 @@ export function Top100Page() {
                   setSongIndex(song.indexForPlay);
                   songDrawer.onOpen();
                 }}
+                w={"20%"}
               >
                 {song.title}
               </Box>
-              <Box>{song.artistName}</Box>
-              <Box>{song.genre}</Box>
-              <Box>{song.mood}</Box>
-              <FontAwesomeIcon
-                fontSize={"0.8rem"}
-                icon={faClone}
+              <Box w={"20%"}>{song.artistName}</Box>
+              <Box w={"20%"}>{song.genre}</Box>
+              <Box w={"20%"}>{song.mood}</Box>
+              <Box
+                w={"15%"}
+                textAlign={"right"}
                 onClick={() =>
                   handleSimilarButton(song.genre, song.mood, song.id)
                 }
-              />
+              >
+                <FontAwesomeIcon fontSize={"0.8rem"} icon={faClone} />
+              </Box>
             </Flex>
             {similar !== null &&
               song.id === thisId.current &&
               similar.map((si) => (
                 <Flex
                   key={si.id}
-                  justifyContent={"space-between"}
+                  justifyContent={"center"}
                   alignItems={"center"}
                   width={"90%"}
                   m={"0 auto"}
                 >
-                  <Box>{si.title}</Box>
-                  <Box>{si.artistName}</Box>
-                  <Box>{si.genre}</Box>
-                  <Box>{si.mood}</Box>
+                  <Box w={"20%"}>{si.title}</Box>
+                  <Box w={"20%"}>{si.artistName}</Box>
+                  <Box w={"20%"}>{si.genre}</Box>
+                  <Box w={"20%"}>{si.mood}</Box>
                 </Flex>
               ))}
           </Box>

@@ -3,5 +3,7 @@ body {
     margin: 0;
     position: absolute;
     top: -40px;
-    overflow: hidden;
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }

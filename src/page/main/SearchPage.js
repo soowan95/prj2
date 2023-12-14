@@ -43,16 +43,16 @@ export function SearchPage() {
             key={song.id}
             m={"3px auto"}
             width={"70%"}
-            justifyContent={"space-between"}
+            justifyContent={"center"}
             border={"1px solid black"}
             // Box를 클릭하면 해당 노래의 상세 페이지로 이동
             onClick={() => goToSongPage(song.id)}
             style={{ cursor: "pointer" }}
           >
-            <Box>{song.title}</Box>
-            <Box>{song.artistName}</Box>
-            <Box>{song.genre}</Box>
-            <Box>{song.mood}</Box>
+            <Box w={"22%"}>{song.title}</Box>
+            <Box w={"22%"}>{song.artistName}</Box>
+            <Box w={"22%"}>{song.genre}</Box>
+            <Box w={"22%"}>{song.mood}</Box>
           </Flex>
         ))}
       {searched !== null && searched.length === 0 && <SongRequestComp />}

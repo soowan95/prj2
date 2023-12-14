@@ -8,7 +8,7 @@ function KakaoLogin() {
   const navigate = useNavigate();
   const KAKAO_CODE = location.search.split("=")[1];
 
-  const { connect } = useContext(LoginContext);
+  const { connect, setLogin } = useContext(LoginContext);
 
   const getKakaoToken = () => {
     fetch(`https://kauth.kakao.com/oauth/token`, {
@@ -33,10 +33,11 @@ function KakaoLogin() {
                   id: data.id,
                   email: data.kakao_account.email,
                   nickName: data.properties.nickname,
+                  profilePhoto: data.properties.profile_image,
                 })
-                .then(() => {
-                  connect(data.properties.nickname);
-                  // localStorage.setItem("login", data.properties.nickname);
+                .then(({ data }) => {
+                  setLogin(data);
+                  connect(data.nickName);
                   navigate("/main");
                 });
             });
