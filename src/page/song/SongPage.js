@@ -258,18 +258,11 @@ function SongPage(props) {
                     </>
                   )}
                 </Box>
-                <Box w="700px">{songData.lyric}</Box>
               </Flex>
             </Box>
           </Box>
         </Flex>
       </Center>
-      <Box mt={4}>
-        <Flex>
-          <FormLabel fontWeight={"bold"}>가사</FormLabel>
-        </Flex>
-        <div>{songData.lyric}</div>
-      </Box>
       <Center>
         <Box w="1200px">
           <CommentContainer songId={id} />
