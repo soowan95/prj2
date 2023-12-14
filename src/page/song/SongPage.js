@@ -75,7 +75,7 @@ function SongPage(props) {
           </Box>
 
           {/*<Box>{songData.id}</Box>*/}
-          <Box>
+          <Box w={"1000px"}>
             <Flex gap={5} alignItems={"center"}>
               <Heading fontSize="30px" color="purple">
                 {songData.title}
@@ -125,8 +125,10 @@ function SongPage(props) {
             </Box>
             <Box mt={4}>
               <Flex>
-                <FormLabel fontWeight={"bold"}>가사</FormLabel>
-                <div>
+                <FormLabel w={"50px"} fontWeight={"bold"}>
+                  가사
+                </FormLabel>
+                <Box w={"700px"}>
                   {songData.lyric && (
                     <>
                       {showMore
@@ -149,7 +151,7 @@ function SongPage(props) {
                       )}
                     </>
                   )}
-                </div>
+                </Box>
               </Flex>
             </Box>
           </Box>
