@@ -1,6 +1,6 @@
 import { CommentContainer } from "../../component/CommentContainer";
 import { MemberLogin } from "../memberLogin/MemberLogin";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import axios from "axios";
 import {
   Box,
@@ -20,7 +20,12 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBold, faComputerMouse } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBold,
+  faChevronDown,
+  faChevronUp,
+  faComputerMouse,
+} from "@fortawesome/free-solid-svg-icons";
 import Counter from "./Counter";
 import { useNavigate, useParams } from "react-router-dom";
 import SongList from "./SongList";
@@ -32,6 +37,12 @@ function SongPage(props) {
   const [albumList, setAlbumList] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
+
+  // ↓ 더보기 버튼 생성 useState
+  const [showMore, setShowMore] = useState(false);
+
+  // ↓ 글자 수 제한 useRef사용
+  const textLimit = useRef < number > 170;
 
   useEffect(() => {
     axios.get("/api/song/" + id).then(({ data }) => {
@@ -118,7 +129,29 @@ function SongPage(props) {
             <Box mt={4}>
               <Flex>
                 <FormLabel fontWeight={"bold"}>가사</FormLabel>
-                <div>{songData.lyric}</div>
+                <div>
+                  {songData.lyric && (
+                    <>
+                      {showMore
+                        ? songData.lyric
+                        : `${songData.lyric.slice(0, 20)}...`}
+                      {songData.lyric.length > 20 && (
+                        <Button
+                          background={"plum"}
+                          ml={5}
+                          size={"xs"}
+                          onClick={() => setShowMore(!showMore)}
+                        >
+                          {showMore ? "닫기" : "더 보기"}
+                          <FontAwesomeIcon icon={faChevronDown} />
+
+                          {/* 닫기에는 up화살표 적용하고 싶음*/}
+                          {/*<FontAwesomeIcon icon={faChevronUp} />*/}
+                        </Button>
+                      )}
+                    </>
+                  )}
+                </div>
               </Flex>
             </Box>
           </Box>
