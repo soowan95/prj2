@@ -156,7 +156,7 @@ function CommentItem({
             </Box>
           )}
 
-          {/* 댓글 작성자가 권한이 있을 경우 */}
+          {/* 댓글 작성자가 권한이 있을 경우에만 수정, 삭제 버튼 보이게 */}
           {hasAccess(comment.memberId) && (
             <Box marginTop={"10px"}>
               {isEditing || (

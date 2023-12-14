@@ -223,6 +223,14 @@ function SongPage(props) {
                 <div>{songData.release}</div>
               </Flex>
             </Box>
+            <Box mt={4}>
+              <Flex>
+                <FormLabel w={"50px"} fontWeight={"bold"}>
+                  가사
+                </FormLabel>
+                <Box w="700px">{songData.lyric}</Box>
+              </Flex>
+            </Box>
           </Box>
         </Flex>
       </Center>
