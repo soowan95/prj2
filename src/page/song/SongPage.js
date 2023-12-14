@@ -117,8 +117,10 @@ function SongPage(props) {
             </Box>
             <Box mt={4}>
               <Flex>
-                <FormLabel fontWeight={"bold"}>가사</FormLabel>
-                <div>{songData.lyric}</div>
+                <FormLabel w={"50px"} fontWeight={"bold"}>
+                  가사
+                </FormLabel>
+                <Box w="700px">{songData.lyric}</Box>
               </Flex>
             </Box>
           </Box>
