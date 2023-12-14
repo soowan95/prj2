@@ -48,6 +48,7 @@ export function RecommendPlaylist() {
   const playModal = useDisclosure();
   const listIndex = useRef(0);
   const navigate = useNavigate();
+  const count = useRef(0);
 
   useEffect(() => {
     fetchLogin();
@@ -58,8 +59,18 @@ export function RecommendPlaylist() {
 
   function handleHitsCount(listId) {
     axios
-      .put("/api/myList/hitscount?id=" + listId)
-      .then(() => navigate("/main/topplaylist?listId=" + listId));
+      .put("/api/myList/hitscount?id=" + listId, {
+        memberId: login.id,
+        listId: listId,
+      })
+      .then(({ data }) => (count.current = data))
+      .catch(() => console.log("잘안됨"))
+      .finally(() =>
+        navigate(
+          "/main/topplaylist?listId=" + listId + "&count=" + count.current,
+        ),
+      );
+    // .then(() => navigate("/main/topplaylist?listId=" + listId));
   }
 
   return (

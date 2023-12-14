@@ -109,7 +109,7 @@ export function MyPlayList() {
                       _hover={{ cursor: "pointer" }}
                       onClick={() => handleChart(memberplaylist.listId)}
                     >
-                      <Image src="https://www.iphonefaq.org/files/styles/large/public/apple_music.jpg" />
+                      <Image src={memberplaylist.photo} />
                     </CardHeader>
                     <CardBody>
                       <Heading
