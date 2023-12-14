@@ -11,6 +11,7 @@ import {
   FormLabel,
   Heading,
   Image,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -49,11 +50,14 @@ function SongPage(props) {
   const [albumList, setAlbumList] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const addModal = useDisclosure();
+  const createModal = useDisclosure();
   const { login } = useContext(LoginContext);
   const [addPlaylist, setAddPlaylist] = useState([]);
   const [value, setValue] = useState(1);
   const toast = useToast();
+  const [inputCount, setInputCount] = useState(0);
+  const [playlistName, setPlaylistName] = useState("");
   console.log(value);
 
   useEffect(() => {
@@ -71,7 +75,7 @@ function SongPage(props) {
     axios
       .get("/api/myList/get?" + params.toString())
       .then((response) => setAddPlaylist(response.data));
-    onOpen();
+    addModal.onOpen();
   }
 
   function handleSavePlaylist() {
@@ -85,13 +89,54 @@ function SongPage(props) {
           description: "저장이 완료되었습니다.",
           status: "success",
         });
-        onClose();
+        addModal.onClose();
       })
       .catch(() => {
         toast({
           description: "저장중 문제가 발생하였습니다.",
           status: "warning",
         });
+      });
+  }
+
+  function handleCreatePlaylist() {
+    axios
+      .post("/api/myList/createPlaylist", {
+        listName: playlistName,
+        memberId: login.id,
+      })
+      .then(() => {
+        toast({
+          description: "생성완료",
+          status: "success",
+        });
+      })
+      .catch(() => {
+        toast({
+          description: "생성중 문제가 발생하였습니다.",
+          status: "warning",
+        });
+      });
+  }
+
+  function handleCheckPlaylistName() {
+    const params = new URLSearchParams();
+    params.set("listName", playlistName);
+    axios
+      .get("/api/myList/check?" + params)
+      .then(() => {
+        toast({
+          description: "이미 사용중인 이름입니다.",
+          status: "warning",
+        });
+      })
+      .catch((error) => {
+        if (error.response.status === 404) {
+          toast({
+            description: "사용 가능한 이름입니다.",
+            status: "success",
+          });
+        }
       });
   }
 
@@ -233,13 +278,13 @@ function SongPage(props) {
       {/* 플레이리스트 추가 모달 */}
       <Center>
         <Tooltip label="플레이리스트에 추가" fontSize="0.6rem">
-          <Button variant="ghost" borderRadius="full" onClick={onOpen}>
+          <Button variant="ghost" borderRadius="full" onClick={addModal.onOpen}>
             <FontAwesomeIcon icon={faPlus} />
           </Button>
         </Tooltip>
 
         {/* 플레이리스트 추가 모달 */}
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={addModal.isOpen} onClose={addModal.onClose}>
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>플레이리스트 선택</ModalHeader>
@@ -253,9 +298,9 @@ function SongPage(props) {
                     <Th>곡 수</Th>
                   </Tr>
                 </Thead>
-                <Tbody>
-                  {addPlaylist.length !== 0 ? (
-                    addPlaylist.map((listSongs) => (
+                {addPlaylist.length !== 0 ? (
+                  addPlaylist.map((listSongs) => (
+                    <Tbody>
                       <Tr>
                         <RadioGroup value={value} onChange={setValue}>
                           <Td>
@@ -266,22 +311,62 @@ function SongPage(props) {
                         </RadioGroup>
                         <Td>{listSongs.totalSongCount} 곡</Td>
                       </Tr>
-                    ))
-                  ) : (
+                      <Button onClick={createModal.onOpen}>
+                        플레이리스트 만들기
+                      </Button>
+                    </Tbody>
+                  ))
+                ) : (
+                  <Tbody>
                     <Center>
-                      <Text>플레이리스트가 없습니다.</Text>
-                      <Button>플레이리스트 만들기</Button>
+                      <Button onClick={createModal.onOpen}>
+                        플레이리스트 만들기
+                      </Button>
                     </Center>
-                  )}
-                </Tbody>
+                  </Tbody>
+                )}
               </Table>
             </ModalBody>
             <ModalFooter>
               <Button colorScheme="facebook" onClick={handleSavePlaylist}>
                 저장
               </Button>
-              <Button colorScheme="red" onClick={onClose}>
+              <Button colorScheme="red" onClick={addModal.onClose}>
                 취소
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+
+        {/*  플레이리스트 생성 모달  */}
+        <Modal isOpen={createModal.isOpen} onClose={createModal.onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>플레이리스트 생성</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Flex>
+                <Input
+                  onChange={(e) => {
+                    setInputCount(e.target.value.length);
+                    setPlaylistName(e.target.value);
+                  }}
+                  maxLength="14"
+                  placeholder="이름 지정"
+                />
+                <Button variant="ghost" onClick={handleCheckPlaylistName}>
+                  중복확인
+                </Button>
+              </Flex>
+              <Text textAlign="left">{inputCount} / 15</Text>
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                variant="ghost"
+                colorScheme="facebook"
+                onClick={handleCreatePlaylist}
+              >
+                생성
               </Button>
             </ModalFooter>
           </ModalContent>
