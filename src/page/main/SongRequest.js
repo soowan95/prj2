@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -31,7 +31,7 @@ import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 import { useImmer } from "use-immer";
-import {LoginContext} from "../../component/LoginProvider";
+import { LoginContext } from "../../component/LoginProvider";
 
 export function SongRequest() {
   const [requestList, setRequestList] = useState(null);
@@ -75,42 +75,78 @@ export function SongRequest() {
   function handleInsert() {
     // ok -> 성공 토스트 띄우면서 모달 닫기
     // error -> 오류 토스트 띄우면서 그대로 있기
-    axios
-      .postForm("/api/song/insert", {
-        title: title.current,
-        artistName: artist.current,
-        mood: selectMood.join(", "),
-        genre: selectGenre.join(", "),
-        artistGroup: group.current,
-        album: album.current,
-        release: release.current,
-        lyric: lyric.current,
-        requestTitle: songTitle.current,
-        requestArtist: artistName.current,
-        songUrl: songUrl.current,
-        files: files,
-      })
-      .then(() => {
-        toast({
-          description: "저장이 완료 되었습니다☺️",
-          status: "success",
+    if (files) {
+      axios
+        .postForm("/api/song/insert", {
+          title: title.current,
+          artistName: artist.current,
+          mood: selectMood.join(", "),
+          genre: selectGenre.join(", "),
+          artistGroup: group.current,
+          album: album.current,
+          release: release.current,
+          lyric: lyric.current,
+          requestTitle: songTitle.current,
+          requestArtist: artistName.current,
+          songUrl: songUrl.current,
+          files: files,
+        })
+        .then(() => {
+          toast({
+            description: "저장이 완료 되었습니다☺️",
+            status: "success",
+          });
+          setIsUpdate(true);
+          onClose();
+          updateSelectGenre((draft) => {
+            draft.splice(0, draft.length);
+          });
+          updateSelectMood((draft) => {
+            draft.splice(0, draft.length);
+          });
+        })
+        .catch((error) => {
+          toast({
+            description: "저장 중 문제가 발생하였습니다😥",
+            status: "warning",
+          });
         });
-        setIsUpdate(true);
-        onClose();
-        updateSelectGenre((draft) => {
-          draft.splice(0, draft.length);
+    } else {
+      axios
+        .post("/api/song/insertOnlyInfo", {
+          title: title.current,
+          artistName: artist.current,
+          mood: selectMood.join(", "),
+          genre: selectGenre.join(", "),
+          artistGroup: group.current,
+          album: album.current,
+          release: release.current,
+          lyric: lyric.current,
+          requestTitle: songTitle.current,
+          requestArtist: artistName.current,
+          songUrl: songUrl.current,
+        })
+        .then(() => {
+          toast({
+            description: "저장이 완료 되었습니다☺️",
+            status: "success",
+          });
+          setIsUpdate(true);
+          onClose();
+          updateSelectGenre((draft) => {
+            draft.splice(0, draft.length);
+          });
+          updateSelectMood((draft) => {
+            draft.splice(0, draft.length);
+          });
+        })
+        .catch((error) => {
+          toast({
+            description: "저장 중 문제가 발생하였습니다😥",
+            status: "warning",
+          });
         });
-        updateSelectMood((draft) => {
-          draft.splice(0, draft.length);
-        });
-      })
-      .catch((error) => {
-        toast({
-          description: "저장 중 문제가 발생하였습니다😥",
-          status: "warning",
-        });
-        // axios.postForm("/api/song/upload").then((response) => response.data);
-      });
+    }
   }
 
   function handleGenre(e) {
@@ -141,12 +177,11 @@ export function SongRequest() {
     }
   }
 
-
-
   if (!isAdmin()) {
     navigate(-1);
     return null;
   }
+
   return (
     <Box>
       <Heading size={"md"} marginLeft={"30px"} marginTop={"50px"}>
@@ -180,10 +215,8 @@ export function SongRequest() {
                         onClick={() => {
                           artistName.current = request.artist;
                           songTitle.current = request.title;
-                          title.current = songTitle.current;
-                          artist.current = artistName.current;
-                          // songUrldmf song 테이블에서 불러올수 있는가 ㅜㅜ?
-                          songUrl.current = songUrl.current;
+                          title.current = request.title;
+                          artist.current = request.artist;
                           onOpen();
                         }}
                         colorScheme="purple"
