@@ -358,40 +358,46 @@ export function MainLayout() {
                   {autoComplete !== null &&
                   autoComplete.length !== 0 &&
                   searchCategory === "가수"
-                    ? _.uniqBy(autoComplete, "artistName").map((song) => (
-                        <Box
-                          key={song.id}
-                          onClick={() => {
-                            params.set("sk", song.artistName);
-                            handleSearchButton();
-                          }}
-                        >
-                          {song.artistName}
-                        </Box>
-                      ))
-                    : searchCategory === "제목"
-                      ? _.uniqBy(autoComplete, "title").map((song) => (
+                    ? _.uniqBy(autoComplete, "artistName")
+                        .filter((song, index) => index < 10)
+                        .map((song) => (
                           <Box
                             key={song.id}
                             onClick={() => {
-                              params.set("sk", song.title);
+                              params.set("sk", song.artistName);
                               handleSearchButton();
                             }}
                           >
-                            {song.title}
+                            {song.artistName}
                           </Box>
                         ))
-                      : _.uniqBy(autoComplete, "lyric").map((song) => (
-                          <Box
-                            key={song.id}
-                            onClick={() => {
-                              params.set("sk", song.lyric);
-                              handleSearchButton();
-                            }}
-                          >
-                            {song.lyric}
-                          </Box>
-                        ))}
+                    : searchCategory === "제목"
+                      ? _.uniqBy(autoComplete, "title")
+                          .filter((song, index) => index < 10)
+                          .map((song) => (
+                            <Box
+                              key={song.id}
+                              onClick={() => {
+                                params.set("sk", song.title);
+                                handleSearchButton();
+                              }}
+                            >
+                              {song.title}
+                            </Box>
+                          ))
+                      : _.uniqBy(autoComplete, "lyric")
+                          .filter((song, index) => index < 10)
+                          .map((song) => (
+                            <Box
+                              key={song.id}
+                              onClick={() => {
+                                params.set("sk", song.lyric);
+                                handleSearchButton();
+                              }}
+                            >
+                              {song.lyric}
+                            </Box>
+                          ))}
                   {autoComplete !== null && autoComplete.length === 0 && (
                     <SongRequestComp />
                   )}
