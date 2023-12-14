@@ -55,7 +55,7 @@ export function MainLayout() {
     axios
       .get("/api/song/autoComplete?" + params)
       .then(({ data }) => setAutoComplete(data));
-  }, [searchKeyword]);
+  }, [searchKeyword, searchCategory]);
 
   // 검색창 placeholder
   let searchInfoText = searchCategory;
@@ -88,7 +88,10 @@ export function MainLayout() {
               "&" +
               params,
           )
-          .then(({ data }) => setTop100(data));
+          .then(({ data }) => {
+            if (data.length === 0) data = null;
+            setTop100(data);
+          });
       } else {
         handleSearchButton();
       }
@@ -107,7 +110,10 @@ export function MainLayout() {
               "&" +
               params,
           )
-          .then(({ data }) => setTop100(data));
+          .then(({ data }) => {
+            if (data.length === 0) data = null;
+            setTop100(data);
+          });
       } else {
         handleSearchButton();
       }
@@ -118,24 +124,6 @@ export function MainLayout() {
     if (moodInclude.current.replaceAll(",", "") === "")
       moodInclude.current = "";
   }
-
-  let isCtrl = false;
-  let isAlt = false;
-
-  // 단축키 누른 후
-  // document.onkeyup = (e) => {
-  //   if (e.key === "Ctrl") isCtrl = false;
-  //   if (e.key === "Alt") isAlt = false;
-  // };
-
-  // 단축키 눌렀을때
-  // document.onkeydown = (e) => {
-  //   if (e.key === "Ctrl") isCtrl = true;
-  //   if (e.key === "Alt") isAlt = true;
-  //
-  //   if (isAlt && e.key === "Enter")
-  //     document.getElementById("searchButton").click();
-  // };
 
   // 필터 버튼 색 바꾸기
   function handleButtonColor(e) {
@@ -226,23 +214,21 @@ export function MainLayout() {
                   Genre
                 </Box>
               </PopoverTrigger>
-              <PopoverContent p={5}>
+              <PopoverContent p={5} w={"100px"}>
                 {genres !== null &&
                   genres.map((genre) => (
                     <Flex key={genre.id} my={"5px"} alignItems={"center"}>
-                      <p style={{ width: "60%" }}>{genre.genre}</p>
                       <Button
                         className="genre"
-                        size={"xs"}
-                        h={"13px"}
-                        w={"13px"}
+                        h={"30px"}
+                        w={"80px"}
                         borderRadius={"5px"}
-                        border={"1px solid black"}
+                        bg={"white"}
                         onClick={(e) => handlePlusButton(e)}
                         value={genre.genre}
                         name="false"
                       >
-                        +
+                        {genre.genre}
                       </Button>
                     </Flex>
                   ))}
@@ -259,22 +245,20 @@ export function MainLayout() {
                   Mood
                 </Box>
               </PopoverTrigger>
-              <PopoverContent p={5}>
+              <PopoverContent p={5} w={"100px"}>
                 {moods !== null &&
                   moods.map((mood) => (
                     <Flex key={mood.id} my={"5px"} alignItems={"center"}>
-                      <p style={{ width: "60%" }}>{mood.mainMood}</p>
                       <Button
                         className="mood"
-                        size={"xs"}
-                        h={"13px"}
-                        w={"13px"}
+                        h={"30px"}
+                        w={"80px"}
                         borderRadius={"5px"}
-                        border={"1px solid black"}
                         onClick={(e) => handlePlusButton(e)}
+                        bg={"white"}
                         value={mood.mainMood}
                       >
-                        +
+                        {mood.mainMood}
                       </Button>
                     </Flex>
                   ))}
@@ -336,6 +320,9 @@ export function MainLayout() {
                     onChange={(e) => {
                       handleChangeSearchInput(e);
                     }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleSearchButton();
+                    }}
                   />
                 </PopoverTrigger>
                 <Button
@@ -361,42 +348,63 @@ export function MainLayout() {
                     ? _.uniqBy(autoComplete, "artistName")
                         .filter((song, index) => index < 10)
                         .map((song) => (
-                          <Box
+                          <Flex
                             key={song.id}
                             onClick={() => {
                               params.set("sk", song.artistName);
                               handleSearchButton();
                             }}
+                            justifyContent={"center"}
                           >
-                            {song.artistName}
-                          </Box>
+                            <Box w={"20%"}>{song.artistName}</Box>
+                            <Box w={"20%"} textAlign={"left"}>
+                              {song.title}
+                            </Box>
+                            <Box w={"40%"} textAlign={"left"}>
+                              {song.lyric.slice(0, 21)}...
+                            </Box>
+                          </Flex>
                         ))
                     : searchCategory === "제목"
                       ? _.uniqBy(autoComplete, "title")
                           .filter((song, index) => index < 10)
                           .map((song) => (
-                            <Box
+                            <Flex
                               key={song.id}
                               onClick={() => {
                                 params.set("sk", song.title);
                                 handleSearchButton();
                               }}
+                              justifyContent={"center"}
                             >
-                              {song.title}
-                            </Box>
+                              <Box w={"20%"}>{song.artistName}</Box>
+                              <Box w={"20%"} textAlign={"left"}>
+                                {song.title}
+                              </Box>
+                              <Box w={"40%"} textAlign={"left"}>
+                                {song.lyric.slice(0, 21)}...
+                              </Box>
+                            </Flex>
                           ))
                       : _.uniqBy(autoComplete, "lyric")
                           .filter((song, index) => index < 10)
                           .map((song) => (
-                            <Box
+                            <Flex
                               key={song.id}
                               onClick={() => {
                                 params.set("sk", song.lyric);
                                 handleSearchButton();
                               }}
+                              justifyContent={"center"}
                             >
-                              {song.lyric}
-                            </Box>
+                              <Box w={"20%"}>{song.artistName}</Box>
+                              <Box w={"20%"} textAlign={"left"}>
+                                {song.title}
+                              </Box>
+                              <Box w={"40%"} textAlign={"left"}>
+                                {song.lyric.slice(0, 21)}...
+                              </Box>
+                            </Flex>
                           ))}
                   {autoComplete !== null && autoComplete.length === 0 && (
                     <SongRequestComp />
