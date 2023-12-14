@@ -8,6 +8,8 @@ export function HomeLayout() {
   return (
     <Box
       m={0}
+      p={0}
+      boxSizing="border-box"
       width={"100%"}
       height={"1000px"}
       style={{ backgroundSize: "100%" }}

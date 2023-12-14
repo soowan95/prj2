@@ -172,7 +172,7 @@ function SongPage(props) {
           </Box>
 
           {/*<Box>{songData.id}</Box>*/}
-          <Box w={"1000px"}>
+          <Box>
             <Flex gap={5} alignItems={"center"}>
               <Heading fontSize="30px" color="purple">
                 {songData.title}
@@ -194,38 +194,49 @@ function SongPage(props) {
             </Flex>
             <Box mt={4}>
               <Flex>
-                <FormLabel fontWeight={"bold"}>가수</FormLabel>
-
+                <FormLabel w={"50px"} fontWeight={"bold"}>
+                  가수
+                </FormLabel>
                 <div>{songData.artistName}</div>
               </Flex>
             </Box>
             <Box mt={4}>
               <Flex>
-                <FormLabel fontWeight={"bold"}>앨범명</FormLabel>
+                <FormLabel w={"50px"} fontWeight={"bold"}>
+                  앨범명
+                </FormLabel>
                 <div>{songData.album}</div>
               </Flex>
             </Box>
             <Box mt={4}>
               <Flex>
-                <FormLabel fontWeight={"bold"}>그룹명</FormLabel>
+                <FormLabel w={"50px"} fontWeight={"bold"}>
+                  그룹명
+                </FormLabel>
                 <div>{songData.artistGroup}</div>
               </Flex>
             </Box>
             <Box mt={4}>
               <Flex>
-                <FormLabel fontWeight={"bold"}>장르</FormLabel>
+                <FormLabel w={"50px"} fontWeight={"bold"}>
+                  장르
+                </FormLabel>
                 <div>{songData.genre}</div>
               </Flex>
             </Box>
             <Box mt={4}>
               <Flex>
-                <FormLabel fontWeight={"bold"}>무드</FormLabel>
+                <FormLabel w={"50px"} fontWeight={"bold"}>
+                  무드
+                </FormLabel>
                 <div>{songData.mood}</div>
               </Flex>
             </Box>
             <Box mt={4}>
               <Flex>
-                <FormLabel fontWeight={"bold"}>발매일</FormLabel>
+                <FormLabel w={"50px"} fontWeight={"bold"}>
+                  발매일
+                </FormLabel>
                 <div>{songData.release}</div>
               </Flex>
             </Box>
