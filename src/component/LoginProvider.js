@@ -146,7 +146,7 @@ function LogInProvider({ children }) {
 
     setChat("");
   };
-  
+
   return (
     <LoginContext.Provider
       value={{
@@ -155,6 +155,7 @@ function LogInProvider({ children }) {
         isAuthenticated,
         hasAccess,
         isAdmin,
+        setLogin,
         connect,
         disConnect,
         setChat,
