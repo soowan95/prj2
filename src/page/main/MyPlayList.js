@@ -109,7 +109,7 @@ export function MyPlayList() {
                       _hover={{ cursor: "pointer" }}
                       onClick={() => handleChart(memberplaylist.listId)}
                     >
-                      <Image src="https://image.genie.co.kr/Y/IMAGE/Playlist/Channel/GENIE/PLAYLIST_20231128121036.png/dims/resize/Q_80,0" />
+                      <Image src={memberplaylist.photo} />
                     </CardHeader>
                     <CardBody>
                       <Heading

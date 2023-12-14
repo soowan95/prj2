@@ -49,6 +49,7 @@ export function MyFavoritePlaylist() {
   const [list, setList] = useState(null);
   const [index, setIndex] = useState(0);
   const [favoriteList, setFavoriteList] = useState(null);
+  const count = useRef(0);
 
   useEffect(() => {
     params.set("id", login.id);
@@ -58,7 +59,21 @@ export function MyFavoritePlaylist() {
   }, [favoriteList]);
 
   function handleFavoriteList(listId) {
-    navigate("/main/songinmyfavoriteplaylist?listId=" + listId);
+    axios
+      .put("/api/myList/hitscount?id=" + listId, {
+        memberId: login.id,
+        listId: listId,
+      })
+      .then(({ data }) => (count.current = data))
+      .catch(() => console.log("잘안됨"))
+      .finally(() =>
+        navigate(
+          "/main/songinmyfavoriteplaylist?listId=" +
+            listId +
+            "&count=" +
+            count.current,
+        ),
+      );
   }
 
   return (
@@ -73,9 +88,7 @@ export function MyFavoritePlaylist() {
                 <Box mt={30}>
                   <Card w="xs">
                     <CardHeader _hover={{ cursor: "pointer" }}>
-                      <Image
-                        onClick={() => handleFavoriteList(song.playlistId)}
-                      />
+                      <Image onClick={() => handleFavoriteList(song.listId)} />
                     </CardHeader>
                     <CardBody>
                       <Heading
@@ -84,7 +97,7 @@ export function MyFavoritePlaylist() {
                           cursor: "pointer",
                           textDecoration: "underline",
                         }}
-                        onClick={() => handleFavoriteList(song.playlistId)}
+                        onClick={() => handleFavoriteList(song.listId)}
                       >
                         {song?.listName}
                       </Heading>
