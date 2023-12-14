@@ -41,9 +41,6 @@ function SongPage(props) {
   // ↓ 더보기 버튼 생성 useState
   const [showMore, setShowMore] = useState(false);
 
-  // ↓ 글자 수 제한 useRef사용
-  const textLimit = useRef < number > 170;
-
   useEffect(() => {
     axios.get("/api/song/" + id).then(({ data }) => {
       setSongData(data);
@@ -69,8 +66,8 @@ function SongPage(props) {
             {/* 수정&삭제 버튼은 admin만 보일 수 있게 */}
             <Button
               onClick={() => navigate("/main/songEdit/" + id)}
-              background={"aliceblue"}
-              size={"xs"}
+              background={"plum"}
+              size={"sm"}
               mt={"10px"}
             >
               수정
@@ -137,16 +134,17 @@ function SongPage(props) {
                         : `${songData.lyric.slice(0, 20)}...`}
                       {songData.lyric.length > 20 && (
                         <Button
-                          background={"plum"}
+                          background={"lavender"}
                           ml={5}
                           size={"xs"}
                           onClick={() => setShowMore(!showMore)}
                         >
                           {showMore ? "닫기" : "더 보기"}
-                          <FontAwesomeIcon icon={faChevronDown} />
 
-                          {/* 닫기에는 up화살표 적용하고 싶음*/}
-                          {/*<FontAwesomeIcon icon={faChevronUp} />*/}
+                          {/* 닫기에는 up화살표 적용, 더 보기에는 down 아이콘 적용 */}
+                          <FontAwesomeIcon
+                            icon={showMore ? faChevronUp : faChevronDown}
+                          />
                         </Button>
                       )}
                     </>

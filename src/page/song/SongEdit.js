@@ -8,6 +8,7 @@ import {
   Image,
   Input,
   Spinner,
+  Tooltip,
   useToast,
 } from "@chakra-ui/react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
@@ -28,15 +29,16 @@ export function SongEdit() {
   const { id } = useParams();
 
   // 수정할 파일 업로드
-  const [uploadFile, setUploadFile] = useState(null);
+  // const [uploadFile, setUploadFile] = useState(null);
+
   console.log(songData);
 
   useEffect(() => {
     axios.get("/api/song/" + id).then(({ data }) => {
       updateSongData(data);
-      axios
-        .get("/api/song/albumList?album=" + data.album)
-        .then(({ data }) => setAlbumList(data));
+      axios.get("/api/song/albumList?album=" + data.album).then(({ data }) => {
+        setAlbumList(data);
+      });
     });
   }, []);
 
@@ -44,13 +46,13 @@ export function SongEdit() {
     // 저장 버튼 클릭시
     // PUT /api/main/song/id
     axios
-      .put("/api/song/songEdit", {
+      .putForm("/api/song/songEdit", {
         id: id,
         title: songData.title,
         artistName: songData.artistName,
         album: songData.album,
         artistGroup: songData.artistGroup,
-        uploadFile,
+        file: songData.uploadFile,
       })
       .then(() => {
         toast({
@@ -76,7 +78,11 @@ export function SongEdit() {
           {/* 기존 이미지가 있을 수도 있고 없을 수도 있음 */}
           {/* 기존 이미지 띄우기 (수정은 할 수도 있고 안 할수도 있음) */}
           <Box mr={8}>
-            <Image src={songData.url} boxSize="400px" objectFit="cover" />
+            <Image
+              src={songData.artistFileUrl}
+              boxSize="400px"
+              objectFit="cover"
+            />
           </Box>
 
           {/* 수정할 데이터 */}
@@ -149,13 +155,33 @@ export function SongEdit() {
             <Input
               type="file"
               accept="image/*"
-              onChange={(e) => setUploadFile(e.target.files)}
+              onChange={(e) =>
+                updateSongData((draft) => {
+                  draft.uploadFile = e.target.files[0];
+                })
+              }
             />
           </FormControl>
 
           <Flex gap={2}>
-            <Button onClick={handleSubmit}>저장</Button>
-            <Button onClick={() => navigate(-1)}>취소</Button>
+            <Tooltip label={"뒤로"}>
+              <Button
+                onClick={() => navigate(-1)}
+                background={"lavender"}
+                size={"sm"}
+                w={16}
+              >
+                🔙
+              </Button>
+            </Tooltip>
+            <Button
+              onClick={handleSubmit}
+              background={"plum"}
+              size={"sm"}
+              w={16}
+            >
+              수정
+            </Button>
           </Flex>
         </Box>
       </Box>
