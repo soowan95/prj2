@@ -1,4 +1,5 @@
 import { CommentContainer } from "../../component/CommentContainer";
+import { MemberLogin } from "../memberLogin/MemberLogin";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import {
@@ -35,6 +36,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBold,
+  faChevronDown,
+  faChevronUp,
   faComputerMouse,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
@@ -59,6 +62,9 @@ function SongPage(props) {
   const [inputCount, setInputCount] = useState(0);
   const [playlistName, setPlaylistName] = useState("");
   const isSubmit = useRef(true);
+
+  // ↓ 더보기 버튼 생성 useState
+  const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
     axios.get("/api/song/" + id).then(({ data }) => {
@@ -157,8 +163,8 @@ function SongPage(props) {
             {/* 수정&삭제 버튼은 admin만 보일 수 있게 */}
             <Button
               onClick={() => navigate("/main/songEdit/" + id)}
-              background={"aliceblue"}
-              size={"xs"}
+              background={"plum"}
+              size={"sm"}
               mt={"10px"}
             >
               수정
@@ -166,7 +172,7 @@ function SongPage(props) {
           </Box>
 
           {/*<Box>{songData.id}</Box>*/}
-          <Box>
+          <Box w={"1000px"}>
             <Flex gap={5} alignItems={"center"}>
               <Heading fontSize="30px" color="purple">
                 {songData.title}
@@ -228,6 +234,30 @@ function SongPage(props) {
                 <FormLabel w={"50px"} fontWeight={"bold"}>
                   가사
                 </FormLabel>
+                <Box w={"700px"}>
+                  {songData.lyric && (
+                    <>
+                      {showMore
+                        ? songData.lyric
+                        : `${songData.lyric.slice(0, 20)}...`}
+                      {songData.lyric.length > 20 && (
+                        <Button
+                          background={"lavender"}
+                          ml={5}
+                          size={"xs"}
+                          onClick={() => setShowMore(!showMore)}
+                        >
+                          {showMore ? "닫기" : "더 보기"}
+
+                          {/* 닫기에는 up화살표 적용, 더 보기에는 down 아이콘 적용 */}
+                          <FontAwesomeIcon
+                            icon={showMore ? faChevronUp : faChevronDown}
+                          />
+                        </Button>
+                      )}
+                    </>
+                  )}
+                </Box>
                 <Box w="700px">{songData.lyric}</Box>
               </Flex>
             </Box>
