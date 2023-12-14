@@ -23,7 +23,6 @@ import MemberDelete from "./page/memberLogin/MemberDelete";
 import MyFavoritePlaylist from "./page/main/MyFavoritePlaylist";
 import SongList from "./page/song/SongList";
 import { SongEdit } from "./page/song/SongEdit";
-import LiveChatComp from "./component/LiveChatComp";
 import SongInMyFavoritePlaylist from "./page/main/SongInMyFavoritePlaylist";
 import MySongRequest from "./page/main/MySongRequest";
 import RecommendPlaylist from "./page/main/RecommendPlaylist";
