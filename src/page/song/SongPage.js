@@ -307,14 +307,7 @@ function SongPage(props) {
         </Center>
       </Box>
 
-      {/* 플레이리스트 추가 모달 */}
       <Center>
-        <Tooltip label="플레이리스트에 추가" fontSize="0.6rem">
-          <Button variant="ghost" borderRadius="full" onClick={addModal.onOpen}>
-            <FontAwesomeIcon icon={faPlus} />
-          </Button>
-        </Tooltip>
-
         {/* 플레이리스트 추가 모달 */}
         <Modal isOpen={addModal.isOpen} onClose={addModal.onClose}>
           <ModalOverlay />

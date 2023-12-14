@@ -137,7 +137,7 @@ export function TopPlaylist() {
                         borderRadius={0}
                         variant="ghost"
                         onClick={() => {
-                          setIndex(favoriteList.indexForPlay);
+                          setIndex(idx);
                           playModal.onOpen();
                         }}
                       >
