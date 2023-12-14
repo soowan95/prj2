@@ -40,6 +40,7 @@ function CommentForm({ songId, isSubmitting, onSubmit }) {
   return (
     <Box>
       <Flex mt={70} align="center" justify="center">
+        <Text>댓글</Text>
         <Textarea
           w="70%"
           h={100}

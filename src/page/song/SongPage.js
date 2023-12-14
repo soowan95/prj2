@@ -58,7 +58,7 @@ function SongPage(props) {
   const toast = useToast();
   const [inputCount, setInputCount] = useState(0);
   const [playlistName, setPlaylistName] = useState("");
-  console.log(value);
+  const isSubmit = useRef(true);
 
   useEffect(() => {
     axios.get("/api/song/" + id).then(({ data }) => {
@@ -73,8 +73,12 @@ function SongPage(props) {
     const params = new URLSearchParams();
     params.set("id", login.id);
     axios
-      .get("/api/myList/get?" + params.toString())
-      .then((response) => setAddPlaylist(response.data));
+      .get("/api/myList/get?" + params.toString() + "&songId=" + id)
+      .then((response) => {
+        setAddPlaylist(response.data);
+        if (response.data.filter((a) => a.isSongContain === false).length !== 0)
+          isSubmit.current = false;
+      });
     addModal.onOpen();
   }
 
@@ -89,13 +93,8 @@ function SongPage(props) {
           description: "저장이 완료되었습니다.",
           status: "success",
         });
+        isSubmit.current = true;
         addModal.onClose();
-      })
-      .catch(() => {
-        toast({
-          description: "저장중 문제가 발생하였습니다.",
-          status: "warning",
-        });
       });
   }
 
@@ -110,6 +109,9 @@ function SongPage(props) {
           description: "생성완료",
           status: "success",
         });
+        createModal.onClose();
+        window.location.reload(0);
+        navigate(() => addModal.onOpen());
       })
       .catch(() => {
         toast({
@@ -150,7 +152,6 @@ function SongPage(props) {
               src={songData.artistFileUrl}
               alt={`${songData.artistName}-${songData.title}`}
               boxSize="400px"
-              objectFit="cover"
             />
 
             {/* 수정&삭제 버튼은 admin만 보일 수 있게 */}
@@ -222,15 +223,15 @@ function SongPage(props) {
                 <div>{songData.release}</div>
               </Flex>
             </Box>
-            <Box mt={4}>
-              <Flex>
-                <FormLabel fontWeight={"bold"}>가사</FormLabel>
-                <div>{songData.lyric}</div>
-              </Flex>
-            </Box>
           </Box>
         </Flex>
       </Center>
+      <Box mt={4}>
+        <Flex>
+          <FormLabel fontWeight={"bold"}>가사</FormLabel>
+        </Flex>
+        <div>{songData.lyric}</div>
+      </Box>
       <Center>
         <Box w="1200px">
           <CommentContainer songId={id} />
@@ -298,37 +299,37 @@ function SongPage(props) {
                     <Th>곡 수</Th>
                   </Tr>
                 </Thead>
-                {addPlaylist.length !== 0 ? (
+                {addPlaylist.length !== 0 &&
                   addPlaylist.map((listSongs) => (
-                    <Tbody>
-                      <Tr>
-                        <RadioGroup value={value} onChange={setValue}>
-                          <Td>
-                            <Radio value={listSongs.listId}>
-                              {listSongs.listName}
-                            </Radio>
-                          </Td>
-                        </RadioGroup>
-                        <Td>{listSongs.totalSongCount} 곡</Td>
-                      </Tr>
-                      <Button onClick={createModal.onOpen}>
-                        플레이리스트 만들기
-                      </Button>
-                    </Tbody>
-                  ))
-                ) : (
-                  <Tbody>
-                    <Center>
-                      <Button onClick={createModal.onOpen}>
-                        플레이리스트 만들기
-                      </Button>
-                    </Center>
-                  </Tbody>
-                )}
+                    <Tr>
+                      <RadioGroup value={value} onChange={setValue}>
+                        <Td>
+                          <Radio
+                            value={listSongs.listId}
+                            isDisabled={listSongs.isSongContain}
+                          >
+                            {listSongs.listName}
+                          </Radio>
+                        </Td>
+                      </RadioGroup>
+                      <Td>{listSongs.totalSongCount} 곡</Td>
+                    </Tr>
+                  ))}
+                <Center>
+                  <Button onClick={createModal.onOpen}>
+                    플레이리스트 만들기
+                  </Button>
+                </Center>
               </Table>
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="facebook" onClick={handleSavePlaylist}>
+              <Button
+                colorScheme="facebook"
+                onClick={() => {
+                  handleSavePlaylist();
+                }}
+                isDisabled={isSubmit.current}
+              >
                 저장
               </Button>
               <Button colorScheme="red" onClick={addModal.onClose}>
