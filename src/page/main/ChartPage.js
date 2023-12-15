@@ -29,7 +29,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { LoginContext } from "../../component/LoginProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis, faPlay, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -45,7 +45,7 @@ export function ChartPage() {
   const playModal = useDisclosure();
   const editModal = useDisclosure();
   const listIndex = useRef(0);
-
+  const navigate = useNavigate();
   const { login } = useContext(LoginContext);
 
   useEffect(() => {
@@ -79,6 +79,24 @@ export function ChartPage() {
           status: "info",
         });
         window.location.reload(0);
+      })
+      .catch(() => {
+        toast({
+          description: "삭제중 문제가 발생하였습니다",
+          status: "warning",
+        });
+      });
+  }
+
+  function handleDeletePlaylist() {
+    axios
+      .delete("/api/myList/" + list.listId)
+      .then(() => {
+        toast({
+          description: "삭제가 완료되었습니다",
+          status: "success",
+        });
+        navigate("/main/myplaylist");
       })
       .catch(() => {
         toast({
@@ -136,6 +154,12 @@ export function ChartPage() {
               </Flex>
               <Flex>
                 <FormLabel>업데이트 {list !== null && list.update}</FormLabel>
+              </Flex>
+              <Flex>
+                <FormLabel>플레이리스트 삭제</FormLabel>
+                <Button variant="ghost" onClick={handleDeletePlaylist}>
+                  <FontAwesomeIcon icon={faTrash} />
+                </Button>
               </Flex>
             </Box>
           </Flex>
