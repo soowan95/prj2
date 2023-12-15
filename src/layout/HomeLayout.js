@@ -7,11 +7,11 @@ import "../css/Home.css";
 export function HomeLayout() {
   return (
     <Box
-      m={0}
+      mt={"-40px"}
       p={0}
       boxSizing="border-box"
       width={"100%"}
-      height={"1000px"}
+      height={"950px"}
       style={{ backgroundSize: "100%" }}
       bgImg="https://t3.ftcdn.net/jpg/02/98/47/38/360_F_298473896_Vsz21xTwMtroEeeGgU8pL2vwt3N65pfR.jpg"
     >
