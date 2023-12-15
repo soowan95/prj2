@@ -218,7 +218,7 @@ export function MainLayout() {
             height={"200px"}
             alignItems={"center"}
           >
-            <Box textAlign={"center"} fontSize={"1.5rem"}>
+            <Box textAlign={"center"} fontWeight={"bold"} fontSize={"1.5rem"}>
               FILTER
             </Box>
             <Popover
