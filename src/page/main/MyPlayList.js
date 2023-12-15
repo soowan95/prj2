@@ -6,28 +6,18 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
-  Center,
   Divider,
   Flex,
   Heading,
-  HStack,
   Image,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
   Spacer,
   Stack,
-  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faHeart as fullHeart,
-  faRecordVinyl,
-} from "@fortawesome/free-solid-svg-icons";
+import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
 import { LoginContext } from "../../component/LoginProvider";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 
@@ -79,7 +69,10 @@ export function MyPlayList() {
         memberId: login.id,
         listId: listId,
       })
-      .then(({ data }) => (count.current = data))
+      .then(({ data }) => {
+        count.current = data;
+        window.scrollTo(0, 0);
+      })
       .catch(() => console.log("잘 안됨"))
       .finally(() =>
         navigate(
