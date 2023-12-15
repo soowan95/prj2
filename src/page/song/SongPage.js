@@ -158,7 +158,7 @@ function SongPage(props) {
     <Box mt={"100px"}>
       <Center>
         <Flex>
-          {/* 가수 이미지 출력 */}
+          {/* 이미지 출력 */}
           <Box mr={8}>
             <Image
               src={songData.artistFileUrl}
