@@ -120,8 +120,9 @@ export function ChartPage() {
                     .filter((a) => a.artistFileUrl.lastIndexOf("http") === 0)
                     .at(0).artistFileUrl
                 }
-                boxSize="400px"
-                objectFit="cover" // 이미지가 상자를 완전히 덮도록 크기 조절하는 것
+                boxSize="220px"
+                objectFit="cover"
+                style={{ margin: "0 auto", display: "block" }}
               />
             </Box>
             <Box>
