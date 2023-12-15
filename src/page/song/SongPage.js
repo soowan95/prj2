@@ -63,6 +63,11 @@ function SongPage(props) {
   const [playlistName, setPlaylistName] = useState("");
   const isSubmit = useRef(true);
 
+  // 플레이리스트 이미지 삽입
+  const [imagePreview, setImagePreview] = useState(login.profilePhoto);
+  const [coverImage, setCoverImage] = useState("");
+  const freader = new FileReader();
+
   // ↓ 더보기 버튼 생성 useState
   const [showMore, setShowMore] = useState(false);
 
@@ -106,9 +111,10 @@ function SongPage(props) {
 
   function handleCreatePlaylist() {
     axios
-      .post("/api/myList/createPlaylist", {
+      .postForm("/api/myList/createPlaylist", {
         listName: playlistName,
         memberId: login.id,
+        coverimage: coverImage,
       })
       .then(() => {
         toast({
@@ -152,7 +158,7 @@ function SongPage(props) {
     <Box mt={"100px"}>
       <Center>
         <Flex>
-          {/* 가수 이미지 출력 */}
+          {/* 이미지 출력 */}
           <Box mr={8}>
             <Image
               src={songData.artistFileUrl}
@@ -172,7 +178,7 @@ function SongPage(props) {
           </Box>
 
           {/*<Box>{songData.id}</Box>*/}
-          <Box w={"1000px"}>
+          <Box>
             <Flex gap={5} alignItems={"center"}>
               <Heading fontSize="30px" color="purple">
                 {songData.title}
@@ -194,38 +200,49 @@ function SongPage(props) {
             </Flex>
             <Box mt={4}>
               <Flex>
-                <FormLabel fontWeight={"bold"}>가수</FormLabel>
-
+                <FormLabel w={"50px"} fontWeight={"bold"}>
+                  가수
+                </FormLabel>
                 <div>{songData.artistName}</div>
               </Flex>
             </Box>
             <Box mt={4}>
               <Flex>
-                <FormLabel fontWeight={"bold"}>앨범명</FormLabel>
+                <FormLabel w={"50px"} fontWeight={"bold"}>
+                  앨범명
+                </FormLabel>
                 <div>{songData.album}</div>
               </Flex>
             </Box>
             <Box mt={4}>
               <Flex>
-                <FormLabel fontWeight={"bold"}>그룹명</FormLabel>
+                <FormLabel w={"50px"} fontWeight={"bold"}>
+                  그룹명
+                </FormLabel>
                 <div>{songData.artistGroup}</div>
               </Flex>
             </Box>
             <Box mt={4}>
               <Flex>
-                <FormLabel fontWeight={"bold"}>장르</FormLabel>
+                <FormLabel w={"50px"} fontWeight={"bold"}>
+                  장르
+                </FormLabel>
                 <div>{songData.genre}</div>
               </Flex>
             </Box>
             <Box mt={4}>
               <Flex>
-                <FormLabel fontWeight={"bold"}>무드</FormLabel>
+                <FormLabel w={"50px"} fontWeight={"bold"}>
+                  무드
+                </FormLabel>
                 <div>{songData.mood}</div>
               </Flex>
             </Box>
             <Box mt={4}>
               <Flex>
-                <FormLabel fontWeight={"bold"}>발매일</FormLabel>
+                <FormLabel w={"50px"} fontWeight={"bold"}>
+                  발매일
+                </FormLabel>
                 <div>{songData.release}</div>
               </Flex>
             </Box>
@@ -384,6 +401,24 @@ function SongPage(props) {
                 </Button>
               </Flex>
               <Text textAlign="left">{inputCount} / 15</Text>
+            </ModalBody>
+            <ModalBody>
+              <Text>사진 설정</Text>
+              <Flex>
+                <Image boxSize="100px" src={imagePreview} />
+                <Input
+                  mt={10}
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    freader.readAsDataURL(e.target.files[0]);
+                    freader.onload = (e) => {
+                      setImagePreview(e.target.result);
+                    };
+                    setCoverImage(e.target.files[0]);
+                  }}
+                />
+              </Flex>
             </ModalBody>
             <ModalFooter>
               <Button

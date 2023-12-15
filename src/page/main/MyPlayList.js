@@ -10,12 +10,14 @@ import {
   Divider,
   Flex,
   Heading,
+  HStack,
   Image,
   Modal,
   ModalContent,
   ModalHeader,
   ModalOverlay,
   Spacer,
+  Stack,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -90,26 +92,27 @@ export function MyPlayList() {
 
   return (
     <Box>
-      <Divider />
-      <Heading ml={10}>{login.nickName} 님의 재생목록</Heading>
-      <Divider />
-      <Flex gap={5}>
-        {list !== null &&
-          list.map(
-            (
-              memberplaylist,
-              //SELECT a.memberId as id, a.listName, a.id listId FROM memberplaylist a
-              //join member b on a.memberId = b.id
-              //where b.id = #{id}
-            ) => (
-              <Box gap={5} key={memberplaylist.id}>
-                <Box mt={30}>
+      <Stack spacing={4}>
+        <Divider />
+        <Heading ml={5}>{login.nickName} 님의 재생목록</Heading>
+        <Divider />
+        <Flex flexWrap="wrap" ml={"140px"} justifyContent="center">
+          {/* 수정된 부분 */}
+          {list !== null &&
+            list.map((memberplaylist, index) => (
+              <Box>
+                <Box mr={"130px"} mb={"20px"}>
                   <Card w="xs">
                     <CardHeader
                       _hover={{ cursor: "pointer" }}
                       onClick={() => handleChart(memberplaylist.listId)}
                     >
-                      <Image src={memberplaylist.photo} />
+                      <Image
+                        src={memberplaylist.photo}
+                        boxSize="220px"
+                        objectFit="cover"
+                        style={{ margin: "0 auto", display: "block" }}
+                      />
                     </CardHeader>
                     <CardBody>
                       <Heading
@@ -128,14 +131,13 @@ export function MyPlayList() {
                     </CardBody>
                     <Divider color="gray" />
                     <CardFooter>
-                      {/*<FontAwesomeIcon icon={faRecordVinyl}/>*/}
                       <Box>{memberplaylist.totalSongCount}곡</Box>
                       <Spacer />
                       <Flex>
                         <LikeContainer
                           onClick={handleLike}
-                          listId={memberplaylist.listId} // 리스트 아이디
-                          isLike={memberplaylist.isLike} // ture 인지 false 인지 boolean
+                          listId={memberplaylist.listId}
+                          isLike={memberplaylist.isLike}
                         ></LikeContainer>
                         <Box>{memberplaylist.countLike}</Box>
                       </Flex>
@@ -143,9 +145,9 @@ export function MyPlayList() {
                   </Card>
                 </Box>
               </Box>
-            ),
-          )}
-      </Flex>
+            ))}
+        </Flex>
+      </Stack>
     </Box>
   );
 }

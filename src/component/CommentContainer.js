@@ -39,8 +39,10 @@ function CommentForm({ songId, isSubmitting, onSubmit }) {
 
   return (
     <Box>
+      <Heading ml={30} size={"md"}>
+        댓글
+      </Heading>
       <Flex mt={70} align="center" justify="center">
-        <Text>댓글</Text>
         <Textarea
           w="70%"
           h={100}
@@ -191,8 +193,9 @@ function CommentList({
   const { hasAccess } = useContext(LoginContext);
 
   return (
-    <Card>
-      <CardHeader mt={50}>
+    // 댓글 리스트 배경 투명하게 바꿈
+    <Card bg="transparent">
+      <CardHeader mt={30}>
         <Heading ml={30} size={"md"}>
           댓글 리스트
         </Heading>

@@ -178,10 +178,8 @@ export function MainLayout() {
         overflowX={"hidden"}
         h={"2000px"}
         // 배경화면~!!!!!!
-        // bgImage={`url(${process.env.PUBLIC_URL}/img/solidcolor.png)`}
         bgImage={`url(${process.env.PUBLIC_URL}/img/background.jpg)`}
       >
-        <img src={process.env.PUBLIC_URL + "/solidcolor.png"} />
         {/* 메인 로고 */}
         <Button
           size={"L"}
@@ -190,8 +188,7 @@ export function MainLayout() {
             position: "relative",
             left: "50%",
             transform: "translate(-50%)",
-            fontFamily: "Spicy Rice",
-            color: "purple",
+            background: "none",
           }}
           fontSize={"3rem"}
           onClick={() => {
@@ -200,7 +197,12 @@ export function MainLayout() {
             setSearchKeyword("");
           }}
         >
-          RELIEVE
+          <Box
+            width={"150px"}
+            height={"150px"}
+            bgImage={`url(${process.env.PUBLIC_URL}/img/Relieve.png)`}
+            backgroundSize={"100%"}
+          />
         </Button>
         {/* 사용자 정보 */}
         <Box position={"absolute"} width={"20px"} right={"3%"} top={"50px"}>
