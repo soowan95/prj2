@@ -5,10 +5,8 @@ import {
   Flex,
   FormControl,
   FormLabel,
-  Heading,
   Image,
   Input,
-  Spinner,
   Tooltip,
   useToast,
 } from "@chakra-ui/react";
@@ -16,7 +14,6 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useImmer } from "use-immer";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import SongRequest from "../main/SongRequest";
 
 export function SongEdit() {
   const toast = useToast();
@@ -44,31 +41,56 @@ export function SongEdit() {
   }, []);
 
   function handleSubmit() {
-    // 수정 버튼 클릭시
-    // PUT/api/main/song/id
-    axios
-      .putForm("/api/song/songEdit", {
-        id: id,
-        title: songData.title,
-        artistName: songData.artistName,
-        album: songData.album,
-        artistGroup: songData.artistGroup,
-        file: songData.uploadFile,
-      })
-      .then(() => {
-        toast({
-          description: "수정이 완료되었습니다 ☺️",
-          status: "success",
+    // 저장 버튼 클릭시
+    // PUT /api/main/song/id
+    if (songData.uploadFile) {
+      axios
+        .putForm("/api/song/songEdit", {
+          id: id,
+          title: songData.title,
+          artistName: songData.artistName,
+          album: songData.album,
+          artistGroup: songData.artistGroup,
+          file: songData.uploadFile,
+        })
+        .then(() => {
+          toast({
+            description: "수정이 완료되었습니다 ☺️",
+            status: "success",
+          });
+          // 수정이 완료되면 /main/song/id로 가고싶음....(= 내가 방금 수정한 페이지가 뜨게)
+          navigate("/main/songEdit/" + id);
+        })
+        .catch((error) => {
+          toast({
+            description: "수정 중 문제 발생😱😱",
+            status: "warning",
+          });
         });
-        // 수정이 완료되면 /main/song/id로 가고싶음....(= 내가 방금 수정한 페이지가 뜨게)
-        navigate("/main/songEdit/" + id);
-      })
-      .catch((error) => {
-        toast({
-          description: "수정 중 문제 발생😱😱",
-          status: "warning",
+    } else {
+      axios
+        .put("/api/song/songEditOnlyInfo", {
+          id: id,
+          title: songData.title,
+          artistName: songData.artistName,
+          album: songData.album,
+          artistGroup: songData.artistGroup,
+        })
+        .then(() => {
+          toast({
+            description: "수정이 완료되었습니다 ☺️",
+            status: "success",
+          });
+          // 수정이 완료되면 /main/song/id로 가고싶음....(= 내가 방금 수정한 페이지가 뜨게)
+          navigate("/main/songEdit/" + id);
+        })
+        .catch((error) => {
+          toast({
+            description: "수정 중 문제 발생😱😱",
+            status: "warning",
+          });
         });
-      });
+    }
   }
 
   return (

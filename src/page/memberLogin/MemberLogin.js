@@ -52,6 +52,8 @@ export function MemberLogin() {
     "가장 처음 가본 콘서트는 어떤 가수의 콘서트였습니까?",
   ];
 
+  localStorage.setItem("securityQuestionList", securityQuestionList);
+
   function handleLogin() {
     axios
       .post("/api/member/login", { id, password })
@@ -108,6 +110,9 @@ export function MemberLogin() {
                   placeholder="ID"
                   value={id}
                   onChange={(e) => setId(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleLogin();
+                  }}
                 />
               </InputGroup>
             </FormControl>
@@ -123,6 +128,9 @@ export function MemberLogin() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleLogin();
+                  }}
                 />
               </InputGroup>
             </FormControl>

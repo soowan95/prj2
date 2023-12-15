@@ -17,12 +17,7 @@ import { useContext, useState } from "react";
 import axios from "axios";
 import { LoginContext } from "../../component/LoginProvider";
 
-function PasswordRecovery({
-  isOpen,
-  onClose,
-  securityQuestions,
-  recoveryInfo,
-}) {
+function PasswordRecovery({ isOpen, onClose, recoveryInfo }) {
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -94,18 +89,30 @@ function PasswordRecovery({
           </FormControl>
           <FormControl mb={5}>
             <FormLabel>보안 질문</FormLabel>
-            <Select value={recoveryInfo?.question || ""} isReadOnly>
-              {securityQuestions &&
-                securityQuestions.map((question, index) => (
-                  <option key={index} value={question}>
-                    {question}
-                  </option>
-                ))}
+            <Select
+              defaultValue={recoveryInfo?.question || ""}
+              isReadOnly={recoveryInfo.question}
+              onChange={(e) => (recoveryInfo.question = e.target.value)}
+            >
+              {localStorage.getItem("securityQuestionList") &&
+                localStorage
+                  .getItem("securityQuestionList")
+                  .split(",")
+                  .map((question, index) => (
+                    <option key={index} value={question}>
+                      {question}
+                    </option>
+                  ))}
             </Select>
           </FormControl>
           <FormControl mb={5}>
             <FormLabel>답변</FormLabel>
-            <Input type="text" value={recoveryInfo?.answer || ""} isReadOnly />
+            <Input
+              type="text"
+              defaultValue={recoveryInfo?.answer || ""}
+              isReadOnly={recoveryInfo.answer}
+              onChange={(e) => (recoveryInfo.answer = e.target.value)}
+            />
           </FormControl>
           <FormControl mb={5}>
             <FormLabel>새 비밀번호 입력</FormLabel>
