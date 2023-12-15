@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, useState} from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -31,7 +31,7 @@ import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 import { useImmer } from "use-immer";
-import {LoginContext} from "../../component/LoginProvider";
+import { LoginContext } from "../../component/LoginProvider";
 
 export function SongRequest() {
   const [requestList, setRequestList] = useState(null);
@@ -141,8 +141,6 @@ export function SongRequest() {
     }
   }
 
-
-
   if (!isAdmin()) {
     navigate(-1);
     return null;
@@ -199,7 +197,7 @@ export function SongRequest() {
       </Box>
 
       {/* 입력 창 모달 ! */}
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader fontSize={"small"}>입력 확인 ✅</ModalHeader>

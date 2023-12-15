@@ -15,6 +15,7 @@ function LogInProvider({ children }) {
     axios.get("/api/member/login").then((response) => {
       setLogin(response.data);
       userId.current = response.data.nickName;
+      localStorage.setItem("admin", response.data.admin);
     });
   }
 
@@ -23,11 +24,7 @@ function LogInProvider({ children }) {
   }
 
   function isAdmin() {
-    if (login.auth) {
-      return login.auth.some((elem) => elem.name === "admin");
-    }
-
-    return false;
+    return localStorage.getItem("admin") === "true";
   }
 
   // function isManager() {
