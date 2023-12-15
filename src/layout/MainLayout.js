@@ -138,7 +138,7 @@ export function MainLayout() {
   const getButtonStyle = (category) => ({
     fontFamily: "YClover-Bold",
     color: selectedCategory === category ? "white" : "black",
-    background: selectedCategory === category ? "purple" : "white",
+    background: selectedCategory === category ? "#e9dcfa" : "white",
   });
 
   // 검색창 카테고리 바꾸기

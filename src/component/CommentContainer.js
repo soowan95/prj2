@@ -193,27 +193,36 @@ function CommentList({
   const { hasAccess } = useContext(LoginContext);
 
   return (
-    // 댓글 리스트 배경 투명하게 바꿈
-    <Card bg="transparent">
-      <CardHeader mt={30}>
-        <Heading ml={30} size={"md"}>
-          댓글 리스트
-        </Heading>
-      </CardHeader>
-      <CardBody>
-        <Stack divider={<StackDivider />} spacing="4">
-          {commentList.map((comment) => (
-            <CommentItem
-              key={comment.id}
-              isSubmitting={isSubmitting}
-              setIsSubmitting={setIsSubmitting}
-              comment={comment}
-              onDeleteModalOpen={onDeleteModalOpen}
-            />
-          ))}
-        </Stack>
-      </CardBody>
-    </Card>
+    // Box를 추가하여 Card를 감싸고, position 속성을 사용하여 왼쪽에 고정
+    <Box
+      // position="fixed" top="0" left="0" zIndex="1"
+      width="100%"
+    >
+      {/*// 댓글 리스트 배경 투명하게 바꿈*/}
+      <Card bg="transparent">
+        <CardHeader mt={30}>
+          <Heading ml={30} size={"md"}>
+            댓글 리스트
+          </Heading>
+        </CardHeader>
+        <CardBody>
+          {/* maxWidth 속성을 추가하여 최대 너비를 설정 */}
+          <Box minWidth="1000px" mx="auto">
+            <Stack divider={<StackDivider />} spacing="4">
+              {commentList.map((comment) => (
+                <CommentItem
+                  key={comment.id}
+                  isSubmitting={isSubmitting}
+                  setIsSubmitting={setIsSubmitting}
+                  comment={comment}
+                  onDeleteModalOpen={onDeleteModalOpen}
+                />
+              ))}
+            </Stack>
+          </Box>
+        </CardBody>
+      </Card>
+    </Box>
   );
 }
 
