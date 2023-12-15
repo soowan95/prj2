@@ -36,20 +36,31 @@ function CommentForm({ songId, isSubmitting, onSubmit }) {
     // 제출 후 댓글 입력 초기화
     setComment("");
   }
-
+  // <CardHeader mt={30}>
+  //   <Heading ml={30} size={"md"}>
+  //     댓글 리스트
+  //   </Heading>
   return (
-    <Box>
-      <Heading ml={30} size={"md"}>
+    <Box mt={100}>
+      <Heading ml={50} size={"md"}>
         댓글
       </Heading>
-      <Flex mt={70} align="center" justify="center">
+      <Flex mt={5} align="center" justify="center">
         <Textarea
-          w="70%"
+          w="80%"
           h={100}
           value={comment}
           onChange={(e) => setComment(e.target.value)}
+          focusBorderColor="purple"
+          _hover={{ borderColor: "purple" }}
         />
-        <Button isDisabled={isSubmitting} onClick={handleSubmit} h={100}>
+        <Button
+          isDisabled={isSubmitting}
+          onClick={handleSubmit}
+          h={100}
+          _hover={{ bg: "purple", color: "white" }}
+          _active={{ bg: "purple", color: "white" }}
+        >
           작성
         </Button>
       </Flex>

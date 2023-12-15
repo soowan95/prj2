@@ -153,11 +153,14 @@ function SongPage(props) {
       <Center>
         <Flex>
           {/* 가수 이미지 출력 */}
-          <Box mr={8}>
+          <Box mr={8} flex="1">
             <Image
               src={songData.artistFileUrl}
               alt={`${songData.artistName}-${songData.title}`}
-              boxSize="400px"
+              minWidth="400px"
+              minHeight="400px"
+              width="400px"
+              height="auto"
             />
 
             {/* 수정&삭제 버튼은 admin만 보일 수 있게 */}
