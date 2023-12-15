@@ -232,7 +232,7 @@ export function SongRequest() {
       </Box>
 
       {/* 입력 창 모달 ! */}
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader fontSize={"small"}>입력 확인 ✅</ModalHeader>

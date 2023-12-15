@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import {
+  Box,
   Button,
   Card,
   CardBody,
@@ -8,6 +9,7 @@ import {
   Center,
   Flex,
   FormControl,
+  FormHelperText,
   FormLabel,
   Heading,
   Image,
@@ -19,6 +21,9 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Radio,
+  RadioGroup,
+  Stack,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -47,6 +52,10 @@ export function MemberInfo() {
   const [imagePreview, setImagePreview] = useState(login.profilePhoto);
   const [profilePhoto, setProfilePhoto] = useState("");
 
+  const [isNickNameOk, setIsNickNameOk] = useState(false);
+  const [isEmailOk, setIsEmailOk] = useState(false);
+  const [inputPicture, setInputPicture] = useState("none");
+
   const freader = new FileReader();
 
   useEffect(() => {
@@ -55,9 +64,6 @@ export function MemberInfo() {
       setEmail(response.data.email);
       setNickName(response.data.nickName);
     });
-    axios
-      .get("/api/member/questions?id=" + login.id)
-      .then(({ data }) => setQuestions(data));
   }, []);
 
   function handleNickNameCheck() {
@@ -81,6 +87,7 @@ export function MemberInfo() {
             status: "success",
           });
         }
+        setIsNickNameOk(true);
       });
   }
 
@@ -105,27 +112,47 @@ export function MemberInfo() {
             status: "success",
           });
         }
+        setIsEmailOk(true);
       });
   }
 
   function handleSubmit() {
-    axios
-      .putForm("/api/member/edit", {
-        id: login.id,
-        email,
-        nickName,
-        photo: profilePhoto,
-      })
-      .then(() => {
-        toast({
-          description: "수정되었습니다",
-          status: "success",
-        });
-        onClose();
-        fetchLogin();
-        window.location.reload(0);
-      })
-      .catch((error) => console.log(error));
+    if (profilePhoto) {
+      axios
+        .putForm("/api/member/edit", {
+          id: login.id,
+          email: isEmailOk ? email : null,
+          nickName: isNickNameOk ? nickName : null,
+          photo: profilePhoto,
+        })
+        .then(() => {
+          toast({
+            description: "수정되었습니다",
+            status: "success",
+          });
+          onClose();
+          fetchLogin();
+          window.location.reload(0);
+        })
+        .catch((error) => console.log(error));
+    } else {
+      axios
+        .put("/api/member/editOnlyInfo", {
+          id: login.id,
+          email: isEmailOk ? email : null,
+          nickName: isNickNameOk ? nickName : null,
+        })
+        .then(() => {
+          toast({
+            description: "수정되었습니다",
+            status: "success",
+          });
+          onClose();
+          fetchLogin();
+          window.location.reload(0);
+        })
+        .catch((error) => console.log(error));
+    }
   }
 
   return (
@@ -200,53 +227,85 @@ export function MemberInfo() {
               <Flex gap={3}>
                 <Input
                   type="text"
+                  placeholder={login.nickName}
                   value={nickName}
                   onChange={(e) => {
                     setNickName(e.target.value);
                     setNickNameAvailable(false);
                   }}
+                  onKeyUp={(e) => {
+                    if (e.target.value.startsWith("k-"))
+                      e.target.value = e.target.value.replace("k-", "");
+                  }}
                 />
-                <Button variant="ghost" onClick={handleNickNameCheck}>
+                <Button
+                  isDisabled={login.nickName === nickName || !nickName}
+                  variant="ghost"
+                  onClick={handleNickNameCheck}
+                >
                   중복확인
                 </Button>
               </Flex>
+              <FormHelperText textAlign={"center"}>
+                k- 로 시작할 수 없습니다.
+              </FormHelperText>
             </FormControl>
             <FormControl inInvalid={!emailAvailable}>
               <FormLabel>이메일</FormLabel>
               <Flex gap={3}>
                 <Input
                   type="text"
+                  placeHolder={login.email}
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
                     setEmailAvailable(false);
                   }}
                 />
-                <Button variant="ghost" onClick={handleEmailCheck}>
+                <Button
+                  isDisabled={login.email === email || !email}
+                  variant="ghost"
+                  onClick={handleEmailCheck}
+                >
                   중복확인
                 </Button>
               </Flex>
+              <FormHelperText textAlign={"center"}>
+                중복확인 안하면 기존 정보가 사용됩니다.
+              </FormHelperText>
             </FormControl>
-
-            <FormControl>
-              <FormLabel>프로필 사진 변경</FormLabel>
-              <Flex>
-                <Image borderRadius="full" boxSize="100px" src={imagePreview} />
-                <Input
-                  mt={10}
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    freader.readAsDataURL(e.target.files[0]);
-                    freader.onload = (e) => {
-                      setImagePreview(e.target.result);
-                    };
-                    setProfilePhoto(e.target.files[0]);
-                  }}
-                />
-              </Flex>
-            </FormControl>
-            <FormControl>
+            <RadioGroup mt={3} value={inputPicture} onChange={setInputPicture}>
+              <Box>사진을 첨부하시겠습니까?</Box>
+              <Stack direction="row">
+                <Radio value="block">네</Radio>
+                <Radio value="none">아니오</Radio>
+              </Stack>
+            </RadioGroup>
+            <Box display={inputPicture}>
+              <FormControl>
+                <FormLabel>프로필 사진 변경</FormLabel>
+                <Flex>
+                  <Image
+                    borderRadius="full"
+                    boxSize="100px"
+                    src={imagePreview}
+                  />
+                  <Input
+                    mt={10}
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      freader.readAsDataURL(e.target.files[0]);
+                      freader.onload = (e) => {
+                        setImagePreview(e.target.result);
+                      };
+                      setProfilePhoto(e.target.files[0]);
+                    }}
+                  />
+                </Flex>
+              </FormControl>
+            </Box>
+            <FormControl mt={3}>
               <FormLabel>비밀번호</FormLabel>
               <Button
                 variant="ghost"
@@ -258,7 +317,17 @@ export function MemberInfo() {
             </FormControl>
           </ModalBody>
           <ModalFooter gap={5}>
-            <Button colorScheme="blue" onClick={handleSubmit}>
+            <Button
+              isDisabled={
+                !(
+                  (login.nickName !== nickName && isNickNameOk) ||
+                  (login.email !== email && isEmailOk) ||
+                  profilePhoto
+                )
+              }
+              colorScheme="blue"
+              onClick={handleSubmit}
+            >
               수정
             </Button>
             <Button colorScheme="red" onClick={onClose}>
@@ -268,9 +337,9 @@ export function MemberInfo() {
         </ModalContent>
       </Modal>
       <PasswordRecovery
+        recoveryInfo={login}
         isOpen={isPasswordModalOpen}
         onClose={onPasswordModalClose}
-        securityQuestions={questions}
       />
     </Center>
   );
