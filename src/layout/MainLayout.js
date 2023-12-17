@@ -17,6 +17,8 @@ import SongRequestComp from "../component/SongRequestComp";
 import _ from "lodash";
 import LiveChatComp from "../component/LiveChatComp";
 import "../css/Fonts.css";
+import { faSquareCaretUp } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function MainLayout() {
   const [top100, setTop100] = useState(null);
@@ -32,6 +34,7 @@ export function MainLayout() {
   const moodInclude = useRef(",");
   const genreMoodList = useRef([]);
   const searchRef = useRef(null);
+  const scroll = useRef(null);
 
   const moodPopOver = useDisclosure();
   const genrePopOver = useDisclosure();
@@ -169,9 +172,15 @@ export function MainLayout() {
     params.set("sk", searchKeyword);
   }
 
+  // 스크롤 위로
+  function handleScroll() {
+    scroll.current.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   return (
     <SongContext.Provider value={{ top100, searched }}>
       <Box
+        ref={scroll}
         position={"relative"}
         width={"100%"}
         m={0}
@@ -436,6 +445,14 @@ export function MainLayout() {
             </Flex>
           </FormControl>
         )}
+        <Button
+          position={"fixed"}
+          bottom={"7%"}
+          right={"3%"}
+          onClick={handleScroll}
+        >
+          <FontAwesomeIcon icon={faSquareCaretUp} />
+        </Button>
         <Outlet />
         <LiveChatComp />
       </Box>
