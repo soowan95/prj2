@@ -7,6 +7,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  useColorMode,
   useDisclosure,
 } from "@chakra-ui/react";
 import { createContext, useEffect, useRef, useState } from "react";
@@ -44,6 +45,8 @@ export function MainLayout() {
   const location = useLocation();
 
   const navigate = useNavigate();
+
+  const { toggleColorMode } = useColorMode();
 
   params.set("sc", searchCategory);
   params.set("sk", searchKeyword);
@@ -185,10 +188,17 @@ export function MainLayout() {
         width={"100%"}
         m={0}
         overflowX={"hidden"}
-        h={"2000px"}
         // 배경화면~!!!!!!
         bgImage={`url(${process.env.PUBLIC_URL}/img/background.jpg)`}
       >
+        <Button
+          onClick={toggleColorMode}
+          position={"absolute"}
+          top={"3%"}
+          right={"10%"}
+        >
+          테마바꾸기 버튼
+        </Button>
         {/* 메인 로고 */}
         <Button
           size={"L"}

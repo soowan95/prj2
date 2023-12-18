@@ -32,7 +32,6 @@ import { useNavigate } from "react-router-dom";
 function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isRepeat, setIsRepeat] = useState(true);
-  const [isBuffer, setIsBuffer] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const [rerenderCount, setRerenderCount] = useState(0);
 
@@ -104,10 +103,6 @@ function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
     }
   }
 
-  function handleBuffer() {
-    setIsBuffer(!isBuffer);
-  }
-
   function handleShowTooltip() {
     setShowTooltip(!showTooltip);
   }
@@ -119,7 +114,6 @@ function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
       onClose={() => {
         setIsPlaying(false);
         setIsRepeat(true);
-        setIsBuffer(false);
         setShowTooltip(false);
         songInfo.current.seekTo(0);
         onClose();
@@ -171,11 +165,7 @@ function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
                     setRerenderCount(0);
                   }}
                 >
-                  {isBuffer ? (
-                    <Spinner size={"xs"} />
-                  ) : (
-                    <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
-                  )}
+                  <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
                 </Box>
                 <Box mr={4} lineHeight={"40px"} onClick={handleForward}>
                   <FontAwesomeIcon icon={faRotateRight} />
@@ -189,8 +179,6 @@ function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
                 <ReactPlayer
                   style={{ position: "absolute", left: "-100%" }}
                   onEnded={handleSongEnded}
-                  onBuffer={handleBuffer}
-                  onBufferEnd={handleBuffer}
                   ref={songInfo}
                   playing={isPlaying}
                   url={songList !== null && songList.at(index).songUrl}

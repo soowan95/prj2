@@ -88,7 +88,10 @@ export function MyFavoritePlaylist() {
                 <Box mt={30}>
                   <Card w="xs">
                     <CardHeader _hover={{ cursor: "pointer" }}>
-                      <Image onClick={() => handleFavoriteList(song.listId)} />
+                      <Image
+                        src={song.photo}
+                        onClick={() => handleFavoriteList(song.listId)}
+                      />
                     </CardHeader>
                     <CardBody>
                       <Heading
