@@ -127,11 +127,11 @@ export function RecommendPlaylist() {
                     >
                       {srl.listName}
                     </CardBody>
-                    <CardFooter pl={1}>
+                    <CardFooter pl={1.5} pt={0} width={"350px"}>
                       {srl?.songs} 곡
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       {srl?.count}
-                      <FontAwesomeIcon icon={fullHeart} size="xl2" />
+                      <FontAwesomeIcon icon={fullHeart} size="xl" />
                     </CardFooter>
                   </Box>
                 </Box>

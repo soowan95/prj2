@@ -100,7 +100,7 @@ export function MyPlayList() {
           {list !== null &&
             list.map((memberplaylist, index) => (
               <Box mr={"130px"} mb={"20px"}>
-                <Card w="xs">
+                <Card w="xs" bgColor={"none"}>
                   <CardHeader
                     _hover={{ cursor: "pointer" }}
                     onClick={() => handleChart(memberplaylist.listId)}
@@ -115,6 +115,9 @@ export function MyPlayList() {
                   <CardBody>
                     <Heading
                       size="md"
+                      ml={"40px"}
+                      fontSize={"25"}
+                      fontWeight={"bold"}
                       _hover={{
                         cursor: "pointer",
                         textDecoration: "underline",
@@ -127,11 +130,10 @@ export function MyPlayList() {
                       &nbsp;
                     </Heading>
                   </CardBody>
-                  <Divider color="gray" />
                   <CardFooter>
-                    <Box>{memberplaylist.totalSongCount}곡</Box>
+                    <Box ml={"43px"}>{memberplaylist.totalSongCount}곡</Box>
                     <Spacer />
-                    <Flex>
+                    <Flex mr={"30px"}>
                       <LikeContainer
                         onClick={handleLike}
                         listId={memberplaylist.listId}
