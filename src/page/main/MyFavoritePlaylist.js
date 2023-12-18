@@ -76,6 +76,8 @@ export function MyFavoritePlaylist() {
       );
   }
 
+  function handleHitsCount(likelistId) {}
+
   return (
     <Center mt={50}>
       <Box mt={30}>
@@ -83,13 +85,26 @@ export function MyFavoritePlaylist() {
         <Divider />
         <Flex gap={5}>
           {list !== null &&
-            list.map((song) => (
+            list.map((song, idx) => (
               <Box gap={5} key={song?.id}>
                 <Box mt={30}>
                   <Card w="xs">
-                    <CardHeader _hover={{ cursor: "pointer" }}>
-                      <Image onClick={() => handleFavoriteList(song.listId)} />
+                    <CardHeader height="242px" key={idx}>
+                      <Image
+                        src={song.pictureUrl}
+                        alt={song.picture}
+                        _hover={{ cursor: "pointer" }}
+                        boxSize="220px"
+                        objectFit="cover"
+                        style={{ margin: "0 auto", display: "block" }}
+                        onClick={() => {
+                          handleHitsCount(song.likelistId);
+                        }}
+                      />
                     </CardHeader>
+                    {/*<CardHeader _hover={{ cursor: "pointer" }}>*/}
+                    {/*  <Image onClick={() => handleFavoriteList(song.listId)} />*/}
+                    {/*</CardHeader>*/}
                     <CardBody>
                       <Heading
                         size="md"
@@ -105,9 +120,9 @@ export function MyFavoritePlaylist() {
                     <Divider color="gray" />
                     <CardFooter>
                       <FontAwesomeIcon icon={faRecordVinyl} />
-                      <Text>{song?.songs} SONGS</Text>
+                      <Text>{song?.songs} 곡</Text>
                       <Spacer />
-                      <Text>ID : {song?.memberId} </Text>
+                      <Text>작성자 {song?.nickName} 님</Text>
                     </CardFooter>
                   </Card>
                 </Box>

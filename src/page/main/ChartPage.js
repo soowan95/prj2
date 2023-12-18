@@ -3,6 +3,7 @@ import {
   border,
   Box,
   Button,
+  Divider,
   Flex,
   FormLabel,
   Heading,
@@ -44,12 +45,12 @@ import {
 import PlayComp from "../../component/PlayComp";
 import { faCirclePlay } from "@fortawesome/free-regular-svg-icons";
 
+// 내 플레이리스트에서 플레이리스트 클릭시
 export function ChartPage() {
   const [songList, setSongList] = useState(null);
   const [list, setList] = useState(null);
   const toast = useToast();
   const [params] = useSearchParams();
-  const [favoriteList, setFavoriteList] = useState(null);
   const [index, setIndex] = useState(null);
   const playModal = useDisclosure();
   const editModal = useDisclosure();
@@ -69,9 +70,6 @@ export function ChartPage() {
     axios
       .get("/api/song/chartlist?id=" + params.get("listId"))
       .then(({ data }) => setSongList(data));
-    axios
-      .get("/api/myList/favoriteListName?" + params)
-      .then((response) => setFavoriteList(response.data));
   }, []);
 
   function handleEditFavoriteList(songId, playlistId) {
@@ -176,7 +174,7 @@ export function ChartPage() {
 
       {/*마이플레이리스트 차트*/}
       <Box>
-        <h1> 게시물 목록 </h1>
+        <Divider />
         <Box>
           <Table>
             <Thead>
@@ -249,15 +247,13 @@ export function ChartPage() {
                         <FontAwesomeIcon icon={faCirclePlay} />
                       </Button>
                     </Td>
-                    <Td
-                    // border={"1px solid black"}
-                    >
-                      <Button borderRadius={0} variant="ghost">
-                        <Popover>
-                          <PopoverTrigger>
-                            <FontAwesomeIcon icon={faQrcode} />
-                          </PopoverTrigger>
-                        </Popover>
+                    <Td>
+                      <Button
+                        borderRadius={0}
+                        variant="ghost"
+                        onClick={() => navigate("/main/song/" + song.id)}
+                      >
+                        <FontAwesomeIcon icon={faEllipsis} />
                       </Button>
                     </Td>
                     <Td p={1}>
@@ -285,7 +281,7 @@ export function ChartPage() {
           <PlayComp
             isOpen={playModal.isOpen}
             onClose={playModal.onClose}
-            songList={favoriteList}
+            songList={songList}
             index={index}
             setIndex={setIndex}
           />
@@ -300,7 +296,7 @@ export function ChartPage() {
                 colorScheme="red"
                 onClick={() =>
                   handleEditFavoriteList(
-                    favoriteList.at(listIndex).id,
+                    songList.at(listIndex).id,
                     params.get("listId"),
                   )
                 }
