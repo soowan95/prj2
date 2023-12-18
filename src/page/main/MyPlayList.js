@@ -10,6 +10,11 @@ import {
   Flex,
   Heading,
   Image,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  SimpleGrid,
   Spacer,
   Stack,
   useDisclosure,
@@ -89,57 +94,57 @@ export function MyPlayList() {
         <Divider />
         <Heading ml={5}>{login.nickName} 님의 재생목록</Heading>
         <Divider />
+        {/*<SimpleGrid columns={3} spacing={5} minChildWidth="70px">*/}
         <Flex flexWrap="wrap" ml={"140px"} justifyContent="center">
           {/* 수정된 부분 */}
           {list !== null &&
             list.map((memberplaylist, index) => (
-              <Box>
-                <Box mr={"130px"} mb={"20px"}>
-                  <Card w="xs">
-                    <CardHeader
-                      _hover={{ cursor: "pointer" }}
-                      onClick={() => handleChart(memberplaylist.listId)}
+              <Box mr={"130px"} mb={"20px"}>
+                <Card w="xs">
+                  <CardHeader
+                    _hover={{ cursor: "pointer" }}
+                    onClick={() => handleChart(memberplaylist.listId)}
+                  >
+                    <Image
+                      src={memberplaylist.photo}
+                      boxSize="220px"
+                      objectFit="cover"
+                      style={{ margin: "0 auto", display: "block" }}
+                    />
+                  </CardHeader>
+                  <CardBody>
+                    <Heading
+                      size="md"
+                      _hover={{
+                        cursor: "pointer",
+                        textDecoration: "underline",
+                      }}
+                      onClick={() => {
+                        handleChart(memberplaylist.listId);
+                      }}
                     >
-                      <Image
-                        src={memberplaylist.photo}
-                        boxSize="220px"
-                        objectFit="cover"
-                        style={{ margin: "0 auto", display: "block" }}
-                      />
-                    </CardHeader>
-                    <CardBody>
-                      <Heading
-                        size="md"
-                        _hover={{
-                          cursor: "pointer",
-                          textDecoration: "underline",
-                        }}
-                        onClick={() => {
-                          handleChart(memberplaylist.listId);
-                        }}
-                      >
-                        {memberplaylist.listName} &nbsp; &nbsp; &nbsp; &nbsp;
-                        &nbsp;
-                      </Heading>
-                    </CardBody>
-                    <Divider color="gray" />
-                    <CardFooter>
-                      <Box>{memberplaylist.totalSongCount}곡</Box>
-                      <Spacer />
-                      <Flex>
-                        <LikeContainer
-                          onClick={handleLike}
-                          listId={memberplaylist.listId}
-                          isLike={memberplaylist.isLike}
-                        ></LikeContainer>
-                        <Box>{memberplaylist.countLike}</Box>
-                      </Flex>
-                    </CardFooter>
-                  </Card>
-                </Box>
+                      {memberplaylist.listName} &nbsp; &nbsp; &nbsp; &nbsp;
+                      &nbsp;
+                    </Heading>
+                  </CardBody>
+                  <Divider color="gray" />
+                  <CardFooter>
+                    <Box>{memberplaylist.totalSongCount}곡</Box>
+                    <Spacer />
+                    <Flex>
+                      <LikeContainer
+                        onClick={handleLike}
+                        listId={memberplaylist.listId}
+                        isLike={memberplaylist.isLike}
+                      ></LikeContainer>
+                      <Box>{memberplaylist.countLike}</Box>
+                    </Flex>
+                  </CardFooter>
+                </Card>
               </Box>
             ))}
         </Flex>
+        {/*</SimpleGrid>*/}
       </Stack>
     </Box>
   );

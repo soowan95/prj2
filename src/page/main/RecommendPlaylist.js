@@ -20,12 +20,14 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverTrigger,
+  SimpleGrid,
   Table,
   Tbody,
   Td,
   Th,
   Thead,
   Tr,
+  Global,
   useDisclosure,
 } from "@chakra-ui/react";
 import {
@@ -38,6 +40,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import PlayComp from "../../component/PlayComp";
+import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
 
 export function RecommendPlaylist() {
   const { fetchLogin, login } = useContext(LoginContext);
@@ -76,42 +79,66 @@ export function RecommendPlaylist() {
   return (
     <>
       <Box mt={50}>
-        <Heading>요즘 뜨는 추천 플레이리스트!</Heading>
+        <Heading ml={"338px"}>요즘 뜨는 추천 플레이리스트!</Heading>
+        <br />
+        <br />
+        <br />
       </Box>
-      <Flex gap={5}>
-        {/* S3 이미지 출력 */}
-        {recommendList !== null &&
-          recommendList.map((srl, idx) => (
-            <Card w="sm" border="1px solid purple">
-              <CardHeader key={idx}>
-                <Image
-                  src={srl.pictureUrl}
-                  alt={srl.picture}
-                  _hover={{ cursor: "pointer" }}
-                  onClick={() => {
-                    handleHitsCount(srl.likelistId);
-                  }}
-                />
-              </CardHeader>
-              <CardBody
-                _hover={{ cursor: "pointer" }}
-                onClick={() => {
-                  handleHitsCount(srl.likelistId);
-                }}
+      <SimpleGrid columns={3} spacing={5} minChildWidth="70px">
+        <Flex gap={5} flexWrap="wrap" ml={"140px"} justifyContent="center">
+          {/* S3 이미지 출력 */}
+          {recommendList !== null &&
+            recommendList.map((srl, idx) => (
+              <Card
+                mr={"100"}
+                mb={"20px"}
+                // border="1px solid purple"
+                width={"350px"}
+                height={"400px"}
+                bgColor={"none"}
               >
-                {srl.listName}
-              </CardBody>
-              <CardFooter>
-                <FontAwesomeIcon icon={faRecordVinyl} />
-                {srl?.songs} SONGS
-              </CardFooter>
-              <CardFooter>
-                <FontAwesomeIcon icon={faHeart} />
-                {srl?.count} LIKES
-              </CardFooter>
-            </Card>
-          ))}
-      </Flex>
+                <Box>
+                  <CardHeader height="242px" key={idx}>
+                    <Image
+                      src={srl.pictureUrl}
+                      alt={srl.picture}
+                      _hover={{ cursor: "pointer" }}
+                      boxSize="220px"
+                      objectFit="cover"
+                      style={{ margin: "0 auto", display: "block" }}
+                      onClick={() => {
+                        handleHitsCount(srl.likelistId);
+                      }}
+                    />
+                  </CardHeader>
+                  <Box height="140px" width="220px" ml="64px">
+                    <Box pl={1} mt="10px" color="#0096ff">
+                      인기 추천
+                    </Box>
+                    <CardBody
+                      fontSize={"25"}
+                      fontWeight={"bold"}
+                      size="md"
+                      _hover={{ cursor: "pointer" }}
+                      onClick={() => {
+                        handleHitsCount(srl.likelistId);
+                      }}
+                      pl={1}
+                    >
+                      {srl.listName}
+                    </CardBody>
+                    <CardFooter pl={1}>
+                      {srl?.songs} 곡
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      {srl?.count}
+                      <FontAwesomeIcon icon={fullHeart} size="xl2" />
+                    </CardFooter>
+                  </Box>
+                </Box>
+              </Card>
+            ))}
+        </Flex>
+      </SimpleGrid>
     </>
   );
 }
