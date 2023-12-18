@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import {
+  border,
   Box,
   Button,
+  Divider,
   Flex,
   FormLabel,
   Heading,
@@ -32,15 +34,23 @@ import axios from "axios";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { LoginContext } from "../../component/LoginProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsis, faPlay, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleInfo,
+  faEllipsis,
+  faPlay,
+  faQrcode,
+  faTrash,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
 import PlayComp from "../../component/PlayComp";
+import { faCirclePlay } from "@fortawesome/free-regular-svg-icons";
 
+// 내 플레이리스트에서 플레이리스트 클릭시
 export function ChartPage() {
   const [songList, setSongList] = useState(null);
   const [list, setList] = useState(null);
   const toast = useToast();
   const [params] = useSearchParams();
-  const [favoriteList, setFavoriteList] = useState(null);
   const [index, setIndex] = useState(null);
   const playModal = useDisclosure();
   const editModal = useDisclosure();
@@ -60,9 +70,6 @@ export function ChartPage() {
     axios
       .get("/api/song/chartlist?id=" + params.get("listId"))
       .then(({ data }) => setSongList(data));
-    axios
-      .get("/api/myList/favoriteListName?" + params)
-      .then((response) => setFavoriteList(response.data));
   }, []);
 
   function handleEditFavoriteList(songId, playlistId) {
@@ -111,10 +118,10 @@ export function ChartPage() {
       <Box>
         <Flex>
           <Flex flexDirection="row">
-            <Box mr={8} border="1px solid black">
+            <Box ml={"50px"} mr={8} border="1px solid black">
               <Image
                 src={list !== null && list.photo}
-                boxSize="220px"
+                boxSize="350px"
                 objectFit="cover"
                 style={{ margin: "0 auto", display: "block" }}
               />
@@ -160,7 +167,7 @@ export function ChartPage() {
 
       {/*마이플레이리스트 차트*/}
       <Box>
-        <h1> 게시물 목록 </h1>
+        <Divider />
         <Box>
           <Table>
             <Thead>
@@ -169,9 +176,38 @@ export function ChartPage() {
                 <Th></Th>
                 <Th>곡정보</Th>
                 <Th></Th>
-                <Th>재생</Th>
-                <Th>정보</Th>
-                <Th>삭제</Th>
+                <Th
+                  // border={"1px solid black"}
+                  width={"40px"}
+                  p={0}
+                >
+                  <Box
+                    // border={"1px solid red"}
+                    width={"30px"}
+                    ml={"40px"}
+                  >
+                    재생
+                  </Box>
+                </Th>
+                <Th
+                  // border={"1px solid blue"}
+                  width={"10px"}
+                  p={0}
+                >
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;정보
+                </Th>
+                <Th
+                  // border={"1px solid blue"}
+                  width={"100px"}
+                  p={0}
+                >
+                  <Box
+                    // border={"1px solid red"}
+                    mr={"50px"}
+                  >
+                    &nbsp;&nbsp;삭제
+                  </Box>
+                </Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -182,40 +218,50 @@ export function ChartPage() {
                   <Tr>
                     <Td>{idx + 1}</Td>
                     {/*노래 곡 아이디를 보여주는 것이 아닌 1부터 보여주는 것*/}
-                    <Td>{song.title}</Td>
-                    <Td>{song.artistName}</Td>
+                    <Td fontWeight={"bold"} fontSize={"20px"}>
+                      {song.title}
+                    </Td>
+                    <Td color={"#8b8b8b"}>{song.artistName}</Td>
                     <Td>{song.album}</Td>
-                    <Td>
+                    <Td
+                      // border={"1px solid red"}
+                      p={0}
+                    >
                       <Button
-                        borderRadius={0}
                         variant="ghost"
+                        // border={"1px solid blue"}
+                        width={"40px"}
+                        ml={"35px"}
                         onClick={() => {
                           setIndex(idx);
                           playModal.onOpen();
                         }}
                       >
-                        <FontAwesomeIcon icon={faPlay} />
-                      </Button>
-                    </Td>
-                    <Td>
-                      <Button borderRadius={0} variant="ghost">
-                        <Popover>
-                          <PopoverTrigger>
-                            <FontAwesomeIcon icon={faEllipsis} />
-                          </PopoverTrigger>
-                        </Popover>
+                        <FontAwesomeIcon icon={faCirclePlay} />
                       </Button>
                     </Td>
                     <Td>
                       <Button
                         borderRadius={0}
                         variant="ghost"
+                        onClick={() => navigate("/main/song/" + song.id)}
+                      >
+                        <FontAwesomeIcon icon={faEllipsis} />
+                      </Button>
+                    </Td>
+                    <Td p={1}>
+                      <Button
+                        p={0}
+                        borderRadius={0}
+                        variant="ghost"
+                        // border={"1px solid blue"}
+                        ml={"-5px"}
                         onClick={() => {
                           listIndex.current = idx;
                           editModal.onOpen();
                         }}
                       >
-                        <FontAwesomeIcon icon={faTrash} />
+                        <FontAwesomeIcon icon={faTrashCan} />
                       </Button>
                     </Td>
                   </Tr>
@@ -228,7 +274,7 @@ export function ChartPage() {
           <PlayComp
             isOpen={playModal.isOpen}
             onClose={playModal.onClose}
-            songList={favoriteList}
+            songList={songList}
             index={index}
             setIndex={setIndex}
           />
@@ -243,7 +289,7 @@ export function ChartPage() {
                 colorScheme="red"
                 onClick={() =>
                   handleEditFavoriteList(
-                    favoriteList.at(listIndex).id,
+                    songList.at(listIndex).id,
                     params.get("listId"),
                   )
                 }

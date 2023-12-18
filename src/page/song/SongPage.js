@@ -8,7 +8,6 @@ import {
   Center,
   Divider,
   Flex,
-  FormControl,
   FormLabel,
   Heading,
   Image,
@@ -35,17 +34,12 @@ import {
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faBold,
   faChevronDown,
   faChevronUp,
-  faComputerMouse,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
-import Counter from "./Counter";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import SongList from "./SongList";
 import KakaoShareComp from "../../component/KakaoShareComp";
-import { number } from "sockjs-client/lib/utils/random";
 import { LoginContext } from "../../component/LoginProvider";
 
 function SongPage(props) {
@@ -62,6 +56,7 @@ function SongPage(props) {
   const [inputCount, setInputCount] = useState(0);
   const [playlistName, setPlaylistName] = useState("");
   const isSubmit = useRef(true);
+  const [currentSongId, setCurrentSongId] = useState(null);
 
   // 플레이리스트 이미지 삽입
   const [imagePreview, setImagePreview] = useState(
@@ -97,9 +92,9 @@ function SongPage(props) {
 
   function handleSavePlaylist() {
     axios
-      .postForm("/api/myList/insertMyPlaylist", {
+      .post("/api/myList/insertMyPlaylist", {
         listId: value,
-        id: id,
+        songId: id,
       })
       .then(() => {
         toast({
@@ -163,6 +158,10 @@ function SongPage(props) {
           {/* 이미지 출력 */}
           <Box mr={8}>
             <Image
+              style={{
+                maxWidth: "400px",
+                height: "400px",
+              }}
               src={songData.artistFileUrl}
               alt={`${songData.artistName}-${songData.title}`}
               boxSize="400px"
@@ -284,7 +283,14 @@ function SongPage(props) {
         </Flex>
       </Center>
       <Center>
-        <Box w="1200px">
+        <Box
+          w="1200px"
+          mr={8}
+          flexShrink={0}
+          // position="absolute"
+          left="0" // 뷰포트의 왼쪽에 위치
+          top="1000px" // 뷰포트의 상단에서 100px 아래에 위치
+        >
           <CommentContainer songId={id} />
         </Box>
       </Center>
