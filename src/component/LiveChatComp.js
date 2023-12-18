@@ -52,31 +52,94 @@ function LiveChatComp() {
           return (
             <Box>
               <Flex key={idx}>
-                <Avatar size={"sm"} name={item.sender} src={item.profile}>
+                <Avatar
+                  size={"sm"}
+                  ml={2}
+                  name={item.sender}
+                  src={item.profile}
+                >
                   <AvatarBadge
-                    boxSize={"0.5rem"}
+                    // style={{ left: "10px" }}
+                    boxSize={"0.6rem"}
                     bg={item.isOnline ? "green" : "red"}
                   />
                 </Avatar>
-                <Box fontSize={"0.7rem"} ml={1} lineHeight={"20px"}>
+                <Box
+                  fontSize={"0.9rem"}
+                  ml={1}
+                  lineHeight={"30px"}
+                  fontWeight={"bold"}
+                >
                   {item.sender}
                 </Box>
               </Flex>
-              <Box ml={8}>{item.message}</Box>
+              <Box
+                ml={8}
+                mt={1}
+                mb={1}
+                w={"fit-content"}
+                style={{
+                  color: "black",
+                  backgroundColor: "#ebebed",
+                  borderRadius: "20px",
+                  whiteSpace: "normal",
+                  width: "auto",
+                  maxWidth: "200px",
+                  height: "auto",
+                }}
+              >
+                <div style={{ paddingLeft: "10px", paddingRight: "10px" }}>
+                  {item.message}
+                </div>
+              </Box>
             </Box>
           );
         } else {
           return (
             <Flex key={idx}>
-              <Box ml={8}>{item.message}</Box>
+              <Box
+                ml={8}
+                mb={1}
+                w={"fit-content"}
+                h={"25px"}
+                style={{
+                  color: "black",
+                  backgroundColor: "#ebebed",
+                  borderRadius: "20px",
+                  whiteSpace: "normal",
+                  width: "auto",
+                  maxWidth: "200px",
+                  height: "auto",
+                }}
+              >
+                <div style={{ paddingLeft: "10px", paddingRight: "10px" }}>
+                  {item.message}
+                </div>
+              </Box>
             </Flex>
           );
         }
       } else {
         return (
           <Flex justifyContent={"right"} key={idx}>
-            <Box fontSize={"0.9rem"} mr={3}>
-              {item.message}
+            <Box
+              w={"fit-content"}
+              h={"25px"}
+              mb={1}
+              style={{
+                color: "white",
+                backgroundColor: "#aa99e8",
+                borderRadius: "20px",
+                whiteSpace: "normal",
+                width: "auto",
+                maxWidth: "200px",
+                height: "auto",
+              }}
+              mr={3}
+            >
+              <div style={{ paddingLeft: "10px", paddingRight: "10px" }}>
+                {item.message}
+              </div>
             </Box>
           </Flex>
         );
@@ -116,40 +179,43 @@ function LiveChatComp() {
         {...move()}
         display={chatVisible}
         className="chatBox"
-        bg={"white"}
-        width={"200px"}
+        bg={"#e9dcfa"}
+        width={"250px"}
         height={"500px"}
         position={"fixed"}
         left={pos.x + 88 + "%"}
         top={pos.y + 20 + "%"}
       >
-        <Box
-          onMouseOver={() => setIsMove(true)}
-          onMouseLeave={() => setIsMove(false)}
-          opacity={0}
-          className="moveIcon"
-          position={"relative"}
-          left={"50%"}
-          w={"20px"}
-          h={"3%"}
-          cursor={"grab"}
-        >
-          <FontAwesomeIcon icon={faEllipsis} />
-        </Box>
-        <Box
-          position={"relative"}
-          left={"90%"}
-          w={"20px"}
-          h={"3%"}
-          lineHeight={"10px"}
-          onClick={() => setChatVisible("none")}
-        >
-          <FontAwesomeIcon icon={faMinus} />
-        </Box>
+        <Flex>
+          <Box
+            onMouseOver={() => setIsMove(true)}
+            onMouseLeave={() => setIsMove(false)}
+            opacity={0}
+            className="moveIcon"
+            position={"relative"}
+            left={"50%"}
+            w={"20px"}
+            h={"3%"}
+            cursor={"grab"}
+          >
+            <FontAwesomeIcon icon={faEllipsis} />
+          </Box>
+          <Box
+            position={"relative"}
+            left={"80%"}
+            top={"5px"}
+            w={"20px"}
+            h={"3%"}
+            lineHeight={"10px"}
+            onClick={() => setChatVisible("none")}
+          >
+            <FontAwesomeIcon icon={faMinus} />
+          </Box>
+        </Flex>
         <Box
           className="scrollBox"
           overflowY={"auto"}
-          border={"1px solid black"}
+          // border={"1px solid black"}
           height={"85%"}
           width={"100%"}
         >

@@ -156,6 +156,10 @@ function SongPage(props) {
           {/* 이미지 출력 */}
           <Box mr={8}>
             <Image
+              style={{
+                maxWidth: "400px",
+                height: "400px",
+              }}
               src={songData.artistFileUrl}
               alt={`${songData.artistName}-${songData.title}`}
               boxSize="400px"
@@ -277,7 +281,14 @@ function SongPage(props) {
         </Flex>
       </Center>
       <Center>
-        <Box w="1200px">
+        <Box
+          w="1200px"
+          mr={8}
+          flexShrink={0}
+          // position="absolute"
+          left="0" // 뷰포트의 왼쪽에 위치
+          top="1000px" // 뷰포트의 상단에서 100px 아래에 위치
+        >
           <CommentContainer songId={id} />
         </Box>
       </Center>

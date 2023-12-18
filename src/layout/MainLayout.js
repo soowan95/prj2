@@ -141,7 +141,7 @@ export function MainLayout() {
   const getButtonStyle = (category) => ({
     fontFamily: "YClover-Bold",
     color: selectedCategory === category ? "white" : "black",
-    background: selectedCategory === category ? "purple" : "white",
+    background: selectedCategory === category ? "#e9dcfa" : "white",
   });
 
   // 검색창 카테고리 바꾸기
@@ -227,7 +227,7 @@ export function MainLayout() {
             height={"200px"}
             alignItems={"center"}
           >
-            <Box textAlign={"center"} fontSize={"1.5rem"}>
+            <Box textAlign={"center"} fontWeight={"bold"} fontSize={"1.5rem"}>
               FILTER
             </Box>
             <Popover
