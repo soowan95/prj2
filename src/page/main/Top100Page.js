@@ -1,17 +1,24 @@
 import {
   Box,
+  Card,
+  CardBody,
+  CardHeader,
+  Center,
   Drawer,
   DrawerBody,
   DrawerContent,
   DrawerHeader,
   DrawerOverlay,
   Flex,
+  FormControl,
+  FormLabel,
+  Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useContext, useRef, useState } from "react";
 import { SongContext } from "../../layout/MainLayout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClone } from "@fortawesome/free-regular-svg-icons";
+import { faCirclePlay, faClone } from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import PlayComp from "../../component/PlayComp";
@@ -54,10 +61,11 @@ export function Top100Page() {
         top100.map((song) => (
           <Box
             key={song.id}
-            m={"3px auto"}
-            width={"70%"}
-            border={"1px solid black"}
-            style={{ cursor: "pointer" }}
+            m={"10px auto"}
+            width={"75%"}
+            alignItems={"center"}
+            borderBottom={"1px solid lavender"}
+            // style={{ cursor: "pointer" }}
           >
             <Flex
               justifyContent={"center"}
@@ -70,10 +78,21 @@ export function Top100Page() {
                   songDrawer.onOpen();
                 }}
                 w={"20%"}
+                h={"60px"}
+                //border={"1px solid black"}
               >
-                {song.title}
+                <FormControl w={"300px"}>
+                  <FormLabel fontSize={17} color={"#535353"} cursor={"pointer"}>
+                    <FontAwesomeIcon icon={faCirclePlay} /> {song.title}
+                  </FormLabel>
+                  <FormLabel fontSize={15} cursor={"pointer"}>
+                    {song.artistName}
+                  </FormLabel>
+                </FormControl>
               </Box>
-              <Box w={"20%"}>{song.artistName}</Box>
+
+              {/*<Box w={"20%"}>{song.artistName}</Box>*/}
+
               <Box w={"20%"}>{song.genre}</Box>
               <Box w={"20%"}>{song.mood}</Box>
               <Box
@@ -83,25 +102,42 @@ export function Top100Page() {
                   handleSimilarButton(song.genre, song.mood, song.id)
                 }
               >
-                <FontAwesomeIcon fontSize={"0.8rem"} icon={faClone} />
+                <Tooltip label={"Similar Songs"}>
+                  <FontAwesomeIcon
+                    cursor={"pointer"}
+                    fontSize={"0.8rem"}
+                    icon={faClone}
+                  />
+                </Tooltip>
               </Box>
             </Flex>
-            {similar !== null &&
-              song.id === thisId.current &&
-              similar.map((si) => (
-                <Flex
-                  key={si.id}
-                  justifyContent={"center"}
-                  alignItems={"center"}
-                  width={"90%"}
-                  m={"0 auto"}
-                >
-                  <Box w={"20%"}>{si.title}</Box>
-                  <Box w={"20%"}>{si.artistName}</Box>
-                  <Box w={"20%"}>{si.genre}</Box>
-                  <Box w={"20%"}>{si.mood}</Box>
-                </Flex>
-              ))}
+            <Center>
+              <Flex w={"80%"} justifyContent={"space-between"}>
+                {similar !== null &&
+                  song.id === thisId.current &&
+                  similar.map((si) => (
+                    <Box
+                      //border={"1px black solid"}
+                      key={si.id}
+                      //alignItems={"center"}
+                      m={"0 auto"}
+                    >
+                      <Card w={"150px"} background={"lavender"}>
+                        <CardBody>
+                          <Box fontWeight={"bold"} color={"#535353"}>
+                            {si.title.length > 10
+                              ? si.title.slice(0, 10) + ".."
+                              : si.title}
+                          </Box>
+                          <Box>{si.artistName}</Box>
+                          <Box>{si.genre}</Box>
+                          <Box>{si.mood}</Box>
+                        </CardBody>
+                      </Card>
+                    </Box>
+                  ))}
+              </Flex>
+            </Center>
           </Box>
         ))}
       <PlayComp

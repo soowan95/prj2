@@ -37,7 +37,7 @@ function LiveChatComp() {
     if (isMove)
       setPos({
         x: e.offset[0] / 19,
-        y: e.offset[1] / 20,
+        y: e.offset[1] / 9,
       });
   });
 
@@ -182,9 +182,9 @@ function LiveChatComp() {
         bg={"#e9dcfa"}
         width={"250px"}
         height={"500px"}
-        position={"absolute"}
+        position={"fixed"}
         left={pos.x + 88 + "%"}
-        top={pos.y + 10 + "%"}
+        top={pos.y + 20 + "%"}
       >
         <Flex>
           <Box

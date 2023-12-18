@@ -6,28 +6,23 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
-  Center,
   Divider,
   Flex,
   Heading,
-  HStack,
   Image,
   Modal,
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  SimpleGrid,
   Spacer,
   Stack,
-  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faHeart as fullHeart,
-  faRecordVinyl,
-} from "@fortawesome/free-solid-svg-icons";
+import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
 import { LoginContext } from "../../component/LoginProvider";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 
@@ -79,7 +74,10 @@ export function MyPlayList() {
         memberId: login.id,
         listId: listId,
       })
-      .then(({ data }) => (count.current = data))
+      .then(({ data }) => {
+        count.current = data;
+        window.scrollTo(0, 0);
+      })
       .catch(() => console.log("잘 안됨"))
       .finally(() =>
         navigate(
@@ -96,57 +94,59 @@ export function MyPlayList() {
         <Divider />
         <Heading ml={5}>{login.nickName} 님의 재생목록</Heading>
         <Divider />
+        {/*<SimpleGrid columns={3} spacing={5} minChildWidth="70px">*/}
         <Flex flexWrap="wrap" ml={"140px"} justifyContent="center">
           {/* 수정된 부분 */}
           {list !== null &&
             list.map((memberplaylist, index) => (
-              <Box>
-                <Box mr={"130px"} mb={"20px"}>
-                  <Card w="xs">
-                    <CardHeader
-                      _hover={{ cursor: "pointer" }}
-                      onClick={() => handleChart(memberplaylist.listId)}
+              <Box mr={"130px"} mb={"20px"}>
+                <Card w="xs" bgColor={"none"}>
+                  <CardHeader
+                    _hover={{ cursor: "pointer" }}
+                    onClick={() => handleChart(memberplaylist.listId)}
+                  >
+                    <Image
+                      src={memberplaylist.photo}
+                      boxSize="220px"
+                      objectFit="cover"
+                      style={{ margin: "0 auto", display: "block" }}
+                    />
+                  </CardHeader>
+                  <CardBody>
+                    <Heading
+                      size="md"
+                      ml={"40px"}
+                      fontSize={"25"}
+                      fontWeight={"bold"}
+                      _hover={{
+                        cursor: "pointer",
+                        textDecoration: "underline",
+                      }}
+                      onClick={() => {
+                        handleChart(memberplaylist.listId);
+                      }}
                     >
-                      <Image
-                        src={memberplaylist.photo}
-                        boxSize="220px"
-                        objectFit="cover"
-                        style={{ margin: "0 auto", display: "block" }}
-                      />
-                    </CardHeader>
-                    <CardBody>
-                      <Heading
-                        size="md"
-                        _hover={{
-                          cursor: "pointer",
-                          textDecoration: "underline",
-                        }}
-                        onClick={() => {
-                          handleChart(memberplaylist.listId);
-                        }}
-                      >
-                        {memberplaylist.listName} &nbsp; &nbsp; &nbsp; &nbsp;
-                        &nbsp;
-                      </Heading>
-                    </CardBody>
-                    <Divider color="gray" />
-                    <CardFooter>
-                      <Box>{memberplaylist.totalSongCount}곡</Box>
-                      <Spacer />
-                      <Flex>
-                        <LikeContainer
-                          onClick={handleLike}
-                          listId={memberplaylist.listId}
-                          isLike={memberplaylist.isLike}
-                        ></LikeContainer>
-                        <Box>{memberplaylist.countLike}</Box>
-                      </Flex>
-                    </CardFooter>
-                  </Card>
-                </Box>
+                      {memberplaylist.listName} &nbsp; &nbsp; &nbsp; &nbsp;
+                      &nbsp;
+                    </Heading>
+                  </CardBody>
+                  <CardFooter>
+                    <Box ml={"43px"}>{memberplaylist.totalSongCount}곡</Box>
+                    <Spacer />
+                    <Flex mr={"30px"}>
+                      <LikeContainer
+                        onClick={handleLike}
+                        listId={memberplaylist.listId}
+                        isLike={memberplaylist.isLike}
+                      ></LikeContainer>
+                      <Box>{memberplaylist.countLike}</Box>
+                    </Flex>
+                  </CardFooter>
+                </Card>
               </Box>
             ))}
         </Flex>
+        {/*</SimpleGrid>*/}
       </Stack>
     </Box>
   );

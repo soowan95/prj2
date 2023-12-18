@@ -19,13 +19,20 @@ import {
   ModalBody,
   ModalFooter,
   useToast,
+  Center,
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { faPenToSquare, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAngleLeft,
+  faAngleRight,
+  faPenToSquare,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LoginProvider, { LoginContext } from "./LoginProvider";
 import { NotAllowedIcon } from "@chakra-ui/icons";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 function CommentForm({ songId, isSubmitting, onSubmit }) {
   const [comment, setComment] = useState("");
@@ -184,13 +191,33 @@ function CommentItem({
   );
 }
 
+function PageButton({ variant, pageNumber, children, setPage }) {
+  function handleClick() {
+    setPage(pageNumber);
+  }
+
+  return (
+    <Button variant={variant} onClick={handleClick}>
+      {children}
+    </Button>
+  );
+}
+
 function CommentList({
   commentList,
   onDeleteModalOpen,
   isSubmitting,
   setIsSubmitting,
+  pageInfo,
+  setPage,
 }) {
   const { hasAccess } = useContext(LoginContext);
+
+  const pageNumbers = [];
+
+  for (let i = pageInfo.startPageNo; i <= pageInfo.endPageNo; i++) {
+    pageNumbers.push(i);
+  }
 
   return (
     // Box를 추가하여 Card를 감싸고, position 속성을 사용하여 왼쪽에 고정
@@ -198,7 +225,6 @@ function CommentList({
       // position="fixed" top="0" left="0" zIndex="1"
       width="100%"
     >
-      {/*// 댓글 리스트 배경 투명하게 바꿈*/}
       <Card bg="transparent">
         <CardHeader mt={30}>
           <Heading ml={30} size={"md"}>
@@ -222,6 +248,42 @@ function CommentList({
           </Box>
         </CardBody>
       </Card>
+      <Center mt={5} mb={40}>
+        <Box>
+          {pageInfo.prevPageNumber && (
+            <PageButton
+              setPage={setPage}
+              variant="ghost"
+              pageNumber={pageInfo.prevPageNumber}
+            >
+              <FontAwesomeIcon icon={faAngleLeft} />
+            </PageButton>
+          )}
+
+          {pageNumbers.map((pageNumber) => (
+            <PageButton
+              key={pageNumber}
+              variant={
+                pageNumber === pageInfo.currentPageNumber ? "solid" : "ghost"
+              }
+              pageNumber={pageNumber}
+              setPage={setPage}
+            >
+              {pageNumber}
+            </PageButton>
+          ))}
+
+          {pageInfo.nextPageNumber && (
+            <PageButton
+              setPage={setPage}
+              variant="ghost"
+              pageNumber={pageInfo.nextPageNumber}
+            >
+              <FontAwesomeIcon icon={faAngleRight} />
+            </PageButton>
+          )}
+        </Box>
+      </Center>
     </Box>
   );
 }
@@ -229,6 +291,8 @@ function CommentList({
 export function CommentContainer({ songId }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [commentList, setCommentList] = useState([]);
+  const [pageInfo, setPageInfo] = useState([]);
+  const [page, setPage] = useState(1);
 
   const { isOpen, onClose, onOpen } = useDisclosure();
 
@@ -246,10 +310,13 @@ export function CommentContainer({ songId }) {
 
       // 댓글 목록 불러오기
       axios
-        .get("/api/comment/list?" + params)
-        .then((response) => setCommentList(response.data));
+        .get("/api/comment/list?" + params + "&p=" + page)
+        .then((response) => {
+          setCommentList(response.data.commentList);
+          setPageInfo(response.data.pageInfo);
+        });
     }
-  }, [isSubmitting]);
+  }, [isSubmitting, page]);
 
   // 댓글 작성 핸들러
   function handleSubmit(comment) {
@@ -331,6 +398,8 @@ export function CommentContainer({ songId }) {
         setIsSubmitting={setIsSubmitting}
         isSubmitting={isSubmitting}
         onDeleteModalOpen={handleDeleteModalOpen}
+        pageInfo={pageInfo}
+        setPage={setPage}
       />
 
       {/* 삭제 모달 */}
