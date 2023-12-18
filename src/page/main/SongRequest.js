@@ -211,6 +211,17 @@ export function SongRequest() {
     <Box>
       <Heading size={"md"} marginLeft={"30px"} marginTop={"50px"}>
         요청 목록
+        {requestList !== null &&
+          requestList.filter((a) => a.update === null).length === 0 && (
+            <Button
+              ml={5}
+              size={"sm"}
+              colorScheme="purple"
+              onClick={submitModal.onOpen}
+            >
+              입력
+            </Button>
+          )}
       </Heading>
       <br />
       <br />
