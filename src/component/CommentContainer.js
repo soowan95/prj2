@@ -45,21 +45,30 @@ function CommentForm({ songId, isSubmitting, onSubmit }) {
   }
 
   return (
-    <Box>
-      <Heading ml={30} size={"md"}>
-        댓글
-      </Heading>
-      <Flex mt={70} align="center" justify="center">
-        <Textarea
-          w="70%"
-          h={100}
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-        />
-        <Button isDisabled={isSubmitting} onClick={handleSubmit} h={100}>
-          작성
-        </Button>
-      </Flex>
+    <Box
+      w={{ base: "100%", md: "1200px" }}
+      style={{ position: "sticky", top: 0, zIndex: 1 }}
+    >
+      <Card bg="transparent" style={{ position: "sticky" }}>
+        <CardHeader mt={30}>
+          <Heading ml={30} size={"md"}>
+            댓글
+          </Heading>
+        </CardHeader>
+        <CardBody>
+          <Flex align="center" justify="center">
+            <Textarea
+              w="70%"
+              h={100}
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
+            <Button isDisabled={isSubmitting} onClick={handleSubmit} h={100}>
+              작성
+            </Button>
+          </Flex>
+        </CardBody>
+      </Card>
     </Box>
   );
 }
@@ -221,11 +230,8 @@ function CommentList({
 
   return (
     // Box를 추가하여 Card를 감싸고, position 속성을 사용하여 왼쪽에 고정
-    <Box
-      // position="fixed" top="0" left="0" zIndex="1"
-      width="100%"
-    >
-      <Card bg="transparent">
+    <Box width="100%">
+      <Card bg="transparent" borderWidth="0">
         <CardHeader mt={30}>
           <Heading ml={30} size={"md"}>
             댓글 리스트
@@ -248,7 +254,7 @@ function CommentList({
           </Box>
         </CardBody>
       </Card>
-      <Center mt={5} mb={40}>
+      <Center mt={5} mb={10}>
         <Box>
           {pageInfo.prevPageNumber && (
             <PageButton

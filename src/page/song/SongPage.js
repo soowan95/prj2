@@ -182,9 +182,7 @@ function SongPage(props) {
           {/*<Box>{songData.id}</Box>*/}
           <Box>
             <Flex gap={5} alignItems={"center"}>
-              <Heading fontSize="30px" color="purple">
-                {songData.title}
-              </Heading>
+              <Heading fontSize="30px">{songData.title}</Heading>
               <KakaoShareComp
                 title={songData.title}
                 description={songData.genre + "&" + songData.mood}
@@ -294,18 +292,35 @@ function SongPage(props) {
           <CommentContainer songId={id} />
         </Box>
       </Center>
-      <Box>
-        {/*<SongList album={album.current} />*/}
+      <Box mb={"70"}>
+        {/* <SongList album={album.current} /> */}
         <Center>
-          <Box w={"1200px"}>
+          <Box
+            w={{ base: "100%", md: "1200px" }}
+            style={{ position: "sticky", top: 0, zIndex: 1 }}
+          >
             <br />
-            <Heading size={"md"}>곡 정보</Heading>
+            <Heading flexWrap={"wrap"} size={"md"}>
+              곡 정보
+            </Heading>
             <br />
-            <Box>
-              <Table>
+            <Box
+              style={{
+                position: "relative", // 부모 컨테이너가 상대 위치여야 자식 엘리먼트를 절대 위치로 설정할 수 있습니다.
+                overflowX: "auto", // 가로 스크롤을 추가하여 내용이 줄어들 때 스크롤 가능하도록 함
+              }}
+            >
+              <Table
+                style={{
+                  minWidth: "1200px", // Table의 최소 너비를 100%로 설정하여 줄어들지 않도록 함
+                  tableLayout: "fixed",
+                }}
+              >
                 <Thead>
                   <Tr>
-                    <Th>번호</Th>
+                    <Th style={{ position: "sticky", left: 0, zIndex: 3 }}>
+                      번호
+                    </Th>
                     <Th>제목</Th>
                     <Th>가수</Th>
                     <Th>앨범명</Th>
@@ -317,8 +332,10 @@ function SongPage(props) {
                 <Tbody>
                   {albumList !== null &&
                     albumList.map((album) => (
-                      <Tr>
-                        <Td>{album.id}</Td>
+                      <Tr key={album.id}>
+                        <Td style={{ position: "sticky", left: 0, zIndex: 3 }}>
+                          {album.id}
+                        </Td>
                         <Td>{album.title}</Td>
                         <Td>{album.name}</Td>
                         <Td>{album.album}</Td>

@@ -189,7 +189,7 @@ export function MainLayout() {
         m={0}
         overflowX={"hidden"}
         // 배경화면~!!!!!!
-        bgImage={`url(${process.env.PUBLIC_URL}/img/background.jpg)`}
+        bgImage={`url(${process.env.PUBLIC_URL}/img/darkmode.jpg)`}
       >
         <Button
           onClick={toggleColorMode}
@@ -208,6 +208,7 @@ export function MainLayout() {
             left: "50%",
             transform: "translate(-50%)",
             background: "none",
+            color: "white",
           }}
           fontSize={"3rem"}
           onClick={() => {
