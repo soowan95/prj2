@@ -115,6 +115,7 @@ export function ChartPage() {
               <Image
                 src={
                   songList !== null &&
+                  songList.length !== 0 &&
                   songList
                     .filter((a) => a.artistFileUrl.indexOf("default") === -1)
                     .filter((a) => a.artistFileUrl.lastIndexOf("http") === 0)
@@ -150,10 +151,7 @@ export function ChartPage() {
                 </FormLabel>
               </Flex>
               <Flex>
-                <FormLabel>작성일 {list !== null && list.release}</FormLabel>
-              </Flex>
-              <Flex>
-                <FormLabel>업데이트 {list !== null && list.update}</FormLabel>
+                <FormLabel>작성일 {list !== null && list.inserted}</FormLabel>
               </Flex>
               <Flex>
                 <FormLabel>플레이리스트 삭제</FormLabel>
@@ -232,13 +230,15 @@ export function ChartPage() {
             </Tbody>
           </Table>
         </Box>
-        <PlayComp
-          isOpen={playModal.isOpen}
-          onClose={playModal.onClose}
-          songList={favoriteList}
-          index={index}
-          setIndex={setIndex}
-        />
+        {songList !== null && songList.length !== 0 && (
+          <PlayComp
+            isOpen={playModal.isOpen}
+            onClose={playModal.onClose}
+            songList={favoriteList}
+            index={index}
+            setIndex={setIndex}
+          />
+        )}
         <Modal isOpen={editModal.isOpen} onClose={editModal.onClose}>
           <ModalContent>
             <ModalHeader>곡 삭제</ModalHeader>
