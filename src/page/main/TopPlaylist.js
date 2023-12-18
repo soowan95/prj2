@@ -266,7 +266,7 @@ export function TopPlaylist() {
           <PlayComp
             isOpen={playModal.isOpen}
             onClose={playModal.onClose}
-            songList={favoriteList}
+            songList={songList}
             index={index}
             setIndex={setIndex}
           />
