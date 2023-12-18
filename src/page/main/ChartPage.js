@@ -202,12 +202,12 @@ export function ChartPage() {
                       </Button>
                     </Td>
                     <Td>
-                      <Button borderRadius={0} variant="ghost">
-                        <Popover>
-                          <PopoverTrigger>
-                            <FontAwesomeIcon icon={faEllipsis} />
-                          </PopoverTrigger>
-                        </Popover>
+                      <Button
+                        borderRadius={0}
+                        variant="ghost"
+                        onClick={() => navigate("/main/song/" + song.id)}
+                      >
+                        <FontAwesomeIcon icon={faEllipsis} />
                       </Button>
                     </Td>
                     <Td>
