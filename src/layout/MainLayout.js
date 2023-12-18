@@ -187,6 +187,7 @@ export function MainLayout() {
         position={"relative"}
         width={"100%"}
         m={0}
+        minH={"100vh"}
         overflowX={"hidden"}
         // 배경화면~!!!!!!
         bgImage={`url(${process.env.PUBLIC_URL}/img/darkmode.jpg)`}
@@ -261,8 +262,13 @@ export function MainLayout() {
                         h={"30px"}
                         w={"80px"}
                         borderRadius={"5px"}
-                        bg={"white"}
                         onClick={(e) => handlePlusButton(e)}
+                        bg={
+                          localStorage.getItem("chakra-ui-color-mode") ===
+                          "light"
+                            ? "white"
+                            : "black"
+                        }
                         value={genre.genre}
                         name="false"
                       >
@@ -293,7 +299,12 @@ export function MainLayout() {
                         w={"80px"}
                         borderRadius={"5px"}
                         onClick={(e) => handlePlusButton(e)}
-                        bg={"white"}
+                        bg={
+                          localStorage.getItem("chakra-ui-color-mode") ===
+                          "light"
+                            ? "white"
+                            : "black"
+                        }
                         value={mood.mainMood}
                       >
                         {mood.mainMood}

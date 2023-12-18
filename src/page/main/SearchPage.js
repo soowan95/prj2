@@ -48,6 +48,7 @@ export function SearchPage() {
             justifyContent={"center"}
             alignItems={"center"}
             borderBottom={"1px solid lavender"}
+            _hover={{ bg: "grey" }}
             // Box를 클릭하면 해당 노래의 상세 페이지로 이동
             onClick={() => goToSongPage(song.id)}
           >
