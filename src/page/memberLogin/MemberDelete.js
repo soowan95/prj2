@@ -24,7 +24,7 @@ export function MemberDelete() {
   const toast = useToast();
   const [params] = useSearchParams();
   const navigate = useNavigate();
-  const { fetchLogin, login } = useContext(LoginContext);
+  const { fetchLogin, login, disConnect } = useContext(LoginContext);
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
 
@@ -33,34 +33,44 @@ export function MemberDelete() {
   }, []);
 
   function handleMemberDelete() {
-    // axios
-    // delete /api/member?id=userid
-    // ok -> home 이동, toast 띄우기
-    // error -> toast 띄우기
-    // finally -> modal 닫기
-
     axios
-      .delete("/api/member?" + params.toString())
+      .post("/api/member/check", { password })
       .then(() => {
-        toast({
-          description: "탈퇴되었습니다.",
-          status: "info",
-        });
-        window.location.reload(0);
-        navigate("/");
+        axios
+          .delete("/api/member?" + params.toString())
+          .then(() => {
+            toast({
+              description: "탈퇴되었습니다.",
+              status: "info",
+            });
+            axios.post("/api/member/logout").then(() => {
+              navigate("/");
+              window.scrollTo(0, 0);
+              window.location.reload(0);
+            });
+          })
+          .catch((error) => {
+            if (
+              error.response.status === 401 ||
+              error.response.status === 403
+            ) {
+              toast({
+                description: "권한이 없습니다",
+                status: "error",
+              });
+            } else {
+              toast({
+                description: "탈퇴중 문제가 발생했습니다.",
+                status: "error",
+              });
+            }
+          });
       })
-      .catch((error) => {
-        if (error.response.status === 401 || error.response.status === 403) {
-          toast({
-            description: "권한이 없습니다",
-            status: "error",
-          });
-        } else {
-          toast({
-            description: "탈퇴중 문제가 발생했습니다.",
-            status: "error",
-          });
-        }
+      .catch(() => {
+        toast({
+          description: "비밀번호가 일치하지 않습니다.",
+          status: "error",
+        });
       });
   }
 

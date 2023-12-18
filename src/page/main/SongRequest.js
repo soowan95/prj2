@@ -198,6 +198,7 @@ export function SongRequest() {
               <Th w={"200px"}>요청자 ID</Th>
               <Th>가수</Th>
               <Th>노래 제목</Th>
+              <Th>버튼</Th>
             </Tr>
           </Thead>
 

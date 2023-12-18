@@ -164,6 +164,7 @@ function SongPage(props) {
               src={songData.artistFileUrl}
               alt={`${songData.artistName}-${songData.title}`}
               boxSize="400px"
+              minW={"400px"}
             />
 
             {/* 수정&삭제 버튼은 admin만 보일 수 있게 */}
