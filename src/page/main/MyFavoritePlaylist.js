@@ -91,15 +91,13 @@ export function MyFavoritePlaylist() {
                   <Card w="xs">
                     <CardHeader height="242px" key={idx}>
                       <Image
-                        src={song.pictureUrl}
+                        src={song.photo}
                         alt={song.picture}
                         _hover={{ cursor: "pointer" }}
                         boxSize="220px"
                         objectFit="cover"
                         style={{ margin: "0 auto", display: "block" }}
-                        onClick={() => {
-                          handleHitsCount(song.likelistId);
-                        }}
+                        onClick={() => handleFavoriteList(song.listId)}
                       />
                     </CardHeader>
                     {/*<CardHeader _hover={{ cursor: "pointer" }}>*/}

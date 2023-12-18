@@ -59,7 +59,9 @@ function SongPage(props) {
   const [currentSongId, setCurrentSongId] = useState(null);
 
   // 플레이리스트 이미지 삽입
-  const [imagePreview, setImagePreview] = useState(login.profilePhoto);
+  const [imagePreview, setImagePreview] = useState(
+    "https://practice12323asdf.s3.ap-northeast-2.amazonaws.com/prj2/playlist/default/defaultplaylist.jpg",
+  );
   const [coverImage, setCoverImage] = useState("");
   const freader = new FileReader();
 

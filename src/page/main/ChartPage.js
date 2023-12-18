@@ -120,14 +120,7 @@ export function ChartPage() {
           <Flex flexDirection="row">
             <Box ml={"50px"} mr={8} border="1px solid black">
               <Image
-                src={
-                  songList !== null &&
-                  songList.length !== 0 &&
-                  songList
-                    .filter((a) => a.artistFileUrl.indexOf("default") === -1)
-                    .filter((a) => a.artistFileUrl.lastIndexOf("http") === 0)
-                    .at(0).artistFileUrl
-                }
+                src={list !== null && list.photo}
                 boxSize="350px"
                 objectFit="cover"
                 style={{ margin: "0 auto", display: "block" }}

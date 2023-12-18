@@ -64,7 +64,7 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
           email,
           securityQuestion: selectedSecurityQuestion, // 여기서 selectedSecurityQuestion을 사용
           securityAnswer,
-          profilePhoto,
+          file: profilePhoto,
         })
         .then(() => {
           toast({

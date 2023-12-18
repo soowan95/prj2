@@ -18,11 +18,6 @@ import {
   ModalHeader,
   ModalOverlay,
   Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverHeader,
   PopoverTrigger,
   Radio,
   RadioGroup,
@@ -163,7 +158,7 @@ export function TopPlaylist() {
           <Flex flexDirection="row">
             <Box mr={8} border="1px solid black">
               <Image
-                src="https://image.genie.co.kr/Y/IMAGE/Playlist/Channel/GENIE/PLAYLIST_20231128121036.png/dims/resize/Q_80,0"
+                src={list !== null && list.photo}
                 boxSize="400px"
                 objectFit="cover" // 이미지가 상자를 완전히 덮도록 크기 조절하는 것
               />
@@ -267,13 +262,15 @@ export function TopPlaylist() {
             </Tbody>
           </Table>
         </Box>
-        <PlayComp
-          isOpen={playModal.isOpen}
-          onClose={playModal.onClose}
-          songList={songList}
-          index={index}
-          setIndex={setIndex}
-        />
+        {songList !== null && (
+          <PlayComp
+            isOpen={playModal.isOpen}
+            onClose={playModal.onClose}
+            songList={favoriteList}
+            index={index}
+            setIndex={setIndex}
+          />
+        )}
       </Box>
       <Center>
         {/* 플레이리스트 추가 모달 */}
