@@ -4,6 +4,7 @@ import {
   Button,
   Card,
   Center,
+  Divider,
   Flex,
   FormLabel,
   Heading,
@@ -46,9 +47,7 @@ import { AddIcon } from "@chakra-ui/icons";
 
 function SongInMyFavoritePlaylist() {
   const { login } = useContext(LoginContext);
-  const toast = useToast();
   const [params] = useSearchParams();
-  const [favoriteList, setFavoriteList] = useState(null);
   const [songList, setSongList] = useState(null);
   const [index, setIndex] = useState(null);
   const playModal = useDisclosure();
@@ -64,10 +63,6 @@ function SongInMyFavoritePlaylist() {
     axios
       .get("/api/song/chartlist?id=" + params.get("listId"))
       .then(({ data }) => setSongList(data));
-
-    axios
-      .get("/api/myList/favoriteListName?" + params)
-      .then((response) => setFavoriteList(response.data));
   }, []);
 
   return (
@@ -90,7 +85,7 @@ function SongInMyFavoritePlaylist() {
                 <FormLabel>
                   제작자
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  {list != null && list.id}
+                  {list != null && list.nickName} 님
                 </FormLabel>
               </Flex>
               <Flex>
@@ -117,15 +112,15 @@ function SongInMyFavoritePlaylist() {
 
       {/*마이플레이리스트 차트*/}
       <Box>
-        <h1> 게시물 목록 </h1>
+        <Divider />
         <Box>
           <Table>
             <Thead>
               <Tr>
                 <Th>번호</Th>
-                <Th></Th>
-                <Th>곡정보</Th>
-                <Th></Th>
+                <Th>제목</Th>
+                <Th>아티스트</Th>
+                <Th>앨범</Th>
                 <Th>재생</Th>
                 <Th>정보</Th>
                 <Th>추가</Th>
@@ -147,7 +142,7 @@ function SongInMyFavoritePlaylist() {
                         borderRadius={0}
                         variant="ghost"
                         onClick={() => {
-                          setIndex(favoriteList.indexForPlay);
+                          setIndex(song.indexForPlay);
                           playModal.onOpen();
                         }}
                       >
@@ -183,7 +178,7 @@ function SongInMyFavoritePlaylist() {
         <PlayComp
           isOpen={playModal.isOpen}
           onClose={playModal.onClose}
-          songList={favoriteList}
+          songList={songList}
           index={index}
           setIndex={setIndex}
         />

@@ -35,11 +35,11 @@ import PlayComp from "../../component/PlayComp";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import { AddIcon } from "@chakra-ui/icons";
+// 추천 플레이리스트에서 플레이리스트 클릭시
 
 export function TopPlaylist() {
   const [params] = useSearchParams();
   const [list, setList] = useState(null);
-  const [favoriteList, setFavoriteList] = useState(null);
   const [songList, setSongList] = useState(null);
   const [index, setIndex] = useState();
   const playModal = useDisclosure();
@@ -55,9 +55,6 @@ export function TopPlaylist() {
     axios
       .get("/api/song/chartlist?id=" + params.get("listId"))
       .then(({ data }) => setSongList(data));
-    axios
-      .get("/api/myList/favoriteListName?" + params)
-      .then((response) => setFavoriteList(response.data));
   }, []);
 
   return (
@@ -173,7 +170,7 @@ export function TopPlaylist() {
         <PlayComp
           isOpen={playModal.isOpen}
           onClose={playModal.onClose}
-          songList={favoriteList}
+          songList={songList}
           index={index}
           setIndex={setIndex}
         />
