@@ -3,6 +3,7 @@ import {
   Button,
   Drawer,
   DrawerBody,
+  DrawerCloseButton,
   DrawerContent,
   DrawerHeader,
   DrawerOverlay,
@@ -121,6 +122,7 @@ function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
     >
       <DrawerOverlay>
         <DrawerContent>
+          <DrawerCloseButton />
           <DrawerHeader onClick={() => goToSongPage(songList.at(index).id)}>
             {songList !== null && songList.at(index).title}
           </DrawerHeader>

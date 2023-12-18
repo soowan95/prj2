@@ -65,6 +65,7 @@ export function Top100Page() {
             width={"75%"}
             alignItems={"center"}
             borderBottom={"1px solid lavender"}
+            _hover={{ bg: "#818588" }}
             // style={{ cursor: "pointer" }}
           >
             <Flex
