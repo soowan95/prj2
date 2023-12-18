@@ -40,6 +40,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import PlayComp from "../../component/PlayComp";
+import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
 
 export function RecommendPlaylist() {
   const { fetchLogin, login } = useContext(LoginContext);
@@ -127,8 +128,10 @@ export function RecommendPlaylist() {
                       {srl.listName}
                     </CardBody>
                     <CardFooter pl={1}>
-                      {srl?.songs} SONGS
-                      {srl?.count} LIKES
+                      {srl?.songs} 곡
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      {srl?.count}
+                      <FontAwesomeIcon icon={fullHeart} size="xl2" />
                     </CardFooter>
                   </Box>
                 </Box>
