@@ -187,6 +187,7 @@ export function MainLayout() {
         position={"relative"}
         width={"100%"}
         m={0}
+        minH={"100vh"}
         overflowX={"hidden"}
         // 배경화면~!!!!!!
         bgImage={`url(${process.env.PUBLIC_URL}/img/background.jpg)`}

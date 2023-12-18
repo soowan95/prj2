@@ -49,7 +49,7 @@ function SongPage(props) {
   const navigate = useNavigate();
   const addModal = useDisclosure();
   const createModal = useDisclosure();
-  const { login } = useContext(LoginContext);
+  const { login, isAdmin } = useContext(LoginContext);
   const [addPlaylist, setAddPlaylist] = useState([]);
   const [value, setValue] = useState(1);
   const toast = useToast();
@@ -169,14 +169,16 @@ function SongPage(props) {
             />
 
             {/* 수정&삭제 버튼은 admin만 보일 수 있게 */}
-            <Button
-              onClick={() => navigate("/main/songEdit/" + id)}
-              background={"plum"}
-              size={"sm"}
-              mt={"10px"}
-            >
-              수정
-            </Button>
+            {isAdmin() && (
+              <Button
+                onClick={() => navigate("/main/songEdit/" + id)}
+                background={"plum"}
+                size={"sm"}
+                mt={"10px"}
+              >
+                수정
+              </Button>
+            )}
           </Box>
 
           {/*<Box>{songData.id}</Box>*/}

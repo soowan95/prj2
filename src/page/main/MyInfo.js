@@ -18,7 +18,7 @@ import { LoginContext } from "../../component/LoginProvider";
 import axios from "axios";
 
 export function MyInfo() {
-  const { login, fetchLogin, isAuthenticated, disConnect } =
+  const { login, fetchLogin, isAuthenticated, disConnect, isAdmin } =
     useContext(LoginContext);
   const toast = useToast();
   const navigate = useNavigate();
@@ -70,6 +70,12 @@ export function MyInfo() {
           <Button variant="ghost" onClick={() => navigate("/main/memberinfo")}>
             내 정보
           </Button>
+          {isAdmin() && <br />}
+          {isAdmin() && (
+            <Button onClick={() => navigate("/main/requestlist")}>
+              요청페이지
+            </Button>
+          )}
         </PopoverBody>
         <PopoverFooter>
           {isAuthenticated() && (

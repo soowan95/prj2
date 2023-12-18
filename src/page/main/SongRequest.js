@@ -35,7 +35,8 @@ import { LoginContext } from "../../component/LoginProvider";
 
 export function SongRequest() {
   const [requestList, setRequestList] = useState(null);
-  const { isOpen, onClose, onOpen } = useDisclosure();
+  const submitModal = useDisclosure();
+  const deleteModal = useDisclosure();
 
   const [genreList, setGenreList] = useState(null);
   const [moodList, setMoodList] = useState(null);
@@ -50,6 +51,7 @@ export function SongRequest() {
   const release = useRef("");
   const lyric = useRef("");
   const songUrl = useRef("");
+  const member = useRef("");
 
   const toast = useToast();
   const navigate = useNavigate();
@@ -71,6 +73,29 @@ export function SongRequest() {
     axios.get("/api/song/genre").then(({ data }) => setGenreList(data));
     axios.get("/api/song/mood").then(({ data }) => setMoodList(data));
   }, [isUpdate]);
+
+  function handleDelete() {
+    axios
+      .put("/api/song/updateRequest", {
+        title: songTitle.current,
+        artistName: artistName.current,
+        member: member.current,
+      })
+      .then(() => {
+        toast({
+          description: "삭제 했습니다☺️",
+          status: "success",
+        });
+        setIsUpdate(true);
+        deleteModal.onClose();
+      })
+      .catch((error) => {
+        toast({
+          description: "저장 중 문제가 발생하였습니다😥",
+          status: "warning",
+        });
+      });
+  }
 
   function handleInsert() {
     // ok -> 성공 토스트 띄우면서 모달 닫기
@@ -97,7 +122,7 @@ export function SongRequest() {
             status: "success",
           });
           setIsUpdate(true);
-          onClose();
+          submitModal.onClose();
           updateSelectGenre((draft) => {
             draft.splice(0, draft.length);
           });
@@ -132,7 +157,7 @@ export function SongRequest() {
             status: "success",
           });
           setIsUpdate(true);
-          onClose();
+          submitModal.onClose();
           updateSelectGenre((draft) => {
             draft.splice(0, draft.length);
           });
@@ -218,12 +243,25 @@ export function SongRequest() {
                           songTitle.current = request.title;
                           title.current = request.title;
                           artist.current = request.artist;
-                          onOpen();
+                          submitModal.onOpen();
                         }}
                         colorScheme="purple"
                         size={"sm"}
                       >
                         입력
+                      </Button>
+                      <Button
+                        colorScheme="red"
+                        size={"sm"}
+                        ml={4}
+                        onClick={() => {
+                          artistName.current = request.artist;
+                          songTitle.current = request.title;
+                          member.current = request.member;
+                          deleteModal.onOpen();
+                        }}
+                      >
+                        삭제
                       </Button>
                     </Td>
                   </Tr>
@@ -232,8 +270,30 @@ export function SongRequest() {
         </Table>
       </Box>
 
+      {/* 삭제 모달 ! */}
+      <Modal isOpen={deleteModal.isOpen} onClose={deleteModal.onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader fontSize={"small"}>삭제</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody mt={5}>요청을 삭제하시겠습니까?</ModalBody>
+          <ModalFooter>
+            <Button onClick={handleDelete} colorScheme="red" mr={3}>
+              삭제
+            </Button>
+            <Button onClick={deleteModal.onClose} background={"lightblue"}>
+              닫기
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
       {/* 입력 창 모달 ! */}
-      <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside">
+      <Modal
+        isOpen={submitModal.isOpen}
+        onClose={submitModal.onClose}
+        scrollBehavior="inside"
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader fontSize={"small"}>입력 확인 ✅</ModalHeader>
@@ -346,7 +406,7 @@ export function SongRequest() {
             <Button onClick={handleInsert} colorScheme="purple" mr={3}>
               저장
             </Button>
-            <Button onClick={onClose} background={"lightblue"}>
+            <Button onClick={submitModal.onClose} background={"lightblue"}>
               닫기
             </Button>
           </ModalFooter>
