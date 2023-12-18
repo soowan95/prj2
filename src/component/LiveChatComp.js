@@ -183,7 +183,7 @@ function LiveChatComp() {
         width={"250px"}
         height={"500px"}
         position={"fixed"}
-        left={pos.x + 88 + "%"}
+        left={pos.x + 86 + "%"}
         top={pos.y + 20 + "%"}
       >
         <Flex>

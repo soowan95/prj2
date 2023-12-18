@@ -100,8 +100,8 @@ export function RecommendPlaylist() {
                 <Box>
                   <CardHeader height="242px" key={idx}>
                     <Image
-                      src={srl.pictureUrl}
-                      alt={srl.picture}
+                      src={srl.picture}
+                      alt={srl.cover}
                       _hover={{ cursor: "pointer" }}
                       boxSize="220px"
                       objectFit="cover"
