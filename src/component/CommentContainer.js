@@ -20,6 +20,7 @@ import {
   ModalFooter,
   useToast,
   Center,
+  Input,
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
@@ -50,11 +51,14 @@ function CommentForm({ songId, isSubmitting, onSubmit }) {
         댓글
       </Heading>
       <Flex mt={70} align="center" justify="center">
-        <Textarea
+        <Input
           w="70%"
           h={100}
           value={comment}
           onChange={(e) => setComment(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleSubmit();
+          }}
         />
         <Button isDisabled={isSubmitting} onClick={handleSubmit} h={100}>
           작성
