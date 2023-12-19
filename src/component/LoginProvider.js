@@ -27,14 +27,6 @@ function LogInProvider({ children }) {
     return localStorage.getItem("admin") === "true";
   }
 
-  // function isManager() {
-  //   return login.auth.some((elem) => elem.name === "manager");
-  // }
-  //
-  // function hasAuth(auth) {
-  //   return login.auth.some((elem) => elem.name === auth);
-  // }
-
   function hasAccess(userId) {
     return login.id === userId;
   }
@@ -66,7 +58,7 @@ function LogInProvider({ children }) {
 
   const connect = (nickName) => {
     const clientdata = new StompJs.Client({
-      brokerURL: "ws://localhost:8080/ws/chat",
+      brokerURL: "ws://3.35.16.24:8080/ws/chat",
       connectHeaders: {
         login: "user",
         passcode: "password",
@@ -80,7 +72,7 @@ function LogInProvider({ children }) {
     });
 
     clientdata.webSocketFactory = function () {
-      return new SockJS("http://localhost:8080/ws/chat");
+      return new SockJS("http://3.35.16.24:8080/ws/chat");
     };
 
     clientdata.onConnect = function () {

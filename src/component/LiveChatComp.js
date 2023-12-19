@@ -87,14 +87,11 @@ function LiveChatComp(toggle) {
                       : "#fbe6f2",
                   borderRadius: "20px",
                   whiteSpace: "normal",
-                  width: "auto",
                   maxWidth: "200px",
                   height: "auto",
                 }}
               >
-                <div style={{ paddingLeft: "10px", paddingRight: "10px" }}>
-                  {item.message}
-                </div>
+                {item.message}
               </Box>
             </Box>
           );
