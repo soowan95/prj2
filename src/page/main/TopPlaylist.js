@@ -34,17 +34,20 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEllipsis,
-  faPlay,
-  faPlus,
   faQrcode,
   faTrashCan,
+  faHeart as fullHeart,
+  faPlay,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import PlayComp from "../../component/PlayComp";
 import axios from "axios";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { AddIcon } from "@chakra-ui/icons";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { LoginContext } from "../../component/LoginProvider";
 import { faCirclePlay } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as likeHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import KakaoShareComp from "../../component/KakaoShareComp";
 // 추천 플레이리스트에서 플레이리스트 클릭시
 
 export function TopPlaylist() {
@@ -66,6 +69,8 @@ export function TopPlaylist() {
   const [value, setValue] = useState(1);
   const [inputCount, setInputCount] = useState(0);
   const [currentSongId, setCurrnetSongId] = useState(null);
+  const [reRend, setReRend] = useState(0);
+  const location = useLocation();
 
   //플레이리스트 이미지 삽입
   const [imagePreview, setImagePreview] = useState(login.profilePhoto);
@@ -147,6 +152,27 @@ export function TopPlaylist() {
       });
   }
 
+  function LikeContainer({ onClick, listId, isLike }) {
+    return (
+      <>
+        <Button variant="ghost" size="xl" onClick={() => onClick(listId)}>
+          {isLike && <FontAwesomeIcon icon={likeHeart} size="lg" />}
+          {isLike || <FontAwesomeIcon icon={faHeart} size="lg" />}
+        </Button>
+      </>
+    );
+  }
+  function handleLike(playListId) {
+    axios.post("/api" + "/like", {
+      memberId: login.id,
+      likelistId: playListId, // handliLike의 파라미터playListId로 받지만 모른다 하지만
+      // onClick={handleLike} 밑에 이걸 보면 onClick이 가르키는 것은
+      // <Button variant="ghost" size="xl" onClick={() => onClick(listId)}> 즉 nClick(listId) listId 이다
+    });
+    setReRend((reRend) => reRend + 1);
+    // setRerend 가 0에서 클릭할때 1로 바뀌는 것 1에 의미는 없고 변화되는 것에 의미
+  }
+
   useEffect(() => {
     axios
       .get("/api/myList/getByListId?listId=" + params.get("listId"))
@@ -156,7 +182,7 @@ export function TopPlaylist() {
     axios
       .get("/api/song/chartlist?id=" + params.get("listId"))
       .then(({ data }) => setSongList(data));
-  }, []);
+  }, [reRend]);
 
   return (
     <>
@@ -172,11 +198,17 @@ export function TopPlaylist() {
               />
             </Box>
             <Box>
-              <Heading fontSize="30px" color="black">
-                {list != null && list.listName}
+              <Flex alignItems={"center"} gap={5}>
+                <Heading fontSize="30px" color="black">
+                  {list !== null && list.listName}
+                </Heading>
+                <KakaoShareComp
+                  title={list !== null && list.listName}
+                  imageUrl={list !== null && list.photo}
+                />
                 <br />
                 <br />
-              </Heading>
+              </Flex>
               <Flex>
                 <FormLabel style={{ color: "#8d8d8d" }}>제작사</FormLabel>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -198,6 +230,14 @@ export function TopPlaylist() {
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                   <FormLabel> {list != null && list.inserted}</FormLabel>
                 </Flex>
+              </Flex>
+              <Flex>
+                좋아요 {list !== null && list.countLike}
+                <LikeContainer
+                  onClick={handleLike}
+                  listId={list !== null && list.listId}
+                  isLike={list !== null && list.isLike}
+                />
               </Flex>
             </Box>
           </Flex>

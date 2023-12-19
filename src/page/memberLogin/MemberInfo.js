@@ -157,7 +157,7 @@ export function MemberInfo() {
 
   return (
     <Center mt={50}>
-      <Card mt={50} w="2xl" h="2xl">
+      <Card bg="transparent" mt={50} w="2xl" h="2xl">
         <CardHeader>
           <Heading>{login.nickName} 님</Heading>
         </CardHeader>

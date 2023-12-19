@@ -53,6 +53,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AddIcon } from "@chakra-ui/icons";
 import { faCirclePlay } from "@fortawesome/free-regular-svg-icons";
+import KakaoShareComp from "../../component/KakaoShareComp";
 
 function SongInMyFavoritePlaylist() {
   const { login } = useContext(LoginContext);
@@ -178,11 +179,17 @@ function SongInMyFavoritePlaylist() {
               />
             </Box>
             <Box>
-              <Heading fontSize="30px" color="black">
-                {list != null && list.listName}
+              <Flex alignItems={"center"} gap={5}>
+                <Heading fontSize="30px" color="black">
+                  {list !== null && list.listName}
+                </Heading>
+                <KakaoShareComp
+                  title={list !== null && list.listName}
+                  imageUrl={list !== null && list.photo}
+                />
                 <br />
                 <br />
-              </Heading>
+              </Flex>
               <Flex>
                 <FormLabel style={{ color: "#8d8d8d" }}>제작자</FormLabel>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

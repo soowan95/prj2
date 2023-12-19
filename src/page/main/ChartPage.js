@@ -5,9 +5,12 @@ import {
   Button,
   Divider,
   Flex,
+  FormControl,
+  FormHelperText,
   FormLabel,
   Heading,
   Image,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -37,6 +40,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleInfo,
   faEllipsis,
+  faPenToSquare,
   faPlay,
   faQrcode,
   faTrash,
@@ -44,6 +48,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import PlayComp from "../../component/PlayComp";
 import { faCirclePlay } from "@fortawesome/free-regular-svg-icons";
+import KakaoShareComp from "../../component/KakaoShareComp";
 
 // 내 플레이리스트에서 플레이리스트 클릭시
 export function ChartPage() {
@@ -57,6 +62,16 @@ export function ChartPage() {
   const listIndex = useRef(0);
   const navigate = useNavigate();
   const { login } = useContext(LoginContext);
+  const editPlaylistModal = useDisclosure();
+  const [playlistName, setPlaylistName] = useState("");
+  const [inputCount, setInputCount] = useState(0);
+
+  // 플레이리스트 이미지 수정
+  const [imagePreview, setImagePreview] = useState(
+    "https://practice12323asdf.s3.ap-northeast-2.amazonaws.com/prj2/playlist/default/defaultplaylist.jpg",
+  );
+  const [coverImage, setCoverImage] = useState("");
+  const freader = new FileReader();
 
   useEffect(() => {
     const param = new URLSearchParams();
@@ -113,6 +128,48 @@ export function ChartPage() {
       });
   }
 
+  function handleEditPlaylist() {
+    axios
+      .putForm("/api/myList/editPlaylist", {
+        id: list.listId,
+        listName: playlistName === "" ? list.listName : playlistName,
+        coverimage: coverImage,
+      })
+      .then(() => {
+        toast({
+          description: "수정이 완료되었습니다",
+          status: "success",
+        });
+      })
+      .catch(() => {
+        toast({
+          description: "수정중 문제가 발생하였습니다.",
+          status: "warning",
+        });
+      });
+  }
+
+  function handleCheckPlaylistName() {
+    const params = new URLSearchParams();
+    params.set("listName", playlistName);
+    axios
+      .get("/api/myList/check?" + params)
+      .then(() => {
+        toast({
+          description: "이미 사용중인 이름입니다.",
+          status: "warning",
+        });
+      })
+      .catch((error) => {
+        if (error.response.status === 404) {
+          toast({
+            description: "사용 가능한 이름입니다.",
+            status: "success",
+          });
+        }
+      });
+  }
+
   return (
     <>
       <Box>
@@ -127,11 +184,17 @@ export function ChartPage() {
               />
             </Box>
             <Box>
-              <Heading fontSize="30px" color="black">
-                {list != null && list.listName}
+              <Flex alignItems={"center"} gap={5}>
+                <Heading fontSize="30px" color="black">
+                  {list !== null && list.listName}
+                </Heading>
+                <KakaoShareComp
+                  title={list !== null && list.listName}
+                  imageUrl={list !== null && list.photo}
+                />
                 <br />
                 <br />
-              </Heading>
+              </Flex>
               <Flex>
                 <FormLabel style={{ color: "#8d8d8d" }}>제작사</FormLabel>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -163,6 +226,14 @@ export function ChartPage() {
                   onClick={handleDeletePlaylist}
                 >
                   <FontAwesomeIcon ml={"-5px"} icon={faTrash} />
+              </Flex>
+              <Flex>
+                <Button
+                  variant="ghost"
+                  rightIcon={<FontAwesomeIcon icon={faPenToSquare} />}
+                  onClick={editPlaylistModal.onOpen}
+                >
+                  플레이리스트 수정
                 </Button>
               </Flex>
             </Box>
@@ -279,6 +350,66 @@ export function ChartPage() {
                 삭제
               </Button>
               <Button onClick={editModal.onClose}>취소</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+
+        {/* 플레이리스트 수정 모달 */}
+        <Modal
+          isOpen={editPlaylistModal.isOpen}
+          onClose={editPlaylistModal.onClose}
+        >
+          <ModalContent>
+            <ModalHeader>플레이리스트 수정</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <FormControl>
+                <FormLabel>이름 수정</FormLabel>
+                <Flex>
+                  <Input
+                    value={playlistName}
+                    onChange={(e) => {
+                      setPlaylistName(e.target.value);
+                      setInputCount(e.target.value.length);
+                    }}
+                    maxLength="14"
+                    placeholder={list !== null && list.listName}
+                  />
+
+                  <Button variant="ghost" onClick={handleCheckPlaylistName}>
+                    중복확인
+                  </Button>
+                </Flex>
+                <FormHelperText textAlign="right">
+                  {inputCount} / 15
+                </FormHelperText>
+              </FormControl>
+              <FormControl>
+                <FormLabel>사진 변경</FormLabel>
+                <Flex>
+                  <Image boxSize="100px" src={imagePreview} />
+                  <Input
+                    mt={10}
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      freader.readAsDataURL(e.target.files[0]);
+                      freader.onload = (e) => {
+                        setImagePreview(e.target.result);
+                      };
+                      setCoverImage(e.target.files[0]);
+                    }}
+                  />
+                </Flex>
+              </FormControl>
+            </ModalBody>
+            <ModalFooter>
+              <Button variant="ghost" onClick={handleEditPlaylist}>
+                수정
+              </Button>
+              <Button variant="ghost" onClick={editPlaylistModal.onClose}>
+                취소
+              </Button>
             </ModalFooter>
           </ModalContent>
         </Modal>
