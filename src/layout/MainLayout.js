@@ -1,15 +1,15 @@
 import {
+  border,
   Box,
   Button,
-  Center,
   Flex,
   FormControl,
   FormLabel,
   Input,
+  Kbd,
   Popover,
   PopoverContent,
   PopoverTrigger,
-  scaleFadeConfig,
   useColorMode,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -22,10 +22,10 @@ import _ from "lodash";
 import LiveChatComp from "../component/LiveChatComp";
 import "../css/Fonts.css";
 import {
+  faMagnifyingGlass,
   faMoon,
   faSquareCaretUp,
   faSun,
-  faMagnifyingGlass,
   faCompactDisc,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -39,6 +39,9 @@ export function MainLayout() {
   const [selectedCategory, setSelectedCategory] = useState("가수");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [autoComplete, setAutoComplete] = useState(null);
+  const [currentMode, setCurrentMode] = useState(
+    localStorage.getItem("chakra-ui-color-mode"),
+  );
 
   const genreInclude = useRef(",");
   const moodInclude = useRef(",");
@@ -199,6 +202,17 @@ export function MainLayout() {
     scroll.current.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
+  window.addEventListener("keydown", (e) => {
+    if (
+      e.key === "F2" &&
+      currentMode === localStorage.getItem("chakra-ui-color-mode")
+    ) {
+      toggleColorMode();
+      setCurrentMode(localStorage.getItem("chakra-ui-color-mode"));
+      window.location.reload(0);
+    }
+  });
+
   return (
     <SongContext.Provider value={{ top100, searched }}>
       <Box
@@ -225,6 +239,9 @@ export function MainLayout() {
           fontSize="2xl"
           variant="unstyled"
         >
+          <span style={{ fontSize: "1rem", opacity: "0.5" }}>
+            <Kbd mr={1}>f2</Kbd>
+          </span>
           {localStorage.getItem("chakra-ui-color-mode") === "dark" ? (
             <FontAwesomeIcon icon={faSun} style={{ color: "#f2c84b" }} />
           ) : (
@@ -427,28 +444,42 @@ export function MainLayout() {
                 ))}
               <Popover trigger="hover">
                 <PopoverTrigger>
-                  <Input
-                    ref={searchRef}
-                    id="searchInput"
-                    height={"45px"}
-                    placeholder={searchInfoText}
-                    onChange={(e) => {
-                      handleChangeSearchInput(e);
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") handleSearchButton();
-                    }}
-                  />
+                  <Flex
+                    h={"55px"}
+                    w={"100%"}
+                    border={"1px solid white"}
+                    borderRadius={"8px"}
+                    alignItems={"center"}
+                  >
+                    <Input
+                      border={"0px solid"}
+                      variant={"unstyled"}
+                      ml={2}
+                      ref={searchRef}
+                      id="searchInput"
+                      height={"45px"}
+                      placeholder={searchInfoText}
+                      onChange={(e) => {
+                        handleChangeSearchInput(e);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleSearchButton();
+                      }}
+                    />
+                    <Button
+                      mr={2}
+                      id="searchButton"
+                      height={"45px"}
+                      // width={"5%"}
+                      onClick={handleSearchButton}
+                      bg={"none"}
+                      _hover={{ bg: "none" }}
+                      color={"white"}
+                    >
+                      <FontAwesomeIcon icon={faMagnifyingGlass} />
+                    </Button>
+                  </Flex>
                 </PopoverTrigger>
-
-                <Button
-                  id="searchButton"
-                  height={"45px"}
-                  // width={"5%"}
-                  onClick={handleSearchButton}
-                >
-                  <FontAwesomeIcon icon={faMagnifyingGlass} />
-                </Button>
 
                 <PopoverContent
                   w={{
