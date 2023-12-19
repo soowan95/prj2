@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -12,7 +11,6 @@ import {
   SliderFilledTrack,
   SliderThumb,
   SliderTrack,
-  Spinner,
   Tooltip,
 } from "@chakra-ui/react";
 import ReactPlayer from "react-player";
@@ -25,6 +23,7 @@ import {
   faRepeat,
   faRotateLeft,
   faRotateRight,
+  faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MdGraphicEq } from "react-icons/md";
@@ -34,6 +33,7 @@ function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isRepeat, setIsRepeat] = useState(true);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [isBuffer, setIsBuffer] = useState(false);
   const [rerenderCount, setRerenderCount] = useState(0);
 
   const songInfo = useRef("");
@@ -116,6 +116,7 @@ function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
         setIsPlaying(false);
         setIsRepeat(true);
         setShowTooltip(false);
+        setIsBuffer(false);
         songInfo.current.seekTo(0);
         onClose();
       }}
@@ -167,7 +168,9 @@ function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
                     setRerenderCount(0);
                   }}
                 >
-                  <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
+                  <FontAwesomeIcon
+                    icon={isBuffer ? faSpinner : isPlaying ? faPause : faPlay}
+                  />
                 </Box>
                 <Box mr={4} lineHeight={"40px"} onClick={handleForward}>
                   <FontAwesomeIcon icon={faRotateRight} />
@@ -184,6 +187,8 @@ function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
                   ref={songInfo}
                   playing={isPlaying}
                   url={songList !== null && songList.at(index).songUrl}
+                  onBuffer={() => setIsBuffer(true)}
+                  onBufferEnd={() => setIsBuffer(false)}
                 />
                 <Box
                   lineHeight={"40px"}

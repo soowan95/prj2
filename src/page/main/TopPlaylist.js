@@ -32,21 +32,14 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEllipsis,
-  faQrcode,
-  faTrashCan,
-  faHeart as fullHeart,
-  faPlay,
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faQrcode, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import PlayComp from "../../component/PlayComp";
 import axios from "axios";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { LoginContext } from "../../component/LoginProvider";
 import { faCirclePlay } from "@fortawesome/free-regular-svg-icons";
-import { faHeart as likeHeart } from "@fortawesome/free-solid-svg-icons";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
 import KakaoShareComp from "../../component/KakaoShareComp";
 // 추천 플레이리스트에서 플레이리스트 클릭시
 
@@ -155,9 +148,9 @@ export function TopPlaylist() {
   function LikeContainer({ onClick, listId, isLike }) {
     return (
       <>
-        <Button variant="ghost" size="xl" onClick={() => onClick(listId)}>
-          {isLike && <FontAwesomeIcon icon={likeHeart} size="lg" />}
-          {isLike || <FontAwesomeIcon icon={faHeart} size="lg" />}
+        <Button ml={1} variant="ghost" size="xl" onClick={() => onClick(listId)}>
+          {isLike && <FontAwesomeIcon icon={fullHeart} size="lg" />}
+          {isLike || <FontAwesomeIcon icon={emptyHeart} size="lg" />}
         </Button>
       </>
     );
@@ -189,8 +182,9 @@ export function TopPlaylist() {
       <Box>
         <Flex>
           <Flex flexDirection="row">
-            <Box ml={"50px"} mr={"50px"} border="1px solid black">
+            <Box ml={"50px"} mr={"50px"}>
               <Image
+                borderRadius={"60px 3px"}
                 src={list !== null && list.photo}
                 boxSize="350px"
                 objectFit="cover" // 이미지가 상자를 완전히 덮도록 크기 조절하는 것
@@ -209,35 +203,32 @@ export function TopPlaylist() {
                 <br />
                 <br />
               </Flex>
-              <Flex>
-                <FormLabel style={{ color: "#8d8d8d" }}>제작사</FormLabel>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <FormLabel> {list != null && list.id}</FormLabel>
+              <Flex gap={10}>
+                <Box style={{ color: "#8d8d8d" }}>제작사</Box>
+                <Box ml={"3px"}> {list != null && list.id}</Box>
               </Flex>
-              <Flex>
-                <FormLabel style={{ color: "#8d8d8d" }}>곡수</FormLabel>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <FormLabel> {list != null && list.totalSongCount}</FormLabel>
+              <Flex gap={14}>
+                <Box style={{ color: "#8d8d8d" }}>곡수</Box>
+                <Box> {list != null && list.totalSongCount}</Box>
               </Flex>
-              <Flex>
-                <FormLabel style={{ color: "#8d8d8d" }}>조회수</FormLabel>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <FormLabel> {params.get("count")}회</FormLabel>
+              <Flex gap={10}>
+                <Box style={{ color: "#8d8d8d" }}>조회수</Box>
+                <Box> {params.get("count")}회</Box>
               </Flex>
-              <Flex>
-                <Flex>
-                  <FormLabel style={{ color: "#8d8d8d" }}>작성일</FormLabel>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  <FormLabel> {list != null && list.inserted}</FormLabel>
-                </Flex>
+              <Flex gap={10}>
+                <Box style={{ color: "#8d8d8d" }}>작성일</Box>
+                <Box> {list != null && list.inserted}</Box>
               </Flex>
-              <Flex>
-                좋아요 {list !== null && list.countLike}
-                <LikeContainer
-                  onClick={handleLike}
-                  listId={list !== null && list.listId}
-                  isLike={list !== null && list.isLike}
-                />
+              <Flex gap={10}>
+                <Box>좋아요</Box>
+                <Box>
+                  {list !== null && list.countLike}
+                  <LikeContainer
+                    onClick={handleLike}
+                    listId={list !== null && list.listId}
+                    isLike={list !== null && list.isLike}
+                  />
+                </Box>
               </Flex>
             </Box>
           </Flex>
@@ -255,16 +246,8 @@ export function TopPlaylist() {
                 <Th></Th>
                 <Th>곡정보</Th>
                 <Th></Th>
-                <Th
-                  // border={"1px solid black"}
-                  width={"40px"}
-                  p={0}
-                >
-                  <Box
-                    // border={"1px solid red"}
-                    width={"30px"}
-                    ml={"40px"}
-                  >
+                <Th width={"40px"} p={0}>
+                  <Box width={"30px"} ml={"40px"}>
                     재생
                   </Box>
                 </Th>
