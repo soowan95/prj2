@@ -62,6 +62,7 @@ function LiveChatComp() {
                     // style={{ left: "10px" }}
                     boxSize={"0.6rem"}
                     bg={item.isOnline ? "green" : "red"}
+                    border={"none"}
                   />
                 </Avatar>
                 <Box
@@ -80,7 +81,10 @@ function LiveChatComp() {
                 w={"fit-content"}
                 style={{
                   color: "black",
-                  backgroundColor: "#ebebed",
+                  backgroundColor:
+                    localStorage.getItem("chakra-ui-color-mode") === "dark"
+                      ? "#fcf4db"
+                      : "#fbe6f2",
                   borderRadius: "20px",
                   whiteSpace: "normal",
                   width: "auto",
@@ -104,7 +108,10 @@ function LiveChatComp() {
                 h={"25px"}
                 style={{
                   color: "black",
-                  backgroundColor: "#ebebed",
+                  backgroundColor:
+                    localStorage.getItem("chakra-ui-color-mode") === "dark"
+                      ? "#fcf4db"
+                      : "#fbe6f2",
                   borderRadius: "20px",
                   whiteSpace: "normal",
                   width: "auto",
@@ -128,7 +135,10 @@ function LiveChatComp() {
               mb={1}
               style={{
                 color: "white",
-                backgroundColor: "#aa99e8",
+                backgroundColor:
+                  localStorage.getItem("chakra-ui-color-mode") === "dark"
+                    ? "#f3cd5d"
+                    : "#e86db3",
                 borderRadius: "20px",
                 whiteSpace: "normal",
                 width: "auto",
@@ -179,12 +189,17 @@ function LiveChatComp() {
         {...move()}
         display={chatVisible}
         className="chatBox"
-        bg={"#e9dcfa"}
-        width={"250px"}
+        bg={
+          localStorage.getItem("chakra-ui-color-mode") === "dark"
+            ? "#f8e3a5"
+            : "#f3b6d9"
+        }
+        width={"270px"}
         height={"500px"}
         position={"fixed"}
         left={pos.x + 86 + "%"}
         top={pos.y + 20 + "%"}
+        borderRadius={20}
       >
         <Flex>
           <Box
@@ -223,7 +238,13 @@ function LiveChatComp() {
           <Box ref={fixScroll}></Box>
         </Box>
         <FormControl position={"relative"} bottom={0}>
-          <Flex w={"100%"} h={"10%"}>
+          <Flex
+            justifyContent="center"
+            textAlign={"center"}
+            w={"90%"}
+            mx="auto"
+            h={"10%"}
+          >
             <Input
               value={chat}
               placeholder="메시지 보내기"
@@ -236,6 +257,9 @@ function LiveChatComp() {
                   } else sendChat(e, chat);
                 }
               }}
+              _focus={{
+                borderColor: "transparent",
+              }}
             />
             <Button
               isDisabled={!isAuthenticated()}
@@ -245,6 +269,11 @@ function LiveChatComp() {
                   setChatList([]);
                 } else sendChat(e, chat);
               }}
+              backgroundColor={
+                localStorage.getItem("chakra-ui-color-mode") === "dark"
+                  ? "#f3cd5d"
+                  : "#e86db3"
+              }
             >
               전송
             </Button>
