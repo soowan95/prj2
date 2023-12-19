@@ -123,7 +123,15 @@ export function Top100Page() {
                       //alignItems={"center"}
                       m={"0 auto"}
                     >
-                      <Card w={"150px"} background={"lavender"}>
+                      <Card
+                        w={"150px"}
+                        bg={
+                          localStorage.getItem("chakra-ui-color-mode") ===
+                          "dark"
+                            ? "#f3cd5d"
+                            : "#e86db3"
+                        }
+                      >
                         <CardBody>
                           <Box fontWeight={"bold"} color={"#535353"}>
                             {si.title.length > 10

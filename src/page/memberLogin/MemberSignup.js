@@ -129,7 +129,7 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
       .then(() => {
         setIdAvailable(false);
         toast({
-          description: "이미 사용중인 ID입니다.",
+          description: "이미 사용 중인 ID입니다.",
           status: "warning",
         });
       })
@@ -153,7 +153,7 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
       .then(() => {
         setNickNameAvailable(false);
         toast({
-          description: "이미 사용중인 닉네임입니다.",
+          description: "이미 사용 중인 닉네임입니다.",
           status: "warning",
         });
       })
@@ -190,7 +190,9 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
                 중복 확인
               </Button>
             </Flex>
-            <FormErrorMessage>아이디 중복체크를 해주세요.</FormErrorMessage>
+            <FormErrorMessage ml={2}>
+              * 아이디 중복체크를 해주세요.
+            </FormErrorMessage>
           </FormControl>
           <FormControl mb={5}>
             <FormLabel>비밀번호</FormLabel>
@@ -202,8 +204,8 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
               }}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <FormHelperText>
-              특수기호는 !,@,# 만 사용 가능합니다.
+            <FormHelperText ml={2}>
+              * 특수기호는 !,@,# 만 사용할 수 있습니다.
             </FormHelperText>
           </FormControl>
           <FormControl mb={5} isInvalid={password !== passwordCheck}>
@@ -216,7 +218,7 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
                 setIsPasswordOk(password === e.target.value);
               }}
             />
-            <FormErrorMessage>암호를 확인해주세요.</FormErrorMessage>
+            <FormErrorMessage>암호를 확인해 주세요.</FormErrorMessage>
           </FormControl>
           <FormControl mb={5}>
             <FormLabel>닉네임</FormLabel>
@@ -258,13 +260,13 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
               }}
             />
             {emailOk || (
-              <FormHelperText color={"red"}>
-                이메일 양식을 확인해주세요.
+              <FormHelperText ml={2} color={"red"}>
+                * 이메일 양식을 확인해 주세요.
               </FormHelperText>
             )}
           </FormControl>
           <RadioGroup value={inputPicture} onChange={setInputPicture}>
-            <Box>사진을 첨부하시겠습니까?</Box>
+            <Box mb={2}>사진을 첨부하시겠습니까?</Box>
             <Stack direction="row">
               <Radio value="block">네</Radio>
               <Radio value="none">아니오</Radio>
@@ -272,21 +274,26 @@ export function MemberSignup({ securityQuestionList, isOpen, onClose }) {
           </RadioGroup>
           <Box display={inputPicture}>
             <FormControl mb={5}>
-              <FormLabel>프로필 사진</FormLabel>
-              <FormHelperText>3MB이내 이미지파일만 가능합니다.</FormHelperText>
-              <Image borderRadius="full" boxSize="150px" src={imagePreview} />
+              <FormLabel mt={3}>프로필 사진</FormLabel>
+              <FormHelperText>
+                * 3MB 이내 이미지파일 만 첨부 가능합니다.
+              </FormHelperText>
+              <Flex>
+                <Image borderRadius="full" boxSize="120px" src={imagePreview} />
+                <Input
+                  mt={10}
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    freader.readAsDataURL(e.target.files[0]);
+                    freader.onload = (e) => {
+                      setImagePreview(e.target.result);
+                    };
+                    setProfilePhoto(e.target.files[0]);
+                  }}
+                />
+              </Flex>
             </FormControl>
-            <Input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                freader.readAsDataURL(e.target.files[0]);
-                freader.onload = (e) => {
-                  setImagePreview(e.target.result);
-                };
-                setProfilePhoto(e.target.files[0]);
-              }}
-            />
           </Box>
           <FormControl mb={5}>
             <FormLabel>보안 질문</FormLabel>
