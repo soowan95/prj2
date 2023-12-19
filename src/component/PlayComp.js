@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
@@ -12,7 +11,6 @@ import {
   SliderFilledTrack,
   SliderThumb,
   SliderTrack,
-  Spinner,
   Tooltip,
 } from "@chakra-ui/react";
 import ReactPlayer from "react-player";
