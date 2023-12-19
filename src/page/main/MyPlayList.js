@@ -10,19 +10,28 @@ import {
   Flex,
   Heading,
   Image,
+  Input,
   Modal,
+  ModalBody,
+  ModalCloseButton,
   ModalContent,
+  ModalFooter,
   ModalHeader,
   ModalOverlay,
   SimpleGrid,
   Spacer,
   Stack,
+  Text,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHeart as fullHeart,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import { LoginContext } from "../../component/LoginProvider";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 
@@ -41,20 +50,25 @@ export function MyPlayList() {
   const navigate = useNavigate();
   const [list, setList] = useState(null);
   const [reRend, setReRend] = useState(0);
-  const [songList, setSongList] = useState();
-  const [myPlaylist, setMyPlaylist] = useState(null);
+  const [inputCount, setInputCount] = useState(0);
+  const [playlistName, setPlaylistName] = useState("");
+  const [imagePreview, setImagePreview] = useState(null);
+  const [coverImage, setCoverImage] = useState(null);
+  
   const count = useRef(0);
   // useRef는 .current 프로퍼티로 전달된 인자로 초기화된 변경 가능한 ref 객체를 반환합니다.
 
   const { login } = useContext(LoginContext);
-  const location = useLocation();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
+
+  const freader = new FileReader();
 
   useEffect(() => {
     const params = new URLSearchParams();
     params.set("id", login.id);
     axios.get("/api/myList/get?" + params).then(({ data }) => setList(data));
-  }, [reRend, location]);
+  }, [reRend]);
 
   function handleLike(playListId) {
     axios.post("/api" + "/like", {
@@ -87,11 +101,60 @@ export function MyPlayList() {
       );
   }
 
+  function handleCheckPlaylistName() {
+    const params = new URLSearchParams();
+    params.set("listName", playlistName);
+    axios
+      .get("/api/myList/check?" + params)
+      .then(() => {
+        toast({
+          description: "이미 사용중인 이름입니다.",
+          status: "warning",
+        });
+      })
+      .catch((error) => {
+        if (error.response.status === 404) {
+          toast({
+            description: "사용 가능한 이름입니다.",
+            status: "success",
+          });
+        }
+      });
+  }
+
+  function handleCreatePlaylist() {
+    axios
+      .postForm("/api/myList/createPlaylist", {
+        listName: playlistName,
+        memberId: login.id,
+        coverimage: coverImage,
+      })
+      .then(() => {
+        toast({
+          description: "생성완료",
+          status: "success",
+        });
+        onClose();
+        setReRend((reRend) => reRend + 1);
+      })
+      .catch(() => {
+        toast({
+          description: "생성중 문제가 발생하였습니다.",
+          status: "warning",
+        });
+      });
+  }
+
   return (
     <Box>
       <Stack spacing={4}>
         <Divider />
-        <Heading ml={5}>{login.nickName} 님의 재생목록</Heading>
+        <Flex>
+          <Heading ml={5}>{login.nickName} 님의 재생목록</Heading>
+          <Button onClick={onOpen}>
+            <FontAwesomeIcon icon={faPlus} />
+          </Button>
+        </Flex>
         <Divider />
         {/*<SimpleGrid columns={3} spacing={5} minChildWidth="70px">*/}
         <Flex flexWrap="wrap" ml={"140px"} justifyContent="center">
@@ -105,6 +168,7 @@ export function MyPlayList() {
                     onClick={() => handleChart(memberplaylist.listId)}
                   >
                     <Image
+                      borderRadius={"20px"}
                       src={memberplaylist.photo}
                       boxSize="220px"
                       objectFit="cover"
@@ -147,6 +211,56 @@ export function MyPlayList() {
         </Flex>
         {/*</SimpleGrid>*/}
       </Stack>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>플레이리스트 생성</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Flex>
+              <Input
+                onChange={(e) => {
+                  setInputCount(e.target.value.length);
+                  setPlaylistName(e.target.value);
+                }}
+                maxLength="14"
+                placeholder="이름 지정"
+              />
+              <Button variant="ghost" onClick={handleCheckPlaylistName}>
+                중복확인
+              </Button>
+            </Flex>
+            <Text textAlign="left">{inputCount} / 15</Text>
+          </ModalBody>
+          <ModalBody>
+            <Text>사진 설정</Text>
+            <Flex>
+              <Image boxSize="100px" src={imagePreview} />
+              <Input
+                mt={10}
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  freader.readAsDataURL(e.target.files[0]);
+                  freader.onload = (e) => {
+                    setImagePreview(e.target.result);
+                  };
+                  setCoverImage(e.target.files[0]);
+                }}
+              />
+            </Flex>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              variant="ghost"
+              colorScheme="facebook"
+              onClick={handleCreatePlaylist}
+            >
+              생성
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }

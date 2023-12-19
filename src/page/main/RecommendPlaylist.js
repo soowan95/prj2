@@ -3,58 +3,39 @@ import { LoginContext } from "../../component/LoginProvider";
 import axios from "axios";
 import {
   Box,
-  Button,
   Card,
   CardBody,
   CardFooter,
   CardHeader,
-  Center,
+  Divider,
   Flex,
-  FormLabel,
   Heading,
   Image,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTrigger,
   SimpleGrid,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  Global,
-  useDisclosure,
-  Divider,
 } from "@chakra-ui/react";
 import {
-  faEllipsis,
-  faPlay,
-  faRecordVinyl,
-  faTrash,
+  faArrowLeft,
+  faArrowRight,
+  faHeart as fullHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import PlayComp from "../../component/PlayComp";
-import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+import { useImmer } from "use-immer";
+import ItemsCarousel from "react-items-carousel";
 
 export function RecommendPlaylist() {
   const { fetchLogin, login } = useContext(LoginContext);
-  const [recommendList, setRecommendList] = useState(null);
   const navigate = useNavigate();
   const count = useRef(0);
   const [recommendByViews, setRecommendByViews] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [recommendList, setRecommendList] = useState(null);
 
   useEffect(() => {
     fetchLogin();
     axios
       .get("/api/myList/recommendOrderByLike")
-      .then((response) => setRecommendList(response.data));
+      .then(({ data }) => setRecommendList(data));
     axios
       .get("/api/myList/recommendOrderByViews")
       .then((response) => setRecommendByViews(response.data));
@@ -73,7 +54,6 @@ export function RecommendPlaylist() {
           "/main/topplaylist?listId=" + listId + "&count=" + count.current,
         ),
       );
-    // .then(() => navigate("/main/topplaylist?listId=" + listId));
   }
 
   return (
@@ -84,21 +64,41 @@ export function RecommendPlaylist() {
         <br />
         <br />
       </Box>
-      <SimpleGrid columns={5} spacing={5} minChildWidth="30px">
-        <Flex gap={3} flexWrap="wrap" ml={"90px"} justifyContent="center">
-          {/* S3 이미지 출력 */}
+      <Box w={"1500px"} m={"0 auto"} alignItems={"center"}>
+        <ItemsCarousel
+          chevronWidth={10}
+          numberOfCards={5}
+          slidesToScroll={5}
+          gutter={0}
+          outsideChevron={false}
+          activeItemIndex={currentIndex}
+          requestToChangeActive={setCurrentIndex}
+          rightChevron={
+            <Button>
+              <FontAwesomeIcon icon={faArrowRight} />
+            </Button>
+          }
+          firstAndLastGutter={true}
+          leftChevron={
+            <Button>
+              <FontAwesomeIcon icon={faArrowLeft} />
+            </Button>
+          }
+        >
           {recommendList !== null &&
             recommendList.map((srl, idx) => (
               <Card
-                mr={"100"}
+                key={idx}
                 mb={"20px"}
+                mx={"25px"}
                 width={"250px"}
                 height={"350px"}
                 bgColor={"none"}
               >
                 <Box>
-                  <CardHeader height="242px" key={idx}>
+                  <CardHeader height="242px">
                     <Image
+                      borderRadius={"20px"}
                       src={srl.picture}
                       alt={srl.cover}
                       _hover={{ cursor: "pointer" }}
@@ -110,7 +110,6 @@ export function RecommendPlaylist() {
                       }}
                     />
                   </CardHeader>
-
                   <CardBody
                     fontSize={"25"}
                     fontWeight={"bold"}
@@ -142,8 +141,8 @@ export function RecommendPlaylist() {
                 </Box>
               </Card>
             ))}
-        </Flex>
-      </SimpleGrid>
+        </ItemsCarousel>
+      </Box>
       <Divider />
       <Box mt={50}>
         <Heading ml={"338px"}>가장 많이 들었던 플레이리스트!!</Heading>
@@ -151,22 +150,22 @@ export function RecommendPlaylist() {
         <br />
         <br />
       </Box>
-      <SimpleGrid columns={3} spacing={5} minChildWidth="70px">
-        <Flex gap={5} flexWrap="wrap" ml={"140px"} justifyContent="center">
+      <SimpleGrid columns={5} spacing={5} minChildWidth="30px">
+        <Flex gap={3} flexWrap="wrap" ml={"90px"} justifyContent="center">
           {/* S3 이미지 출력 */}
           {recommendByViews !== null &&
             recommendByViews.map((views, idx) => (
               <Card
                 mr={"100"}
                 mb={"20px"}
-                // border="1px solid purple"
-                width={"350px"}
-                height={"400px"}
+                width={"250px"}
+                height={"350px"}
                 bgColor={"none"}
               >
                 <Box>
                   <CardHeader height="242px" key={idx}>
                     <Image
+                      borderRadius={"20px"}
                       src={views.pictureUrl}
                       alt={views.picture}
                       _hover={{ cursor: "pointer" }}
@@ -178,28 +177,31 @@ export function RecommendPlaylist() {
                       }}
                     />
                   </CardHeader>
-                  <Box height="140px" width="220px" ml="64px">
-                    <Box pl={1} mt="10px" color="#0096ff">
-                      인기 추천
-                    </Box>
-                    <CardBody
-                      fontSize={"25"}
-                      fontWeight={"bold"}
-                      size="md"
-                      _hover={{ cursor: "pointer" }}
-                      onClick={() => {
-                        handleHitsCount(views.likelistId);
-                      }}
-                      pl={1}
-                    >
-                      {views.listName}
-                    </CardBody>
-                    <CardFooter pl={1.5} pt={0} width={"350px"}>
-                      {views?.songs} 곡
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      조회수 : {views?.playlistCount} 회
-                    </CardFooter>
-                  </Box>
+                  <CardBody
+                    fontSize={"25"}
+                    fontWeight={"bold"}
+                    ml={"30px"}
+                    size="md"
+                    _hover={{ cursor: "pointer" }}
+                    onClick={() => {
+                      handleHitsCount(views.likelistId);
+                    }}
+                    pl={1}
+                  >
+                    {views.listName}
+                  </CardBody>
+                  <CardFooter
+                    pt={0}
+                    width={"250px"}
+                    height={"20px"}
+                    ml={"15px"}
+                    mt={"-8px"}
+                  >
+                    <Flex>
+                      <Box>{views?.songs} 곡</Box>
+                      <Box ml={"65px"}>조회수 : {views?.playlistCount} 회</Box>
+                    </Flex>
+                  </CardFooter>
                 </Box>
               </Card>
             ))}
