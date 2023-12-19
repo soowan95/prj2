@@ -174,7 +174,7 @@ export function RecommendPlaylist() {
           {recommendByViews !== null &&
             recommendByViews.map((views, idx) => (
               <Card
-                mr={"100"}
+                mx={"25px"}
                 mb={"20px"}
                 width={"250px"}
                 height={"350px"}
