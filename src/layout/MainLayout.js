@@ -1,12 +1,14 @@
 import {
   Box,
   Button,
+  Center,
   Flex,
   FormControl,
   Input,
   Popover,
   PopoverContent,
   PopoverTrigger,
+  scaleFadeConfig,
   useColorMode,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -22,6 +24,7 @@ import {
   faMoon,
   faSquareCaretUp,
   faSun,
+  faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -271,7 +274,7 @@ export function MainLayout() {
             height={"200px"}
             alignItems={"center"}
           >
-            <Box textAlign={"center"} fontWeight={"bold"} fontSize={"1.5rem"}>
+            <Box textAlign={"center"} fontWeight={"bold"} fontSize={"1.3rem"}>
               FILTER
             </Box>
             <Popover
@@ -281,7 +284,17 @@ export function MainLayout() {
               placement="right"
             >
               <PopoverTrigger>
-                <Box mt={"30px"} textAlign={"center"}>
+                <Box
+                  mt={"30px"}
+                  textAlign={"center"}
+                  cursor={"pointer"}
+                  _hover={{
+                    color: "#F3DA2A",
+                    fontWeight: "bold",
+                    transform: "scale(1.3)",
+                    transition: 1.0,
+                  }}
+                >
                   Genre
                 </Box>
               </PopoverTrigger>
@@ -317,7 +330,17 @@ export function MainLayout() {
               placement="right"
             >
               <PopoverTrigger>
-                <Box mt={"30px"} textAlign={"center"}>
+                <Box
+                  mt={"30px"}
+                  textAlign={"center"}
+                  cursor={"pointer"}
+                  _hover={{
+                    color: "#F3DA2A",
+                    fontWeight: "bold",
+                    transform: "scale(1.3)",
+                    transition: 1.0,
+                  }}
+                >
                   Mood
                 </Box>
               </PopoverTrigger>
@@ -375,6 +398,7 @@ export function MainLayout() {
               </Button>
             </Flex>
             {/* 검색창 */}
+
             <Flex
               position={"relative"}
               width={"70%"}
@@ -409,15 +433,16 @@ export function MainLayout() {
                     }}
                   />
                 </PopoverTrigger>
+
                 <Button
                   id="searchButton"
                   height={"45px"}
-                  width={"5%"}
+                  // width={"5%"}
                   onClick={handleSearchButton}
-                  style={{ fontFamily: "YClover-Bold" }}
                 >
-                  검색
+                  <FontAwesomeIcon icon={faMagnifyingGlass} />
                 </Button>
+
                 <PopoverContent
                   w={{
                     base: "500px",

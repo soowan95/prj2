@@ -48,12 +48,12 @@ export function SearchPage() {
             justifyContent={"center"}
             alignItems={"center"}
             borderBottom={"1px solid lavender"}
-            _hover={{ bg: "grey" }}
+            _hover={{ bg: "grey", opacity: 0.6  }}
             // Box를 클릭하면 해당 노래의 상세 페이지로 이동
             onClick={() => goToSongPage(song.id)}
           >
             <FormControl w={"300px"}>
-              <FormLabel fontSize={17} color={"#535353"} cursor={"pointer"}>
+              <FormLabel fontSize={17} color={"#F3DA2A"} cursor={"pointer"}>
                 <FontAwesomeIcon icon={faFileLines} />　{song.title}
               </FormLabel>
               <FormLabel fontSize={15} cursor={"pointer"}>
