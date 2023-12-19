@@ -32,7 +32,6 @@ function LikeContainer({ onClick, listId, isLike }) {
       <Button variant="ghost" size="xl" onClick={() => onClick(listId)}>
         {isLike && <FontAwesomeIcon icon={fullHeart} size="xl" />}
         {isLike || <FontAwesomeIcon icon={faHeart} size="xl" />}
-        {/*<FontAwesomeIcon icon={isLike ? fullHeart : faHeart} />*/}
       </Button>
     </>
   );
@@ -62,7 +61,7 @@ export function MyPlayList() {
       memberId: login.id,
       likelistId: playListId, // handliLike의 파라미터playListId로 받지만 모른다 하지만
       // onClick={handleLike} 밑에 이걸 보면 onClick이 가르키는 것은
-      // <Button variant="ghost" size="xl" onClick={() => onClick(listId)}> 즉 nClick(listId) listId 이다
+      // <Button variant="ghost" size="xl" onClick={() => onClick(listId)}> 즉 onClick(listId) listId 이다
     });
     setReRend((reRend) => reRend + 1);
     // setRerend 가 0에서 클릭할때 1로 바뀌는 것 1에 의미는 없고 변화되는 것에 의미

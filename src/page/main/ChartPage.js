@@ -175,7 +175,7 @@ export function ChartPage() {
       <Box>
         <Flex>
           <Flex flexDirection="row">
-            <Box ml={"50px"} mr={8} border="1px solid black">
+            <Box ml={"50px"} mr={"50px"} border="1px solid black">
               <Image
                 src={list !== null && list.photo}
                 boxSize="350px"
@@ -192,39 +192,40 @@ export function ChartPage() {
                   title={list !== null && list.listName}
                   imageUrl={list !== null && list.photo}
                 />
+                <br />
+                <br />
               </Flex>
               <Flex>
-                <FormLabel>
-                  작성자
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  {list != null && list.nickName}
+                <FormLabel style={{ color: "#8d8d8d" }}>제작사</FormLabel>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <FormLabel> {list != null && list.id}</FormLabel>
+              </Flex>
+              <Flex>
+                <FormLabel style={{ color: "#8d8d8d" }}>곡수</FormLabel>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <FormLabel> {list != null && list.totalSongCount}</FormLabel>
+              </Flex>
+              <Flex>
+                <FormLabel style={{ color: "#8d8d8d" }}>조회수</FormLabel>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <FormLabel> {params.get("count")}회</FormLabel>
+              </Flex>
+              <Flex>
+                <FormLabel style={{ color: "#8d8d8d" }}>작성일</FormLabel>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <FormLabel> {list !== null && list.inserted}</FormLabel>
+              </Flex>
+              <Flex>
+                <FormLabel style={{ color: "#8d8d8d" }}>
+                  플레이리스트 삭제
                 </FormLabel>
-              </Flex>
-              <Flex>
-                <FormLabel>
-                  곡수
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  {list !== null && list.totalSongCount} 곡
-                </FormLabel>
-              </Flex>
-              <Flex>
-                <FormLabel>
-                  조회수
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  {params.get("count")} 회
-                </FormLabel>
-              </Flex>
-              <Flex>
-                <FormLabel>작성일 {list !== null && list.inserted}</FormLabel>
-              </Flex>
-              <Flex>
                 <Button
                   variant="ghost"
-                  rightIcon={<FontAwesomeIcon icon={faTrash} />}
+                  p={0}
+                  mt={"-7px"}
                   onClick={handleDeletePlaylist}
                 >
-                  플레이리스트 삭제
-                </Button>
+                  <FontAwesomeIcon ml={"-5px"} icon={faTrash} />
               </Flex>
               <Flex>
                 <Button
@@ -251,35 +252,16 @@ export function ChartPage() {
                 <Th></Th>
                 <Th>곡정보</Th>
                 <Th></Th>
-                <Th
-                  // border={"1px solid black"}
-                  width={"40px"}
-                  p={0}
-                >
-                  <Box
-                    // border={"1px solid red"}
-                    width={"30px"}
-                    ml={"40px"}
-                  >
+                <Th width={"40px"} p={0}>
+                  <Box width={"30px"} ml={"40px"}>
                     재생
                   </Box>
                 </Th>
-                <Th
-                  // border={"1px solid blue"}
-                  width={"10px"}
-                  p={0}
-                >
+                <Th width={"10px"} p={0}>
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;정보
                 </Th>
-                <Th
-                  // border={"1px solid blue"}
-                  width={"100px"}
-                  p={0}
-                >
-                  <Box
-                    // border={"1px solid red"}
-                    mr={"50px"}
-                  >
+                <Th width={"100px"} p={0}>
+                  <Box mr={"150px"} width={"40px"}>
                     &nbsp;&nbsp;삭제
                   </Box>
                 </Th>
@@ -298,13 +280,10 @@ export function ChartPage() {
                     </Td>
                     <Td color={"#8b8b8b"}>{song.artistName}</Td>
                     <Td>{song.album}</Td>
-                    <Td
-                      // border={"1px solid red"}
-                      p={0}
-                    >
+                    <Td p={0}>
                       <Button
+                        borderRadius={0}
                         variant="ghost"
-                        // border={"1px solid blue"}
                         width={"40px"}
                         ml={"35px"}
                         onClick={() => {
@@ -321,7 +300,7 @@ export function ChartPage() {
                         variant="ghost"
                         onClick={() => navigate("/main/song/" + song.id)}
                       >
-                        <FontAwesomeIcon icon={faEllipsis} />
+                        <FontAwesomeIcon icon={faQrcode} />
                       </Button>
                     </Td>
                     <Td p={1}>
@@ -329,7 +308,6 @@ export function ChartPage() {
                         p={0}
                         borderRadius={0}
                         variant="ghost"
-                        // border={"1px solid blue"}
                         ml={"-5px"}
                         onClick={() => {
                           listIndex.current = idx;

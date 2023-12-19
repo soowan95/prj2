@@ -44,12 +44,15 @@ import PlayComp from "../../component/PlayComp";
 import {
   faEllipsis,
   faMinus,
+  faOtter,
   faPlay,
   faPlus,
+  faQrcode,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AddIcon } from "@chakra-ui/icons";
+import { faCirclePlay } from "@fortawesome/free-regular-svg-icons";
 import KakaoShareComp from "../../component/KakaoShareComp";
 
 function SongInMyFavoritePlaylist() {
@@ -167,11 +170,12 @@ function SongInMyFavoritePlaylist() {
       <Box>
         <Flex>
           <Flex flexDirection="row">
-            <Box mr={8} border="1px solid black">
+            <Box ml={"50px"} mr={"50px"} border="1px solid black">
               <Image
                 src={list !== null && list.photo}
-                boxSize="400px"
+                boxSize="350px"
                 objectFit="cover" // 이미지가 상자를 완전히 덮도록 크기 조절하는 것
+                style={{ margin: "0 auto", display: "block" }}
               />
             </Box>
             <Box>
@@ -183,30 +187,28 @@ function SongInMyFavoritePlaylist() {
                   title={list !== null && list.listName}
                   imageUrl={list !== null && list.photo}
                 />
+                <br />
+                <br />
               </Flex>
               <Flex>
-                <FormLabel>
-                  제작자
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  {list != null && list.nickName} 님
-                </FormLabel>
+                <FormLabel style={{ color: "#8d8d8d" }}>제작자</FormLabel>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <FormLabel> {list != null && list.nickName} 님</FormLabel>
               </Flex>
               <Flex>
-                <FormLabel>
-                  곡수
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  {list !== null && list.totalSongCount}곡
-                </FormLabel>
+                <FormLabel style={{ color: "#8d8d8d" }}>곡수</FormLabel>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <FormLabel> {list != null && list.totalSongCount}</FormLabel>
               </Flex>
               <Flex>
-                <FormLabel>
-                  조회수
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  {params.get("count")}회
-                </FormLabel>
+                <FormLabel style={{ color: "#8d8d8d" }}>조회수</FormLabel>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <FormLabel> {params.get("count")}회</FormLabel>
               </Flex>
               <Flex>
-                <FormLabel>업데이트</FormLabel>
+                <FormLabel style={{ color: "#8d8d8d" }}>작성일</FormLabel>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <FormLabel> {list != null && list.inserted} </FormLabel>
               </Flex>
             </Box>
           </Flex>
@@ -221,12 +223,22 @@ function SongInMyFavoritePlaylist() {
             <Thead>
               <Tr>
                 <Th>번호</Th>
-                <Th>제목</Th>
-                <Th>아티스트</Th>
-                <Th>앨범</Th>
-                <Th>재생</Th>
-                <Th>정보</Th>
-                <Th>추가</Th>
+                <Th></Th>
+                <Th>곡정보</Th>
+                <Th></Th>
+                <Th width={"40px"} p={0}>
+                  <Box width={"30px"} ml={"40px"}>
+                    재생
+                  </Box>
+                </Th>
+                <Th width={"10px"} p={0}>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;정보
+                </Th>
+                <Th width={"100px"} p={0}>
+                  <Box mr={"150px"} width={"40px"}>
+                    &nbsp;&nbsp;추가
+                  </Box>
+                </Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -237,19 +249,23 @@ function SongInMyFavoritePlaylist() {
                   <Tr>
                     <Td>{idx + 1}</Td>
                     {/*노래 곡 아이디를 보여주는 것이 아닌 1부터 보여주는 것*/}
-                    <Td>{song.title}</Td>
-                    <Td>{song.artistName}</Td>
+                    <Td fontWeight={"bold"} fontSize={"20px"}>
+                      {song.title}
+                    </Td>
+                    <Td color={"#8b8b8b"}>{song.artistName}</Td>
                     <Td>{song.album}</Td>
-                    <Td>
+                    <Td p={0}>
                       <Button
                         borderRadius={0}
                         variant="ghost"
+                        width={"40px"}
+                        ml={"35px"}
                         onClick={() => {
                           setIndex(song.indexForPlay);
                           playModal.onOpen();
                         }}
                       >
-                        <FontAwesomeIcon icon={faPlay} />
+                        <FontAwesomeIcon icon={faCirclePlay} />
                       </Button>
                     </Td>
                     <Td>
@@ -258,13 +274,15 @@ function SongInMyFavoritePlaylist() {
                         variant="ghost"
                         onClick={() => navigate("/main/song/" + song.id)}
                       >
-                        <FontAwesomeIcon icon={faEllipsis} />
+                        <FontAwesomeIcon icon={faQrcode} />
                       </Button>
                     </Td>
-                    <Td>
+                    <Td p={1}>
                       <Button
+                        p={0}
                         borderRadius={0}
                         variant="ghost"
+                        ml={"-5px"}
                         onClick={() => {
                           listIndex.current = idx;
                           handleAddModal(song.id);
