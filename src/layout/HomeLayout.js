@@ -2,10 +2,19 @@ import { Box } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 import React from "react";
 import NavBar from "../component/NavBar";
+import "../css/Home.css";
 
 export function HomeLayout() {
   return (
-    <Box mx={{ base: 0, md: 10, lg: 40 }} mb={80}>
+    <Box
+      mt={"-40px"}
+      p={0}
+      boxSizing="border-box"
+      width={"100%"}
+      height={"950px"}
+      style={{ backgroundSize: "100%" }}
+      bgImg="https://t3.ftcdn.net/jpg/02/98/47/38/360_F_298473896_Vsz21xTwMtroEeeGgU8pL2vwt3N65pfR.jpg"
+    >
       <NavBar />
       <Outlet />
     </Box>

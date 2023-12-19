@@ -1,36 +1,32 @@
 import {
   Box,
   Button,
+  Center,
   FormControl,
   FormLabel,
-  Heading,
   Input,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-  useToast,
-  Center,
-  Card,
   InputGroup,
   InputLeftElement,
-  InputRightElement,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faBold,
   faLockOpen,
   faRightToBracket,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import PasswordRecovery from "./PasswordRecovery";
+import FoundPassword from "./FoundPassword";
 import MemberSignup from "./MemberSignup";
 import { LoginContext } from "../../component/LoginProvider";
 import KakaoLoginComp from "../../component/KakaoLoginComp";
@@ -39,13 +35,14 @@ export function MemberLogin() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
 
-  const { fetchLogin, isAuthenticated } = useContext(LoginContext);
+  const { fetchLogin, isAuthenticated, connect } = useContext(LoginContext);
 
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const pr = useDisclosure();
+  const fp = useDisclosure();
   const ms = useDisclosure();
 
   const navigate = useNavigate();
+
   const toast = useToast();
 
   let securityQuestionList = [
@@ -55,17 +52,19 @@ export function MemberLogin() {
     "가장 처음 가본 콘서트는 어떤 가수의 콘서트였습니까?",
   ];
 
+  localStorage.setItem("securityQuestionList", securityQuestionList);
+
   function handleLogin() {
     axios
       .post("/api/member/login", { id, password })
-      .then(() => {
+      .then(({ data }) => {
+        connect(data.nickName);
         navigate("/main");
         toast({
           description: "로그인 되었습니다😀 ",
           status: "info",
         });
         onClose();
-        window.location.reload(0);
       })
       .catch(() => {
         toast({
@@ -81,7 +80,7 @@ export function MemberLogin() {
   return (
     <Center>
       {isAuthenticated() || (
-        <Button colorScheme="purple" mr={5} onClick={onOpen}>
+        <Button colorScheme="purple" mt={600} onClick={onOpen}>
           <FontAwesomeIcon icon={faRightToBracket} />
           로그인
         </Button>
@@ -96,11 +95,16 @@ export function MemberLogin() {
           <ModalCloseButton />
           <ModalBody>
             <Box>
-              <Center mb={20} fontSize={"xx-large"}>
-                R E L I E V E
+              <Center mb={10}>
+                <Box
+                  width={"150px"}
+                  height={"150px"}
+                  bgImage={`url(${process.env.PUBLIC_URL}/img/RelieveYellow.png)`}
+                  backgroundSize={"100%"}
+                />
               </Center>
             </Box>
-            <FormControl mb={5}>
+            <FormControl mb={3}>
               <FormLabel>아이디</FormLabel>
               <InputGroup>
                 <InputLeftElement>
@@ -111,10 +115,13 @@ export function MemberLogin() {
                   placeholder="ID"
                   value={id}
                   onChange={(e) => setId(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleLogin();
+                  }}
                 />
               </InputGroup>
             </FormControl>
-            <FormControl mb={5}>
+            <FormControl>
               <FormLabel>비밀번호</FormLabel>
               <InputGroup>
                 <InputLeftElement>
@@ -126,6 +133,9 @@ export function MemberLogin() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleLogin();
+                  }}
                 />
               </InputGroup>
             </FormControl>
@@ -139,16 +149,21 @@ export function MemberLogin() {
             >
               로그인
             </Button>
+            <KakaoLoginComp />
+          </ModalFooter>
+          <ModalFooter mb={2}>
             <Button
+              w={"150px"}
               size={"xs"}
-              mr={1}
+              mr={2}
               onClick={() => {
-                pr.onOpen();
+                fp.onOpen();
               }}
             >
-              비밀번호찾기
+              비밀번호 찾기
             </Button>
             <Button
+              w={"150px"}
               size={"xs"}
               onClick={() => {
                 ms.onOpen();
@@ -156,13 +171,12 @@ export function MemberLogin() {
             >
               회원가입
             </Button>
-            <KakaoLoginComp />
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <PasswordRecovery
-        isOpen={pr.isOpen}
-        onClose={pr.onClose}
+      <FoundPassword
+        isOpen={fp.isOpen}
+        onClose={fp.onClose}
         securityQuestions={securityQuestionList}
       />
       <MemberSignup

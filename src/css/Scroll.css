@@ -1,0 +1,24 @@
+.scrollBox {
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+        opacity: 0;
+        width: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 2px;
+        background: #e9dcfa;
+    }
+}
+
+.scrollBox:hover {
+    &::-webkit-scrollbar-thumb {
+        border-radius: 2px;
+        background: white;
+    }
+}
+
+.chatBox:hover {
+    .moveIcon {
+        opacity: 0.5;
+    }
+}

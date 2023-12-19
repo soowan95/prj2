@@ -1,10 +1,22 @@
+import {useNavigate} from "react-router-dom";
 import {useContext, useEffect} from "react";
 import {SongContext} from "../../layout/MainLayout";
-import {Box, Flex} from "@chakra-ui/react";
+import {Box, Flex, FormControl, FormLabel} from "@chakra-ui/react";
 import SongRequestComp from "../../component/SongRequestComp";
+import axios from "axios";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faFileLines} from "@fortawesome/free-regular-svg-icons";
 
 export function SearchPage() {
   const { searched } = useContext(SongContext);
+  const navigate = useNavigate(); // 페이지 이동
+
+  // 노래 상세 페이지로 이동하는 함수
+  const goToSongPage = (songId) => {
+    axios.put("/api/song/plusSongPoint", {id:songId})
+      .then(() => console.log("ok"))
+    navigate(`/main/song/${songId}`);
+  };
 
   // 새로고침 방지 변수
   const preventClose = (e:BeforeUnloadEvent) => {
@@ -23,6 +35,7 @@ export function SearchPage() {
     };
   },[]);
 
+
   return (
     <Box mt={"100px"}>
       {searched !== null &&
@@ -31,13 +44,29 @@ export function SearchPage() {
             key={song.id}
             m={"3px auto"}
             width={"70%"}
-            justifyContent={"space-between"}
-            border={"1px solid black"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            borderBottom={"1px solid lavender"}
+            _hover={{ bg: "grey", opacity: 0.6  }}
+            // Box를 클릭하면 해당 노래의 상세 페이지로 이동
+            onClick={() => goToSongPage(song.id)}
           >
-            <Box>{song.title}</Box>
-            <Box>{song.artistName}</Box>
-            <Box>{song.genre}</Box>
-            <Box>{song.mood}</Box>
+            <FormControl w={"300px"}>
+              <FormLabel fontSize={17} color={"#F3DA2A"} cursor={"pointer"}>
+                <FontAwesomeIcon icon={faFileLines} />　{song.title}
+              </FormLabel>
+              <FormLabel fontSize={15} cursor={"pointer"}>
+                {song.artistName}
+              </FormLabel>
+            </FormControl>
+            <Box w={"20%"}>{song.genre}</Box>
+            <Box w={"20%"}>{song.mood}</Box>
+
+
+            {/*<Box w={"22%"}>{song.title}</Box>*/}
+            {/*<Box w={"22%"}>{song.artistName}</Box>*/}
+            {/*<Box w={"22%"}>{song.genre}</Box>*/}
+            {/*<Box w={"22%"}>{song.mood}</Box>*/}
           </Flex>
         ))}
       {searched !== null && searched.length === 0 && <SongRequestComp />}

@@ -3,10 +3,13 @@ import {
   Button,
   Flex,
   FormControl,
+  FormLabel,
   Input,
+  Kbd,
   Popover,
   PopoverContent,
   PopoverTrigger,
+  useColorMode,
   useDisclosure,
 } from "@chakra-ui/react";
 import { createContext, useEffect, useRef, useState } from "react";
@@ -15,6 +18,16 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { MyInfo } from "../page/main/MyInfo";
 import SongRequestComp from "../component/SongRequestComp";
 import _ from "lodash";
+import LiveChatComp from "../component/LiveChatComp";
+import "../css/Fonts.css";
+import {
+  faCompactDisc,
+  faMagnifyingGlass,
+  faMoon,
+  faSquareCaretUp,
+  faSun,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function MainLayout() {
   const [top100, setTop100] = useState(null);
@@ -22,13 +35,18 @@ export function MainLayout() {
   const [moods, setMoods] = useState(null);
   const [genres, setGenres] = useState(null);
   const [searchCategory, setSearchCategory] = useState("가수");
+  const [selectedCategory, setSelectedCategory] = useState("가수");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [autoComplete, setAutoComplete] = useState(null);
+  const [currentMode, setCurrentMode] = useState(
+    localStorage.getItem("chakra-ui-color-mode"),
+  );
 
   const genreInclude = useRef(",");
   const moodInclude = useRef(",");
   const genreMoodList = useRef([]);
   const searchRef = useRef(null);
+  const scroll = useRef(null);
 
   const moodPopOver = useDisclosure();
   const genrePopOver = useDisclosure();
@@ -38,6 +56,8 @@ export function MainLayout() {
   const location = useLocation();
 
   const navigate = useNavigate();
+
+  const { toggleColorMode } = useColorMode();
 
   params.set("sc", searchCategory);
   params.set("sk", searchKeyword);
@@ -54,7 +74,7 @@ export function MainLayout() {
     axios
       .get("/api/song/autoComplete?" + params)
       .then(({ data }) => setAutoComplete(data));
-  }, [searchKeyword]);
+  }, [searchKeyword, searchCategory]);
 
   // 검색창 placeholder
   let searchInfoText = searchCategory;
@@ -87,7 +107,10 @@ export function MainLayout() {
               "&" +
               params,
           )
-          .then(({ data }) => setTop100(data));
+          .then(({ data }) => {
+            if (data.length === 0) data = null;
+            setTop100(data);
+          });
       } else {
         handleSearchButton();
       }
@@ -106,7 +129,10 @@ export function MainLayout() {
               "&" +
               params,
           )
-          .then(({ data }) => setTop100(data));
+          .then(({ data }) => {
+            if (data.length === 0) data = null;
+            setTop100(data);
+          });
       } else {
         handleSearchButton();
       }
@@ -118,23 +144,6 @@ export function MainLayout() {
       moodInclude.current = "";
   }
 
-  let isCtrl = false;
-  let isAlt = false;
-
-  // 단축키 누른 후
-  document.onkeyup = (e) => {
-    if (e.key === "Ctrl") isCtrl = false;
-    if (e.key === "Alt") isAlt = false;
-  };
-
-  // 단축키 눌렀을때
-  document.onkeydown = (e) => {
-    if (e.key === "Ctrl") isCtrl = true;
-    if (e.key === "Alt") isAlt = true;
-
-    if (e.key === "Enter") document.getElementById("searchButton").click();
-  };
-
   // 필터 버튼 색 바꾸기
   function handleButtonColor(e) {
     e.target.style.background =
@@ -142,9 +151,27 @@ export function MainLayout() {
     e.target.style.color = e.target.style.color === "white" ? "black" : "white";
   }
 
+  // 스타일을 동적으로 설정하는 함수
+  const getButtonStyle = (category) => {
+    const isDarkMode = localStorage.getItem("chakra-ui-color-mode") === "dark";
+    const backgroundColor =
+      selectedCategory === category
+        ? isDarkMode
+          ? "#f2c84b"
+          : "#DA0C81"
+        : "white";
+
+    return {
+      fontFamily: "YClover-Bold",
+      color: selectedCategory === category ? "white" : "black",
+      background: backgroundColor,
+    };
+  };
+
   // 검색창 카테고리 바꾸기
   function handleSearchCategoryButton(e) {
     setSearchCategory(e.target.value);
+    setSelectedCategory(e.target.value); // 클릭된 버튼의 타입으로 상태 업데이트
   }
 
   // 검색 버튼
@@ -169,9 +196,57 @@ export function MainLayout() {
     params.set("sk", searchKeyword);
   }
 
+  // 스크롤 위로
+  function handleScroll() {
+    scroll.current.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  window.addEventListener("keydown", (e) => {
+    if (
+      e.key === "F2" &&
+      currentMode === localStorage.getItem("chakra-ui-color-mode")
+    ) {
+      toggleColorMode();
+      setCurrentMode(localStorage.getItem("chakra-ui-color-mode"));
+      window.location.reload(0);
+    }
+  });
+
   return (
     <SongContext.Provider value={{ top100, searched }}>
-      <Box position={"relative"} width={"100%"} m={0}>
+      <Box
+        ref={scroll}
+        position={"relative"}
+        width={"100%"}
+        m={0}
+        minH={"100vh"}
+        overflowX={"hidden"}
+        // 배경화면~!!!!!!
+        bgImage={
+          `url(${process.env.PUBLIC_URL}/img/` +
+          (localStorage.getItem("chakra-ui-color-mode") === "dark"
+            ? `darkmode.jpg)`
+            : `lightmode.jpg)`)
+        }
+      >
+        {/* 테마 바꾸기 버튼 */}
+        <Button
+          onClick={toggleColorMode}
+          position={"absolute"}
+          top={"3%"}
+          right={"10%"}
+          fontSize="2xl"
+          variant="unstyled"
+        >
+          <span style={{ fontSize: "1rem", opacity: "0.5" }}>
+            <Kbd mr={1}>f2</Kbd>
+          </span>
+          {localStorage.getItem("chakra-ui-color-mode") === "dark" ? (
+            <FontAwesomeIcon icon={faSun} style={{ color: "#f2c84b" }} />
+          ) : (
+            <FontAwesomeIcon icon={faMoon} style={{ color: "white" }} />
+          )}
+        </Button>
         {/* 메인 로고 */}
         <Button
           size={"L"}
@@ -180,6 +255,8 @@ export function MainLayout() {
             position: "relative",
             left: "50%",
             transform: "translate(-50%)",
+            background: "none",
+            color: "white",
           }}
           fontSize={"3rem"}
           onClick={() => {
@@ -188,7 +265,17 @@ export function MainLayout() {
             setSearchKeyword("");
           }}
         >
-          RELIEVE
+          <Box
+            width={"150px"}
+            height={"150px"}
+            bgImage={
+              `url(${process.env.PUBLIC_URL}/img/` +
+              (localStorage.getItem("chakra-ui-color-mode") === "dark"
+                ? `RelieveYellow.png)`
+                : `RelieveWhite.png)`)
+            }
+            backgroundSize={"100%"}
+          />
         </Button>
         {/* 사용자 정보 */}
         <Box position={"absolute"} width={"20px"} right={"3%"} top={"50px"}>
@@ -204,7 +291,7 @@ export function MainLayout() {
             height={"200px"}
             alignItems={"center"}
           >
-            <Box textAlign={"center"} fontSize={"1.5rem"}>
+            <Box textAlign={"center"} fontWeight={"bold"} fontSize={"1.3rem"}>
               FILTER
             </Box>
             <Popover
@@ -214,27 +301,40 @@ export function MainLayout() {
               placement="right"
             >
               <PopoverTrigger>
-                <Box mt={"30px"} textAlign={"center"}>
+                <Box
+                  mt={"30px"}
+                  textAlign={"center"}
+                  cursor={"pointer"}
+                  _hover={{
+                    color: "#F3DA2A",
+                    fontWeight: "bold",
+                    transform: "scale(1.3)",
+                    transition: 1.0,
+                  }}
+                >
                   Genre
                 </Box>
               </PopoverTrigger>
-              <PopoverContent p={5}>
+              <PopoverContent p={5} w={"100px"}>
                 {genres !== null &&
                   genres.map((genre) => (
                     <Flex key={genre.id} my={"5px"} alignItems={"center"}>
-                      <p style={{ width: "60%" }}>{genre.genre}</p>
                       <Button
                         className="genre"
-                        size={"xs"}
-                        h={"13px"}
-                        w={"13px"}
+                        h={"30px"}
+                        w={"80px"}
                         borderRadius={"5px"}
-                        border={"1px solid black"}
                         onClick={(e) => handlePlusButton(e)}
+                        bg={
+                          localStorage.getItem("chakra-ui-color-mode") ===
+                          "light"
+                            ? "white"
+                            : "black"
+                        }
                         value={genre.genre}
                         name="false"
                       >
-                        +
+                        {genre.genre}
                       </Button>
                     </Flex>
                   ))}
@@ -247,26 +347,39 @@ export function MainLayout() {
               placement="right"
             >
               <PopoverTrigger>
-                <Box mt={"30px"} textAlign={"center"}>
+                <Box
+                  mt={"30px"}
+                  textAlign={"center"}
+                  cursor={"pointer"}
+                  _hover={{
+                    color: "#F3DA2A",
+                    fontWeight: "bold",
+                    transform: "scale(1.3)",
+                    transition: 1.0,
+                  }}
+                >
                   Mood
                 </Box>
               </PopoverTrigger>
-              <PopoverContent p={5}>
+              <PopoverContent p={5} w={"100px"}>
                 {moods !== null &&
                   moods.map((mood) => (
                     <Flex key={mood.id} my={"5px"} alignItems={"center"}>
-                      <p style={{ width: "60%" }}>{mood.mainMood}</p>
                       <Button
                         className="mood"
-                        size={"xs"}
-                        h={"13px"}
-                        w={"13px"}
+                        h={"30px"}
+                        w={"80px"}
                         borderRadius={"5px"}
-                        border={"1px solid black"}
                         onClick={(e) => handlePlusButton(e)}
+                        bg={
+                          localStorage.getItem("chakra-ui-color-mode") ===
+                          "light"
+                            ? "white"
+                            : "black"
+                        }
                         value={mood.mainMood}
                       >
-                        +
+                        {mood.mainMood}
                       </Button>
                     </Flex>
                   ))}
@@ -278,30 +391,39 @@ export function MainLayout() {
         {(location.pathname === "/main" ||
           location.pathname === "/main/search") && (
           <FormControl width={"100%"} height={"50px"} mt={"40px"}>
-            <Flex width={"70%"} m={"0 auto"}>
+            <Flex width={"50%"} m={"0 auto"}>
               <Button
+                mr={1}
+                size={"sm"}
                 value={"가수"}
+                style={getButtonStyle("가수")}
                 onClick={(e) => handleSearchCategoryButton(e)}
               >
                 가수
               </Button>
               <Button
+                mr={1}
+                size={"sm"}
                 value={"제목"}
+                style={getButtonStyle("제목")}
                 onClick={(e) => handleSearchCategoryButton(e)}
               >
                 제목
               </Button>
               <Button
+                size={"sm"}
                 value={"가사"}
+                style={getButtonStyle("가사")}
                 onClick={(e) => handleSearchCategoryButton(e)}
               >
                 가사
               </Button>
             </Flex>
             {/* 검색창 */}
+
             <Flex
               position={"relative"}
-              width={"70%"}
+              width={"50%"}
               m={"0 auto"}
               alignItems={"center"}
             >
@@ -320,70 +442,150 @@ export function MainLayout() {
                 ))}
               <Popover trigger="hover">
                 <PopoverTrigger>
-                  <Input
-                    ref={searchRef}
-                    id="searchInput"
-                    height={"45px"}
-                    placeholder={searchInfoText}
-                    onChange={(e) => {
-                      handleChangeSearchInput(e);
-                    }}
-                  />
+                  <Flex
+                    h={"55px"}
+                    w={"100%"}
+                    border={"1px solid white"}
+                    borderRadius={"8px"}
+                    alignItems={"center"}
+                  >
+                    <Input
+                      border={"0px solid"}
+                      variant={"unstyled"}
+                      ml={2}
+                      ref={searchRef}
+                      id="searchInput"
+                      height={"45px"}
+                      placeholder={searchInfoText}
+                      onChange={(e) => {
+                        handleChangeSearchInput(e);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleSearchButton();
+                      }}
+                    />
+                    <Button
+                      mr={2}
+                      id="searchButton"
+                      height={"45px"}
+                      // width={"5%"}
+                      onClick={handleSearchButton}
+                      bg={"none"}
+                      _hover={{ bg: "none" }}
+                      color={"white"}
+                    >
+                      <FontAwesomeIcon icon={faMagnifyingGlass} />
+                    </Button>
+                  </Flex>
                 </PopoverTrigger>
-                <Button
-                  id="searchButton"
-                  border={"1px solid purple"}
-                  height={"45px"}
-                  width={"5%"}
-                  onClick={handleSearchButton}
-                >
-                  검색
-                </Button>
+
                 <PopoverContent
                   w={{
-                    base: "500px",
-                    lg: "700px",
-                    xl: "900px",
-                    "2xl": "1200px",
+                    base: "200px",
+                    lg: "400px",
+                    xl: "600px",
+                    "2xl": "900px",
                   }}
                 >
                   {autoComplete !== null &&
                   autoComplete.length !== 0 &&
                   searchCategory === "가수"
-                    ? _.uniqBy(autoComplete, "artistName").map((song) => (
-                        <Box
-                          key={song.id}
-                          onClick={() => {
-                            params.set("sk", song.artistName);
-                            handleSearchButton();
-                          }}
-                        >
-                          {song.artistName}
-                        </Box>
-                      ))
-                    : searchCategory === "제목"
-                      ? _.uniqBy(autoComplete, "title").map((song) => (
-                          <Box
+                    ? _.uniqBy(autoComplete, "artistName")
+                        .filter((song, index) => index < 10)
+                        .map((song) => (
+                          <Flex
                             key={song.id}
                             onClick={() => {
-                              params.set("sk", song.title);
+                              params.set("sk", song.artistName);
                               handleSearchButton();
                             }}
+                            //justifyContent={"center"}
                           >
-                            {song.title}
-                          </Box>
+                            <Flex ml={5}>
+                              <FormLabel
+                                _hover={{
+                                  cursor: "pointer",
+                                  bgColor: "#B8B8B8",
+                                }}
+                              >
+                                <FontAwesomeIcon icon={faCompactDisc} />　
+                                {song.artistName}　-　{song.title}
+                              </FormLabel>
+                            </Flex>
+
+                            {/*<Box w={"20%"}>{song.artistName}</Box>*/}
+                            {/*<Box w={"20%"} textAlign={"left"}>*/}
+                            {/*  {song.title}*/}
+                            {/*</Box>*/}
+                            {/*<Box w={"40%"} textAlign={"left"}>*/}
+                            {/*  {song.lyric.slice(0, 21)}...*/}
+                            {/*</Box>*/}
+                          </Flex>
                         ))
-                      : _.uniqBy(autoComplete, "lyric").map((song) => (
-                          <Box
-                            key={song.id}
-                            onClick={() => {
-                              params.set("sk", song.lyric);
-                              handleSearchButton();
-                            }}
-                          >
-                            {song.lyric}
-                          </Box>
-                        ))}
+                    : searchCategory === "제목"
+                      ? _.uniqBy(autoComplete, "title")
+                          .filter((song, index) => index < 10)
+                          .map((song) => (
+                            <Flex
+                              key={song.id}
+                              onClick={() => {
+                                params.set("sk", song.title);
+                                handleSearchButton();
+                              }}
+                              //justifyContent={"center"}
+                            >
+                              <Flex ml={5}>
+                                <FormLabel
+                                  _hover={{
+                                    cursor: "pointer",
+                                    bgColor: "#B8B8B8",
+                                  }}
+                                >
+                                  <FontAwesomeIcon icon={faCompactDisc} />　
+                                  {song.title} - {song.artistName}
+                                </FormLabel>
+                              </Flex>
+
+                              {/*<Box w={"20%"}>{song.artistName}</Box>*/}
+                              {/*<Box w={"20%"} textAlign={"left"}>*/}
+                              {/*  {song.title}*/}
+                              {/*</Box>*/}
+                              {/*<Box w={"40%"} textAlign={"left"}>*/}
+                              {/*  {song.lyric.slice(0, 21)}...*/}
+                              {/*</Box>*/}
+                            </Flex>
+                          ))
+                      : _.uniqBy(autoComplete, "lyric")
+                          .filter((song, index) => index < 10)
+                          .map((song) => (
+                            <Flex
+                              key={song.id}
+                              onClick={() => {
+                                params.set("sk", song.lyric);
+                                handleSearchButton();
+                              }}
+                              //justifyContent={"center"}
+                            >
+                              <Flex ml={5}>
+                                <FormLabel
+                                  _hover={{
+                                    cursor: "pointer",
+                                    bgColor: "#B8B8B8",
+                                  }}
+                                >
+                                  <FontAwesomeIcon icon={faCompactDisc} />　
+                                  {song.artistName}　-　{song.title}
+                                </FormLabel>
+                              </Flex>
+                              {/*<Box w={"20%"}>{song.artistName}</Box>*/}
+                              {/*<Box w={"20%"} textAlign={"left"}>*/}
+                              {/*  {song.title}*/}
+                              {/*</Box>*/}
+                              {/*<Box w={"40%"} textAlign={"left"}>*/}
+                              {/*  {song.lyric.slice(0, 21)}...*/}
+                              {/*</Box>*/}
+                            </Flex>
+                          ))}
                   {autoComplete !== null && autoComplete.length === 0 && (
                     <SongRequestComp />
                   )}
@@ -392,7 +594,16 @@ export function MainLayout() {
             </Flex>
           </FormControl>
         )}
+        <Button
+          position={"fixed"}
+          bottom={"7%"}
+          right={"3%"}
+          onClick={handleScroll}
+        >
+          <FontAwesomeIcon icon={faSquareCaretUp} />
+        </Button>
         <Outlet />
+        <LiveChatComp />
       </Box>
     </SongContext.Provider>
   );

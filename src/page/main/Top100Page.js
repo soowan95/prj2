@@ -1,18 +1,35 @@
-import { Box, Flex } from "@chakra-ui/react";
+import {
+  Box,
+  Card,
+  CardBody,
+  Center,
+  Flex,
+  FormControl,
+  FormLabel,
+  Tooltip,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { useContext, useRef, useState } from "react";
 import { SongContext } from "../../layout/MainLayout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClone } from "@fortawesome/free-regular-svg-icons";
+import { faCirclePlay, faClone } from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import PlayComp from "../../component/PlayComp";
 
 export function Top100Page() {
   const [similar, setSimilar] = useState(null);
+  const [songIndex, setSongIndex] = useState(0);
 
   const { top100 } = useContext(SongContext);
 
   const thisId = useRef(0);
 
+  const songDrawer = useDisclosure();
+
   const params = new URLSearchParams();
+
+  const navigate = useNavigate();
 
   function handleSimilarButton(genre, mood, id) {
     params.set("genre", genre);
@@ -31,51 +48,105 @@ export function Top100Page() {
     }
   }
 
+  function handleGoToSong(id) {
+    navigate(`/main/song/${id}`);
+  }
+
   return (
     <Box mt={"100px"}>
       {top100 !== null &&
         top100.map((song) => (
           <Box
             key={song.id}
-            m={"3px auto"}
-            width={"70%"}
-            border={"1px solid black"}
+            m={"10px auto"}
+            width={"75%"}
+            alignItems={"center"}
+            borderBottom={"1px solid lavender"}
           >
             <Flex
-              justifyContent={"space-between"}
+              justifyContent={"center"}
               alignItems={"center"}
               width={"100%"}
+              _hover={{ bg: "rgba(129,133,136,0.38)" }}
             >
-              <Box>{song.title}</Box>
-              <Box>{song.artistName}</Box>
-              <Box>{song.genre}</Box>
-              <Box>{song.mood}</Box>
-              <FontAwesomeIcon
-                fontSize={"0.8rem"}
-                icon={faClone}
+              <Box
+                onClick={() => {
+                  setSongIndex(song.indexForPlay);
+                  songDrawer.onOpen();
+                }}
+                w={"20%"}
+                h={"60px"}
+              >
+                <FormControl w={"300px"}>
+                  <FormLabel fontSize={17} color={"#F3DA2A"} cursor={"pointer"}>
+                    <FontAwesomeIcon icon={faCirclePlay} /> {song.title}
+                  </FormLabel>
+                  <FormLabel fontSize={15} cursor={"pointer"}>
+                    {song.artistName}
+                  </FormLabel>
+                </FormControl>
+              </Box>
+
+              {/*<Box w={"20%"}>{song.artistName}</Box>*/}
+
+              <Box w={"20%"}>{song.genre}</Box>
+              <Box w={"20%"}>{song.mood}</Box>
+              <Box
+                w={"15%"}
+                textAlign={"right"}
                 onClick={() =>
                   handleSimilarButton(song.genre, song.mood, song.id)
                 }
-              />
+              >
+                <Tooltip label={"Similar Songs"}>
+                  <FontAwesomeIcon
+                    cursor={"pointer"}
+                    fontSize={"0.8rem"}
+                    icon={faClone}
+                  />
+                </Tooltip>
+              </Box>
             </Flex>
-            {similar !== null &&
-              song.id === thisId.current &&
-              similar.map((si) => (
-                <Flex
-                  key={si.id}
-                  justifyContent={"space-between"}
-                  alignItems={"center"}
-                  width={"90%"}
-                  m={"0 auto"}
-                >
-                  <Box>{si.title}</Box>
-                  <Box>{si.artistName}</Box>
-                  <Box>{si.genre}</Box>
-                  <Box>{si.mood}</Box>
-                </Flex>
-              ))}
+            <Center>
+              <Flex w={"80%"} justifyContent={"space-between"}>
+                {similar !== null &&
+                  song.id === thisId.current &&
+                  similar.map((si) => (
+                    <Box key={si.id} m={"0 auto"}>
+                      <Card
+                        w={"150px"}
+                        bg={
+                          localStorage.getItem("chakra-ui-color-mode") ===
+                          "dark"
+                            ? "#f3cd5d"
+                            : "#e86db3"
+                        }
+                        onClick={() => handleGoToSong(si.id)}
+                      >
+                        <CardBody>
+                          <Box fontWeight={"bold"} color={"#535353"}>
+                            {si.title.length > 10
+                              ? si.title.slice(0, 10) + ".."
+                              : si.title}
+                          </Box>
+                          <Box>{si.artistName}</Box>
+                          <Box>{si.genre}</Box>
+                          <Box>{si.mood}</Box>
+                        </CardBody>
+                      </Card>
+                    </Box>
+                  ))}
+              </Flex>
+            </Center>
           </Box>
         ))}
+      <PlayComp
+        index={songIndex}
+        setIndex={setSongIndex}
+        isOpen={songDrawer.isOpen}
+        onClose={songDrawer.onClose}
+        songList={top100}
+      />
     </Box>
   );
 }

@@ -1,7 +1,6 @@
 import { HomeLayout } from "./layout/HomeLayout";
 import { MemberLogin } from "./page/memberLogin/MemberLogin";
 import { MainLayout } from "./layout/MainLayout";
-import { SearchPage } from "./page/song/SearchPage";
 import { Top100Page } from "./page/main/Top100Page";
 
 import {
@@ -11,11 +10,22 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { MyPlayList } from "./page/main/MyPlayList";
-import { MyInfo } from "./page/main/MyInfo";
 import SongRequest from "./page/main/SongRequest";
 import LoginProvider from "./component/LoginProvider";
 import SongPage from "./page/song/SongPage";
 import KakaoLogin from "./page/memberLogin/KakaoLogin";
+import { SearchPage } from "./page/main/SearchPage";
+import { Suggestion } from "./page/main/Suggestion";
+import ChartPage from "./page/main/ChartPage";
+import MemberInfo from "./page/memberLogin/MemberInfo";
+import MemberDelete from "./page/memberLogin/MemberDelete";
+import MyFavoritePlaylist from "./page/main/MyFavoritePlaylist";
+import SongList from "./page/song/SongList";
+import { SongEdit } from "./page/song/SongEdit";
+import SongInMyFavoritePlaylist from "./page/main/SongInMyFavoritePlaylist";
+import MySongRequest from "./page/main/MySongRequest";
+import RecommendPlaylist from "./page/main/RecommendPlaylist";
+import TopPlaylist from "./page/main/TopPlaylist";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -29,9 +39,22 @@ const routes = createBrowserRouter(
         <Route path="search" element={<SearchPage />} />
         <Route path="myplaylist" element={<MyPlayList />} />
         <Route path="requestlist" element={<SongRequest />} />
+        <Route path="mySongRequestList" element={<MySongRequest />} />
+        <Route path="albumList" element={<SongList />} />
         <Route path="song/:id" element={<SongPage />} />
+        <Route path="songEdit/:id" element={<SongEdit />} />
+        <Route path="suggestion" element={<Suggestion />} />
+        <Route path="chartpage" element={<ChartPage />} />
+        <Route path="memberinfo" element={<MemberInfo />} />
+        <Route path="delete" element={<MemberDelete />} />
+        <Route path="myFavorite" element={<MyFavoritePlaylist />} />
+        <Route path="recommendplaylist" element={<RecommendPlaylist />} />
+        <Route
+          path="songinmyfavoriteplaylist"
+          element={<SongInMyFavoritePlaylist />}
+        />
+        <Route path="topplaylist" element={<TopPlaylist />} />
       </Route>
-      ,
     </Route>,
   ),
 );
