@@ -65,7 +65,7 @@ export function Top100Page() {
             width={"75%"}
             alignItems={"center"}
             borderBottom={"1px solid lavender"}
-            _hover={{ bg: "#818588" }}
+            _hover={{ bg: "#818588", opacity: 0.6 }}
             // style={{ cursor: "pointer" }}
           >
             <Flex
@@ -83,7 +83,7 @@ export function Top100Page() {
                 //border={"1px solid black"}
               >
                 <FormControl w={"300px"}>
-                  <FormLabel fontSize={17} color={"#535353"} cursor={"pointer"}>
+                  <FormLabel fontSize={17} color={"#F3DA2A"} cursor={"pointer"}>
                     <FontAwesomeIcon icon={faCirclePlay} /> {song.title}
                   </FormLabel>
                   <FormLabel fontSize={15} cursor={"pointer"}>

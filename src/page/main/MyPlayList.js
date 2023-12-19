@@ -54,7 +54,7 @@ export function MyPlayList() {
   const [playlistName, setPlaylistName] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const [coverImage, setCoverImage] = useState(null);
-
+  
   const count = useRef(0);
   // useRef는 .current 프로퍼티로 전달된 인자로 초기화된 변경 가능한 ref 객체를 반환합니다.
 
@@ -168,6 +168,7 @@ export function MyPlayList() {
                     onClick={() => handleChart(memberplaylist.listId)}
                   >
                     <Image
+                      borderRadius={"20px"}
                       src={memberplaylist.photo}
                       boxSize="220px"
                       objectFit="cover"

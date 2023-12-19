@@ -3,7 +3,6 @@ import { LoginContext } from "../../component/LoginProvider";
 import axios from "axios";
 import {
   Box,
-  Button,
   Card,
   CardBody,
   CardFooter,
@@ -55,7 +54,6 @@ export function RecommendPlaylist() {
           "/main/topplaylist?listId=" + listId + "&count=" + count.current,
         ),
       );
-    // .then(() => navigate("/main/topplaylist?listId=" + listId));
   }
 
   return (
@@ -100,6 +98,7 @@ export function RecommendPlaylist() {
                 <Box>
                   <CardHeader height="242px">
                     <Image
+                      borderRadius={"20px"}
                       src={srl.picture}
                       alt={srl.cover}
                       _hover={{ cursor: "pointer" }}
@@ -151,22 +150,22 @@ export function RecommendPlaylist() {
         <br />
         <br />
       </Box>
-      <SimpleGrid columns={3} spacing={5} minChildWidth="70px">
-        <Flex gap={5} flexWrap="wrap" ml={"140px"} justifyContent="center">
+      <SimpleGrid columns={5} spacing={5} minChildWidth="30px">
+        <Flex gap={3} flexWrap="wrap" ml={"90px"} justifyContent="center">
           {/* S3 이미지 출력 */}
           {recommendByViews !== null &&
             recommendByViews.map((views, idx) => (
               <Card
                 mr={"100"}
                 mb={"20px"}
-                // border="1px solid purple"
-                width={"350px"}
-                height={"400px"}
+                width={"250px"}
+                height={"350px"}
                 bgColor={"none"}
               >
                 <Box>
                   <CardHeader height="242px" key={idx}>
                     <Image
+                      borderRadius={"20px"}
                       src={views.pictureUrl}
                       alt={views.picture}
                       _hover={{ cursor: "pointer" }}
@@ -178,28 +177,31 @@ export function RecommendPlaylist() {
                       }}
                     />
                   </CardHeader>
-                  <Box height="140px" width="220px" ml="64px">
-                    <Box pl={1} mt="10px" color="#0096ff">
-                      인기 추천
-                    </Box>
-                    <CardBody
-                      fontSize={"25"}
-                      fontWeight={"bold"}
-                      size="md"
-                      _hover={{ cursor: "pointer" }}
-                      onClick={() => {
-                        handleHitsCount(views.likelistId);
-                      }}
-                      pl={1}
-                    >
-                      {views.listName}
-                    </CardBody>
-                    <CardFooter pl={1.5} pt={0} width={"350px"}>
-                      {views?.songs} 곡
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      조회수 : {views?.playlistCount} 회
-                    </CardFooter>
-                  </Box>
+                  <CardBody
+                    fontSize={"25"}
+                    fontWeight={"bold"}
+                    ml={"30px"}
+                    size="md"
+                    _hover={{ cursor: "pointer" }}
+                    onClick={() => {
+                      handleHitsCount(views.likelistId);
+                    }}
+                    pl={1}
+                  >
+                    {views.listName}
+                  </CardBody>
+                  <CardFooter
+                    pt={0}
+                    width={"250px"}
+                    height={"20px"}
+                    ml={"15px"}
+                    mt={"-8px"}
+                  >
+                    <Flex>
+                      <Box>{views?.songs} 곡</Box>
+                      <Box ml={"65px"}>조회수 : {views?.playlistCount} 회</Box>
+                    </Flex>
+                  </CardFooter>
                 </Box>
               </Card>
             ))}

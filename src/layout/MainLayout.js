@@ -1,12 +1,14 @@
 import {
   Box,
   Button,
+  Center,
   Flex,
   FormControl,
   Input,
   Popover,
   PopoverContent,
   PopoverTrigger,
+  scaleFadeConfig,
   useColorMode,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -18,7 +20,12 @@ import SongRequestComp from "../component/SongRequestComp";
 import _ from "lodash";
 import LiveChatComp from "../component/LiveChatComp";
 import "../css/Fonts.css";
-import { faSquareCaretUp } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMoon,
+  faSquareCaretUp,
+  faSun,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function MainLayout() {
@@ -141,11 +148,21 @@ export function MainLayout() {
   }
 
   // 스타일을 동적으로 설정하는 함수
-  const getButtonStyle = (category) => ({
-    fontFamily: "YClover-Bold",
-    color: selectedCategory === category ? "white" : "black",
-    background: selectedCategory === category ? "#e9dcfa" : "white",
-  });
+  const getButtonStyle = (category) => {
+    const isDarkMode = localStorage.getItem("chakra-ui-color-mode") === "dark";
+    const backgroundColor =
+      selectedCategory === category
+        ? isDarkMode
+          ? "#f2c84b"
+          : "#DA0C81"
+        : "white";
+
+    return {
+      fontFamily: "YClover-Bold",
+      color: selectedCategory === category ? "white" : "black",
+      background: backgroundColor,
+    };
+  };
 
   // 검색창 카테고리 바꾸기
   function handleSearchCategoryButton(e) {
@@ -197,13 +214,20 @@ export function MainLayout() {
             : `lightmode.jpg)`)
         }
       >
+        {/* 테마 바꾸기 버튼 */}
         <Button
           onClick={toggleColorMode}
           position={"absolute"}
           top={"3%"}
           right={"10%"}
+          fontSize="2xl"
+          variant="unstyled"
         >
-          테마바꾸기 버튼
+          {localStorage.getItem("chakra-ui-color-mode") === "dark" ? (
+            <FontAwesomeIcon icon={faSun} style={{ color: "#f2c84b" }} />
+          ) : (
+            <FontAwesomeIcon icon={faMoon} style={{ color: "white" }} />
+          )}
         </Button>
         {/* 메인 로고 */}
         <Button
@@ -226,7 +250,13 @@ export function MainLayout() {
           <Box
             width={"150px"}
             height={"150px"}
-            bgImage={`url(${process.env.PUBLIC_URL}/img/Relieve.png)`}
+            bgImage={
+              `url(${process.env.PUBLIC_URL}/img/` +
+              (localStorage.getItem("chakra-ui-color-mode") === "dark"
+                ? `RelieveYellow.png)`
+                : `RelieveWhite.png)`)
+            }
+            // bgImage={`url(${process.env.PUBLIC_URL}/img/RelieveWhite.png)`}
             backgroundSize={"100%"}
           />
         </Button>
@@ -244,7 +274,7 @@ export function MainLayout() {
             height={"200px"}
             alignItems={"center"}
           >
-            <Box textAlign={"center"} fontWeight={"bold"} fontSize={"1.5rem"}>
+            <Box textAlign={"center"} fontWeight={"bold"} fontSize={"1.3rem"}>
               FILTER
             </Box>
             <Popover
@@ -254,7 +284,17 @@ export function MainLayout() {
               placement="right"
             >
               <PopoverTrigger>
-                <Box mt={"30px"} textAlign={"center"}>
+                <Box
+                  mt={"30px"}
+                  textAlign={"center"}
+                  cursor={"pointer"}
+                  _hover={{
+                    color: "#F3DA2A",
+                    fontWeight: "bold",
+                    transform: "scale(1.3)",
+                    transition: 1.0,
+                  }}
+                >
                   Genre
                 </Box>
               </PopoverTrigger>
@@ -290,7 +330,17 @@ export function MainLayout() {
               placement="right"
             >
               <PopoverTrigger>
-                <Box mt={"30px"} textAlign={"center"}>
+                <Box
+                  mt={"30px"}
+                  textAlign={"center"}
+                  cursor={"pointer"}
+                  _hover={{
+                    color: "#F3DA2A",
+                    fontWeight: "bold",
+                    transform: "scale(1.3)",
+                    transition: 1.0,
+                  }}
+                >
                   Mood
                 </Box>
               </PopoverTrigger>
@@ -348,6 +398,7 @@ export function MainLayout() {
               </Button>
             </Flex>
             {/* 검색창 */}
+
             <Flex
               position={"relative"}
               width={"70%"}
@@ -382,16 +433,16 @@ export function MainLayout() {
                     }}
                   />
                 </PopoverTrigger>
+
                 <Button
                   id="searchButton"
-                  border={"1px solid purple"}
                   height={"45px"}
-                  width={"5%"}
+                  // width={"5%"}
                   onClick={handleSearchButton}
-                  style={{ fontFamily: "YClover-Bold" }}
                 >
-                  검색
+                  <FontAwesomeIcon icon={faMagnifyingGlass} />
                 </Button>
+
                 <PopoverContent
                   w={{
                     base: "500px",
