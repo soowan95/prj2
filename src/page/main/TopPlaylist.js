@@ -32,21 +32,14 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEllipsis,
-  faQrcode,
-  faTrashCan,
-  faHeart as fullHeart,
-  faPlay,
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faQrcode, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import PlayComp from "../../component/PlayComp";
 import axios from "axios";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { LoginContext } from "../../component/LoginProvider";
 import { faCirclePlay } from "@fortawesome/free-regular-svg-icons";
-import { faHeart as likeHeart } from "@fortawesome/free-solid-svg-icons";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
 import KakaoShareComp from "../../component/KakaoShareComp";
 // 추천 플레이리스트에서 플레이리스트 클릭시
 
@@ -156,8 +149,8 @@ export function TopPlaylist() {
     return (
       <>
         <Button variant="ghost" size="xl" onClick={() => onClick(listId)}>
-          {isLike && <FontAwesomeIcon icon={likeHeart} size="lg" />}
-          {isLike || <FontAwesomeIcon icon={faHeart} size="lg" />}
+          {isLike && <FontAwesomeIcon icon={fullHeart} size="lg" />}
+          {isLike || <FontAwesomeIcon icon={emptyHeart} size="lg" />}
         </Button>
       </>
     );
@@ -255,16 +248,8 @@ export function TopPlaylist() {
                 <Th></Th>
                 <Th>곡정보</Th>
                 <Th></Th>
-                <Th
-                  // border={"1px solid black"}
-                  width={"40px"}
-                  p={0}
-                >
-                  <Box
-                    // border={"1px solid red"}
-                    width={"30px"}
-                    ml={"40px"}
-                  >
+                <Th width={"40px"} p={0}>
+                  <Box width={"30px"} ml={"40px"}>
                     재생
                   </Box>
                 </Th>

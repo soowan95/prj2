@@ -226,6 +226,7 @@ export function ChartPage() {
                   onClick={handleDeletePlaylist}
                 >
                   <FontAwesomeIcon ml={"-5px"} icon={faTrash} />
+                </Button>
               </Flex>
               <Flex>
                 <Button
