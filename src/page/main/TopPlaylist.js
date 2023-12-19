@@ -32,12 +32,19 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsis, faPlay, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEllipsis,
+  faPlay,
+  faPlus,
+  faQrcode,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
 import PlayComp from "../../component/PlayComp";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { AddIcon } from "@chakra-ui/icons";
 import { LoginContext } from "../../component/LoginProvider";
+import { faCirclePlay } from "@fortawesome/free-regular-svg-icons";
 // 추천 플레이리스트에서 플레이리스트 클릭시
 
 export function TopPlaylist() {
@@ -156,40 +163,41 @@ export function TopPlaylist() {
       <Box>
         <Flex>
           <Flex flexDirection="row">
-            <Box mr={8} border="1px solid black">
+            <Box ml={"50px"} mr={"50px"} border="1px solid black">
               <Image
                 src={list !== null && list.photo}
-                boxSize="400px"
+                boxSize="350px"
                 objectFit="cover" // 이미지가 상자를 완전히 덮도록 크기 조절하는 것
+                style={{ margin: "0 auto", display: "block" }}
               />
             </Box>
             <Box>
               <Heading fontSize="30px" color="black">
                 {list != null && list.listName}
+                <br />
+                <br />
               </Heading>
               <Flex>
-                <FormLabel>
-                  제작자
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  {list != null && list.id}
-                </FormLabel>
+                <FormLabel style={{ color: "#8d8d8d" }}>제작사</FormLabel>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <FormLabel> {list != null && list.id}</FormLabel>
               </Flex>
               <Flex>
-                <FormLabel>
-                  곡수
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  {list !== null && list.totalSongCount}곡
-                </FormLabel>
+                <FormLabel style={{ color: "#8d8d8d" }}>곡수</FormLabel>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <FormLabel> {list != null && list.totalSongCount}</FormLabel>
               </Flex>
               <Flex>
-                <FormLabel>
-                  조회수
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  {params.get("count")}회
-                </FormLabel>
+                <FormLabel style={{ color: "#8d8d8d" }}>조회수</FormLabel>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <FormLabel> {params.get("count")}회</FormLabel>
               </Flex>
               <Flex>
-                <FormLabel>업데이트</FormLabel>
+                <Flex>
+                  <FormLabel style={{ color: "#8d8d8d" }}>작성일</FormLabel>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <FormLabel> {list != null && list.inserted}</FormLabel>
+                </Flex>
               </Flex>
             </Box>
           </Flex>
@@ -198,7 +206,7 @@ export function TopPlaylist() {
 
       {/*마이플레이리스트 차트*/}
       <Box>
-        <h1> 게시물 목록 </h1>
+        <Divider />
         <Box>
           <Table>
             <Thead>
@@ -207,9 +215,38 @@ export function TopPlaylist() {
                 <Th></Th>
                 <Th>곡정보</Th>
                 <Th></Th>
-                <Th>재생</Th>
-                <Th>정보</Th>
-                <Th>추가</Th>
+                <Th
+                  // border={"1px solid black"}
+                  width={"40px"}
+                  p={0}
+                >
+                  <Box
+                    // border={"1px solid red"}
+                    width={"30px"}
+                    ml={"40px"}
+                  >
+                    재생
+                  </Box>
+                </Th>
+                <Th
+                  // border={"1px solid blue"}
+                  width={"10px"}
+                  p={0}
+                >
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;정보
+                </Th>
+                <Th
+                  // border={"1px solid blue"}
+                  width={"100px"}
+                  p={0}
+                >
+                  <Box
+                    // border={"1px solid red"}
+                    mr={"50px"}
+                  >
+                    &nbsp;&nbsp;삭제
+                  </Box>
+                </Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -220,19 +257,23 @@ export function TopPlaylist() {
                   <Tr>
                     <Td>{idx + 1}</Td>
                     {/*노래 곡 아이디를 보여주는 것이 아닌 1부터 보여주는 것*/}
-                    <Td>{song.title}</Td>
-                    <Td>{song.artistName}</Td>
+                    <Td fontWeight={"bold"} fontSize={"20px"}>
+                      {song.title}
+                    </Td>
+                    <Td color={"#8b8b8b"}>{song.artistName}</Td>
                     <Td>{song.album}</Td>
-                    <Td>
+                    <Td p={0}>
                       <Button
                         borderRadius={0}
                         variant="ghost"
+                        width={"40px"}
+                        ml={"35px"}
                         onClick={() => {
                           setIndex(idx);
                           playModal.onOpen();
                         }}
                       >
-                        <FontAwesomeIcon icon={faPlay} />
+                        <FontAwesomeIcon icon={faCirclePlay} />
                       </Button>
                     </Td>
                     <Td>
@@ -241,19 +282,20 @@ export function TopPlaylist() {
                         variant="ghost"
                         onClick={() => navigate("/main/song/" + song.id)}
                       >
-                        <FontAwesomeIcon icon={faEllipsis} />
+                        <FontAwesomeIcon icon={faQrcode} />
                       </Button>
                     </Td>
-                    <Td>
+                    <Td p={1}>
                       <Button
                         borderRadius={0}
                         variant="ghost"
+                        ml={"-5px"}
                         onClick={() => {
                           listIndex.current = idx;
                           handleAddModal(song.id);
                         }}
                       >
-                        <FontAwesomeIcon icon={faPlus} />
+                        <FontAwesomeIcon icon={faTrashCan} />
                       </Button>
                     </Td>
                   </Tr>

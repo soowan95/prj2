@@ -83,17 +83,21 @@ export function MyFavoritePlaylist() {
       <Box mt={30}>
         <Heading>{login.nickName} 님의 취향저격 플레이리스트</Heading>
         <Divider />
-        <Flex gap={5}>
+        <Flex flexWrap="wrap" ml={"140px"} justifyContent="center">
           {list !== null &&
             list.map((song, idx) => (
-              <Box gap={5} key={song?.id}>
+              <Box mr={"130px"} mb={"20px"} gap={5} key={song?.id}>
                 <Box mt={30}>
-                  <Card w="xs">
-                    <CardHeader height="242px" key={idx}>
+                  <Card w="xs" bgColor={"none"}>
+                    <CardHeader
+                      height="242px"
+                      key={idx}
+                      _hover={{ cursor: "pointer" }}
+                    >
                       <Image
                         src={song.photo}
                         alt={song.picture}
-                        _hover={{ cursor: "pointer" }}
+                        // _hover={{ cursor: "pointer" }}
                         boxSize="220px"
                         objectFit="cover"
                         style={{ margin: "0 auto", display: "block" }}
@@ -106,6 +110,9 @@ export function MyFavoritePlaylist() {
                     <CardBody>
                       <Heading
                         size="md"
+                        ml={"36px"}
+                        fontSize={"25"}
+                        fontWhight={"bold"}
                         _hover={{
                           cursor: "pointer",
                           textDecoration: "underline",
@@ -115,12 +122,15 @@ export function MyFavoritePlaylist() {
                         {song?.listName}
                       </Heading>
                     </CardBody>
-                    <Divider color="gray" />
+                    {/*<Divider color="gray" />*/}
                     <CardFooter>
-                      <FontAwesomeIcon icon={faRecordVinyl} />
-                      <Text>{song?.songs} 곡</Text>
+                      <Text ml={"40px"}>
+                        <FontAwesomeIcon icon={faRecordVinyl} />
+                        &nbsp;
+                        {song?.songs} 곡
+                      </Text>
                       <Spacer />
-                      <Text>작성자 {song?.nickName} 님</Text>
+                      <Text mr={"37px"}>{song?.nickName} 님</Text>
                     </CardFooter>
                   </Card>
                 </Box>
