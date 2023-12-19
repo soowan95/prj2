@@ -75,6 +75,7 @@ function SongPage(props) {
         .get("/api/song/albumList?album=" + data.album)
         .then(({ data }) => setAlbumList(data));
     });
+    window.scrollTo(0, 0);
   }, []);
 
   function handleAddModal() {
@@ -187,7 +188,6 @@ function SongPage(props) {
               <Heading fontSize="30px">{songData.title}</Heading>
               <KakaoShareComp
                 title={songData.title}
-                description={songData.genre + "&" + songData.mood}
                 imageUrl={songData.artistFileUrl}
               />
               <Tooltip label="플레이리스트에 추가" fontSize="0.6rem">
