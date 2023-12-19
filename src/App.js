@@ -10,7 +10,6 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { MyPlayList } from "./page/main/MyPlayList";
-import { MyInfo } from "./page/main/MyInfo";
 import SongRequest from "./page/main/SongRequest";
 import LoginProvider from "./component/LoginProvider";
 import SongPage from "./page/song/SongPage";
@@ -27,7 +26,6 @@ import SongInMyFavoritePlaylist from "./page/main/SongInMyFavoritePlaylist";
 import MySongRequest from "./page/main/MySongRequest";
 import RecommendPlaylist from "./page/main/RecommendPlaylist";
 import TopPlaylist from "./page/main/TopPlaylist";
-import { Button, useColorMode } from "@chakra-ui/react";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(

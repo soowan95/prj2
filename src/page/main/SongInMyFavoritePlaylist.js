@@ -2,11 +2,9 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
-  Card,
   Center,
   Divider,
   Flex,
-  FormLabel,
   Heading,
   Image,
   Input,
@@ -17,14 +15,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverFooter,
-  PopoverHeader,
-  PopoverTrigger,
   Radio,
   RadioGroup,
   Table,
@@ -38,20 +28,11 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { LoginContext } from "../../component/LoginProvider";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import PlayComp from "../../component/PlayComp";
-import {
-  faEllipsis,
-  faMinus,
-  faOtter,
-  faPlay,
-  faPlus,
-  faQrcode,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faQrcode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { AddIcon } from "@chakra-ui/icons";
 import { faCirclePlay } from "@fortawesome/free-regular-svg-icons";
 import KakaoShareComp from "../../component/KakaoShareComp";
 

@@ -1,12 +1,11 @@
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {useContext, useEffect} from "react";
 import {SongContext} from "../../layout/MainLayout";
 import {Box, Flex, FormControl, FormLabel} from "@chakra-ui/react";
 import SongRequestComp from "../../component/SongRequestComp";
 import axios from "axios";
-import LiveChatComp from "../../component/LiveChatComp";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCirclePlay, faFileLines} from "@fortawesome/free-regular-svg-icons";
+import {faFileLines} from "@fortawesome/free-regular-svg-icons";
 
 export function SearchPage() {
   const { searched } = useContext(SongContext);

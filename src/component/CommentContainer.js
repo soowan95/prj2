@@ -4,23 +4,23 @@ import {
   Card,
   CardBody,
   CardHeader,
+  Center,
+  Flex,
   Heading,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Stack,
   StackDivider,
-  Textarea,
   Text,
-  Flex,
+  Textarea,
   useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
   useToast,
-  Center,
-  Input,
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
@@ -31,9 +31,8 @@ import {
   faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import LoginProvider, { LoginContext } from "./LoginProvider";
+import { LoginContext } from "./LoginProvider";
 import { NotAllowedIcon } from "@chakra-ui/icons";
-import { useNavigate, useSearchParams } from "react-router-dom";
 
 function CommentForm({ songId, isSubmitting, onSubmit }) {
   const [comment, setComment] = useState("");

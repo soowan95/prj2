@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { LoginContext } from "../../component/LoginProvider";
 import {
   Box,
-  Button,
   Card,
   CardBody,
   CardFooter,
@@ -12,32 +11,15 @@ import {
   Flex,
   Heading,
   Image,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
   Spacer,
-  Table,
-  Tbody,
-  Td,
   Text,
-  Th,
-  Thead,
-  Tr,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faMinus,
-  faPlay,
-  faRecordVinyl,
-} from "@fortawesome/free-solid-svg-icons";
+import { faRecordVinyl } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import PlayComp from "../../component/PlayComp";
 
 export function MyFavoritePlaylist() {
   const { login } = useContext(LoginContext);

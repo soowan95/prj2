@@ -1,5 +1,4 @@
 import { CommentContainer } from "../../component/CommentContainer";
-import { MemberLogin } from "../memberLogin/MemberLogin";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import {
@@ -38,7 +37,7 @@ import {
   faChevronUp,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import KakaoShareComp from "../../component/KakaoShareComp";
 import { LoginContext } from "../../component/LoginProvider";
 

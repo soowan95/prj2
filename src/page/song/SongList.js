@@ -1,23 +1,31 @@
-import React, {useEffect, useState} from 'react';
-import {Box, FormControl, FormLabel, Heading, Table, Tbody, Td, Th, Thead, Tr} from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import {
+  Box,
+  Heading,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 import axios from "axios";
-import SongPage from "./SongPage";
 
-export function SongList({album}) {
+export function SongList({ album }) {
   const [albumList, setAlbumList] = useState(null);
 
   useEffect(() => {
-    axios.get("/api/song/albumList?album=" + album).then((response)=>setAlbumList(response.data));
+    axios
+      .get("/api/song/albumList?album=" + album)
+      .then((response) => setAlbumList(response.data));
   }, [album]);
 
-
   return (
-
     <Box>
-      <br/>
+      <br />
 
       <Heading size={"md"}>수록곡</Heading>
-      <br/>
+      <br />
 
       <Box>
         <Table>
@@ -34,8 +42,7 @@ export function SongList({album}) {
 
           <Tbody>
             {albumList !== null &&
-              albumList.map((album=>(
-
+              albumList.map((album) => (
                 <Tr>
                   <Td>{album.id}</Td>
                   <Td>{album.title}</Td>
@@ -44,12 +51,10 @@ export function SongList({album}) {
                   <Td>{album.release}</Td>
                   <Td>{album.genre}</Td>
                 </Tr>
-              )))}
+              ))}
           </Tbody>
         </Table>
       </Box>
-
-
     </Box>
   );
 }

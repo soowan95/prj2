@@ -2,11 +2,9 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
-  Card,
   Center,
   Divider,
   Flex,
-  FormLabel,
   Heading,
   Image,
   Input,
@@ -17,8 +15,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Popover,
-  PopoverTrigger,
   Radio,
   RadioGroup,
   Table,
@@ -32,15 +28,21 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faQrcode, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import {
+  faHeart as fullHeart,
+  faQrcode,
+  faTrashCan,
+} from "@fortawesome/free-solid-svg-icons";
 import PlayComp from "../../component/PlayComp";
 import axios from "axios";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { LoginContext } from "../../component/LoginProvider";
-import { faCirclePlay } from "@fortawesome/free-regular-svg-icons";
-import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
-import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
+import {
+  faCirclePlay,
+  faHeart as emptyHeart,
+} from "@fortawesome/free-regular-svg-icons";
 import KakaoShareComp from "../../component/KakaoShareComp";
+
 // 추천 플레이리스트에서 플레이리스트 클릭시
 
 export function TopPlaylist() {

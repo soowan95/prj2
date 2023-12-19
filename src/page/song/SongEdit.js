@@ -7,7 +7,6 @@ import {
   FormLabel,
   Image,
   Input,
-  Tooltip,
   useToast,
 } from "@chakra-ui/react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";

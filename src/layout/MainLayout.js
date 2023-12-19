@@ -1,5 +1,4 @@
 import {
-  border,
   Box,
   Button,
   Flex,
@@ -22,11 +21,11 @@ import _ from "lodash";
 import LiveChatComp from "../component/LiveChatComp";
 import "../css/Fonts.css";
 import {
+  faCompactDisc,
   faMagnifyingGlass,
   faMoon,
   faSquareCaretUp,
   faSun,
-  faCompactDisc,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 

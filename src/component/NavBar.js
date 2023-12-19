@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Box, Button, Center, Image, useToast } from "@chakra-ui/react";
+import { Box, Button, Center, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

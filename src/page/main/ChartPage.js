@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import {
-  border,
   Box,
   Button,
   Divider,
@@ -17,13 +16,6 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTrigger,
   Table,
   Tbody,
   Td,
@@ -34,14 +26,11 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { LoginContext } from "../../component/LoginProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCircleInfo,
-  faEllipsis,
   faPenToSquare,
-  faPlay,
   faQrcode,
   faTrash,
   faTrashCan,

@@ -7,8 +7,6 @@ import {
   Flex,
   FormControl,
   Input,
-  Kbd,
-  useColorMode,
 } from "@chakra-ui/react";
 import { LoginContext } from "./LoginProvider";
 import "../css/Scroll.css";
@@ -16,8 +14,6 @@ import {
   faCommentDots,
   faEllipsis,
   faMinus,
-  faMoon,
-  faSun,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDrag } from "react-use-gesture";

@@ -1,24 +1,22 @@
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
+  Box,
+  Button,
+  Flex,
   FormControl,
   FormLabel,
   Input,
-  Button,
-  useToast,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
   Select,
-  Flex,
-  Box,
+  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
 import PasswordRecovery from "./PasswordRecovery";
-import memberSignup from "./MemberSignup";
-import memberInfo from "./MemberInfo";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";

@@ -2,13 +2,7 @@ import {
   Box,
   Card,
   CardBody,
-  CardHeader,
   Center,
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
   Flex,
   FormControl,
   FormLabel,
@@ -22,7 +16,6 @@ import { faCirclePlay, faClone } from "@fortawesome/free-regular-svg-icons";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import PlayComp from "../../component/PlayComp";
-import KakaoShareComp from "../../component/KakaoShareComp";
 
 export function Top100Page() {
   const [similar, setSimilar] = useState(null);

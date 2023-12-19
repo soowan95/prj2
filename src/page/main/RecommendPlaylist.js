@@ -13,11 +13,7 @@ import {
   Heading,
   Image,
 } from "@chakra-ui/react";
-import {
-  faArrowLeft,
-  faArrowRight,
-  faHeart as fullHeart,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 import ItemsCarousel from "react-items-carousel";

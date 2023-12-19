@@ -18,7 +18,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  SimpleGrid,
   Spacer,
   Stack,
   Text,
@@ -26,7 +25,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHeart as fullHeart,

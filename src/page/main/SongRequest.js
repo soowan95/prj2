@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
-  Flex,
   FormControl,
   FormLabel,
   Heading,
@@ -27,8 +26,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { faFloppyDisk } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 import { useImmer } from "use-immer";
 import { LoginContext } from "../../component/LoginProvider";
