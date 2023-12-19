@@ -95,11 +95,16 @@ export function MemberLogin() {
           <ModalCloseButton />
           <ModalBody>
             <Box>
-              <Center mb={20} fontSize={"xx-large"}>
-                R E L I E V E
+              <Center mb={10}>
+                <Box
+                  width={"150px"}
+                  height={"150px"}
+                  bgImage={`url(${process.env.PUBLIC_URL}/img/RelieveYellow.png)`}
+                  backgroundSize={"100%"}
+                />
               </Center>
             </Box>
-            <FormControl mb={5}>
+            <FormControl mb={3}>
               <FormLabel>아이디</FormLabel>
               <InputGroup>
                 <InputLeftElement>
@@ -116,7 +121,7 @@ export function MemberLogin() {
                 />
               </InputGroup>
             </FormControl>
-            <FormControl mb={5}>
+            <FormControl>
               <FormLabel>비밀번호</FormLabel>
               <InputGroup>
                 <InputLeftElement>
@@ -144,10 +149,9 @@ export function MemberLogin() {
             >
               로그인
             </Button>
-
             <KakaoLoginComp />
           </ModalFooter>
-          <ModalFooter>
+          <ModalFooter mb={2}>
             <Button
               w={"150px"}
               size={"xs"}

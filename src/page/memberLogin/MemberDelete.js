@@ -7,6 +7,7 @@ import {
   CardFooter,
   CardHeader,
   Center,
+  Flex,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -76,24 +77,33 @@ export function MemberDelete() {
 
   return (
     <Center mt={50}>
-      <Card mt={50} w="2xl" h="2xl">
+      <Card mt={50} w="2xl" h="xl">
         <CardHeader>
-          <Heading>{login.nickName} 님</Heading>
+          <Heading ml={10}>{login.nickName} 님</Heading>
         </CardHeader>
         <CardBody style={{ textAlign: "center" }}>
           <Center>
-            <Card w="xl" h="lg">
+            <Card w="xl">
               <CardHeader fontSize="2rem" textDecoration="bold">
                 <Highlight
                   query="삭제"
-                  styles={{ px: "1", py: "1", bg: "orange.100" }}
+                  styles={{
+                    px: "1",
+                    py: "1",
+                    bg:
+                      localStorage.getItem("chakra-ui-color-mode") === "dark"
+                        ? "#f8e3a5"
+                        : "#f3b6d9",
+                  }}
                 >
-                  탈퇴시 모든 정보가 삭제됩니다.
+                  탈퇴 시 모든 정보가 삭제됩니다.
                 </Highlight>
               </CardHeader>
-              <CardBody>
+              <CardBody mt={10}>
                 <FormControl>
-                  <FormLabel>탈퇴를 위해 비밀번호를 입력하세요</FormLabel>
+                  <FormLabel ml={2} mb={2}>
+                    탈퇴를 위해 비밀번호를 입력하세요.
+                  </FormLabel>
                   <Input
                     type="password"
                     value={password}
@@ -102,33 +112,38 @@ export function MemberDelete() {
                 </FormControl>
                 {password.length > 0 && (
                   <FormControl>
-                    <FormLabel>비밀번호를 재입력하세요</FormLabel>
+                    <FormLabel ml={2} mt={5} mb={2}>
+                      비밀번호를 재입력하세요
+                    </FormLabel>
                     <Input
                       type="password"
                       value={passwordCheck}
                       onChange={(e) => setPasswordCheck(e.target.value)}
                     />
                     {password !== passwordCheck && (
-                      <FormHelperText color="red" fontSize="0.8rem">
-                        <FontAwesomeIcon icon={faCircleExclamation} />
-                        <br />
-                        비밀번호가 일치하지 않습니다.
-                      </FormHelperText>
+                      <div style={{ textAlign: "right" }}>
+                        <FormHelperText color="red" fontSize="0.8rem">
+                          <FontAwesomeIcon icon={faCircleExclamation} />{" "}
+                          비밀번호가 일치하지 않습니다.
+                        </FormHelperText>
+                      </div>
                     )}
                   </FormControl>
                 )}
               </CardBody>
-              <CardFooter gap={5}>
-                <Button
-                  colorScheme="red"
-                  isDisabled={password !== passwordCheck}
-                  onClick={handleMemberDelete}
-                >
-                  탈퇴
-                </Button>
-                <Button colorScheme="blue" onClick={() => navigate(-1)}>
-                  취소
-                </Button>
+              <CardFooter>
+                <Flex justifyContent="flex-end" gap={3} width="100%">
+                  <Button
+                    colorScheme="red"
+                    isDisabled={password !== passwordCheck}
+                    onClick={handleMemberDelete}
+                  >
+                    탈퇴
+                  </Button>
+                  <Button colorScheme="blue" onClick={() => navigate(-1)}>
+                    취소
+                  </Button>
+                </Flex>
               </CardFooter>
             </Card>
           </Center>

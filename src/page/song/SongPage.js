@@ -302,7 +302,7 @@ function SongPage(props) {
             style={{ position: "sticky", top: 0, zIndex: 1 }}
           >
             <br />
-            <Heading flexWrap={"wrap"} size={"md"}>
+            <Heading flexWrap={"wrap"} size={"md"} ml={7}>
               곡 정보
             </Heading>
             <br />
@@ -320,14 +320,32 @@ function SongPage(props) {
               >
                 <Thead>
                   <Tr>
-                    <Th style={{ position: "sticky", left: 0, zIndex: 3 }}>
+                    <Th
+                      style={{
+                        width: "100px",
+                        textAlign: "center",
+                        position: "sticky",
+                        left: 0,
+                        zIndex: 3,
+                      }}
+                    >
                       번호
                     </Th>
-                    <Th>제목</Th>
-                    <Th>가수</Th>
-                    <Th>앨범명</Th>
-                    <Th>출시일</Th>
-                    <Th>장르</Th>
+                    <Th style={{ width: "300px", textAlign: "center" }}>
+                      제목
+                    </Th>
+                    <Th style={{ width: "100px", textAlign: "center" }}>
+                      가수
+                    </Th>
+                    <Th style={{ width: "300px", textAlign: "center" }}>
+                      앨범명
+                    </Th>
+                    <Th style={{ width: "200px", textAlign: "center" }}>
+                      출시일
+                    </Th>
+                    <Th style={{ width: "200px", textAlign: "center" }}>
+                      장르
+                    </Th>
                   </Tr>
                 </Thead>
 
@@ -335,14 +353,32 @@ function SongPage(props) {
                   {albumList !== null &&
                     albumList.map((album) => (
                       <Tr key={album.id}>
-                        <Td style={{ position: "sticky", left: 0, zIndex: 3 }}>
+                        <Td
+                          style={{
+                            width: "100px",
+                            textAlign: "center",
+                            position: "sticky",
+                            left: 0,
+                            zIndex: 3,
+                          }}
+                        >
                           {album.id}
                         </Td>
-                        <Td>{album.title}</Td>
-                        <Td>{album.name}</Td>
-                        <Td>{album.album}</Td>
-                        <Td>{album.release}</Td>
-                        <Td>{album.genre}</Td>
+                        <Td style={{ width: "300px", textAlign: "center" }}>
+                          {album.title}
+                        </Td>
+                        <Td style={{ width: "100px", textAlign: "center" }}>
+                          {album.name}
+                        </Td>
+                        <Td style={{ width: "300px", textAlign: "center" }}>
+                          {album.album}
+                        </Td>
+                        <Td style={{ width: "200px", textAlign: "center" }}>
+                          {album.release}
+                        </Td>
+                        <Td style={{ width: "200px", textAlign: "center" }}>
+                          {album.genre}
+                        </Td>
                       </Tr>
                     ))}
                 </Tbody>

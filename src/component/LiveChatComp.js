@@ -16,6 +16,8 @@ import {
   faCommentDots,
   faEllipsis,
   faMinus,
+  faMoon,
+  faSun,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDrag } from "react-use-gesture";
@@ -180,11 +182,19 @@ function LiveChatComp(toggle) {
         display={chatVisible === "none" ? "block" : "none"}
       >
         <Button
-          onClick={() => setChatVisible("block")}
+          bg={"none"}
           _hover={{ bg: "none" }}
+          onClick={() => setChatVisible("block")}
           fontSize={"1.5rem"}
         >
-          <FontAwesomeIcon icon={faCommentDots} />
+          {localStorage.getItem("chakra-ui-color-mode") === "dark" ? (
+            <FontAwesomeIcon
+              icon={faCommentDots}
+              style={{ color: "#f2c84b" }}
+            />
+          ) : (
+            <FontAwesomeIcon icon={faCommentDots} style={{ color: "white" }} />
+          )}
         </Button>
       </Box>
       <Box

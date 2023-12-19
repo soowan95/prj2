@@ -164,19 +164,30 @@ export function MemberInfo() {
         <CardBody style={{ textAlign: "center" }}>
           <Flex gap={5}>
             <Card w="sm" h="250px">
-              <CardBody mt={50}>나의 정보를 수정합니다.</CardBody>
+              <CardBody mt={75}>나의 정보를 수정합니다.</CardBody>
               <CardFooter>
-                <Button colorScheme="facebook" onClick={onOpen}>
+                <Button
+                  onClick={onOpen}
+                  bg={
+                    localStorage.getItem("chakra-ui-color-mode") === "dark"
+                      ? "#f3cd5d"
+                      : "#e86db3"
+                  }
+                >
                   개인정보 수정
                 </Button>
               </CardFooter>
             </Card>
             <Card w="sm" h="250px">
-              <CardBody mt={50}>내가 좋아하는 플레이리스트</CardBody>
+              <CardBody mt={75}>내가 좋아하는 플레이리스트</CardBody>
               <CardFooter>
                 <Button
-                  colorScheme="facebook"
                   onClick={() => navigate("/main/myFavorite")}
+                  bg={
+                    localStorage.getItem("chakra-ui-color-mode") === "dark"
+                      ? "#f3cd5d"
+                      : "#e86db3"
+                  }
                 >
                   좋아요 표시한 플레이리스트
                 </Button>
@@ -186,22 +197,30 @@ export function MemberInfo() {
           <br />
           <Flex gap={5}>
             <Card w="sm" h="250px">
-              <CardBody mt={50}>정보 요청 현황을 확인합니다.</CardBody>
+              <CardBody mt={75}>정보 요청 현황을 확인합니다.</CardBody>
               <CardFooter>
                 <Button
-                  colorScheme="facebook"
                   onClick={() => navigate("/main/mySongRequestList")}
+                  bg={
+                    localStorage.getItem("chakra-ui-color-mode") === "dark"
+                      ? "#f3cd5d"
+                      : "#e86db3"
+                  }
                 >
                   요청 확인
                 </Button>
               </CardFooter>
             </Card>
             <Card w="sm" h="250px">
-              <CardBody mt={50}>RELIEVE 회원을 탈퇴합니다.</CardBody>
+              <CardBody mt={75}>RELIEVE 회원을 탈퇴합니다.</CardBody>
               <CardFooter>
                 <Button
-                  colorScheme="facebook"
                   onClick={() => navigate("/main/delete")}
+                  bg={
+                    localStorage.getItem("chakra-ui-color-mode") === "dark"
+                      ? "#f3cd5d"
+                      : "#e86db3"
+                  }
                 >
                   회원탈퇴
                 </Button>
@@ -218,7 +237,7 @@ export function MemberInfo() {
           <ModalHeader>{login.nickName} 님 정보 수정</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <FormControl>
+            <FormControl mb={5}>
               <FormLabel>아이디</FormLabel>
               <Input type="text" value={login.id} readOnly color="gray" />
             </FormControl>
@@ -246,11 +265,11 @@ export function MemberInfo() {
                   중복확인
                 </Button>
               </Flex>
-              <FormHelperText textAlign={"center"}>
-                k- 로 시작할 수 없습니다.
+              <FormHelperText ml={2} textAlign={"left"}>
+                * k- 로 시작할 수 없습니다.
               </FormHelperText>
             </FormControl>
-            <FormControl inInvalid={!emailAvailable}>
+            <FormControl mb={5} inInvalid={!emailAvailable}>
               <FormLabel>이메일</FormLabel>
               <Flex gap={3}>
                 <Input
@@ -270,12 +289,12 @@ export function MemberInfo() {
                   중복확인
                 </Button>
               </Flex>
-              <FormHelperText textAlign={"center"}>
-                중복확인 안하면 기존 정보가 사용됩니다.
+              <FormHelperText ml={2} textAlign={"left"}>
+                * 중복 확인을 하지 않으면 기존 정보가 사용됩니다.
               </FormHelperText>
             </FormControl>
             <RadioGroup mt={3} value={inputPicture} onChange={setInputPicture}>
-              <Box>사진을 첨부하시겠습니까?</Box>
+              <Box mb={2}>사진을 첨부하시겠습니까?</Box>
               <Stack direction="row">
                 <Radio value="block">네</Radio>
                 <Radio value="none">아니오</Radio>
@@ -283,11 +302,11 @@ export function MemberInfo() {
             </RadioGroup>
             <Box display={inputPicture}>
               <FormControl>
-                <FormLabel>프로필 사진 변경</FormLabel>
+                <FormLabel mt={3}>프로필 사진 변경</FormLabel>
                 <Flex>
                   <Image
                     borderRadius="full"
-                    boxSize="100px"
+                    boxSize="120px"
                     src={imagePreview}
                   />
                   <Input
@@ -305,7 +324,7 @@ export function MemberInfo() {
                 </Flex>
               </FormControl>
             </Box>
-            <FormControl mt={3}>
+            <FormControl mt={7}>
               <FormLabel>비밀번호</FormLabel>
               <Button
                 variant="ghost"
@@ -316,7 +335,7 @@ export function MemberInfo() {
               </Button>
             </FormControl>
           </ModalBody>
-          <ModalFooter gap={5}>
+          <ModalFooter gap={3}>
             <Button
               isDisabled={
                 !(

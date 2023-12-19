@@ -122,9 +122,13 @@ export function Top100Page() {
                     <Box key={si.id} m={"0 auto"}>
                       <Card
                         w={"150px"}
-                        background={"lavender"}
+                        bg={
+                          localStorage.getItem("chakra-ui-color-mode") ===
+                          "dark"
+                            ? "#f3cd5d"
+                            : "#e86db3"
+                        }
                         onClick={() => handleGoToSong(si.id)}
-                        cursor="pointer"
                       >
                         <CardBody>
                           <Box fontWeight={"bold"} color={"#535353"}>

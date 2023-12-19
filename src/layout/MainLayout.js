@@ -275,7 +275,6 @@ export function MainLayout() {
                 ? `RelieveYellow.png)`
                 : `RelieveWhite.png)`)
             }
-            // bgImage={`url(${process.env.PUBLIC_URL}/img/RelieveWhite.png)`}
             backgroundSize={"100%"}
           />
         </Button>
