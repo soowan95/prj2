@@ -130,12 +130,9 @@ export function RecommendPlaylist() {
                     width={"250px"}
                     height={"20px"}
                   >
-                    <Flex gap={10}>
+                    <Flex>
                       <Box>{srl?.songs} 곡</Box>
-                      <Box ml={"90px"}>
-                        {srl?.count}
-                        <FontAwesomeIcon icon={fullHeart} size="lg" />
-                      </Box>
+                      <Box ml={"65px"}>좋아요 : {srl?.count} 개</Box>
                     </Flex>
                   </CardFooter>
                 </Box>

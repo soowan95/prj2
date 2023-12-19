@@ -55,6 +55,10 @@ export function Top100Page() {
     }
   }
 
+  function handleGoToSong(id) {
+    navigate(`/main/song/${id}`);
+  }
+
   return (
     <Box mt={"100px"}>
       {top100 !== null &&
@@ -65,13 +69,12 @@ export function Top100Page() {
             width={"75%"}
             alignItems={"center"}
             borderBottom={"1px solid lavender"}
-            _hover={{ bg: "#818588", opacity: 0.6 }}
-            // style={{ cursor: "pointer" }}
           >
             <Flex
               justifyContent={"center"}
               alignItems={"center"}
               width={"100%"}
+              _hover={{ bg: "rgba(129,133,136,0.38)" }}
             >
               <Box
                 onClick={() => {
@@ -80,7 +83,6 @@ export function Top100Page() {
                 }}
                 w={"20%"}
                 h={"60px"}
-                //border={"1px solid black"}
               >
                 <FormControl w={"300px"}>
                   <FormLabel fontSize={17} color={"#F3DA2A"} cursor={"pointer"}>
@@ -117,13 +119,13 @@ export function Top100Page() {
                 {similar !== null &&
                   song.id === thisId.current &&
                   similar.map((si) => (
-                    <Box
-                      //border={"1px black solid"}
-                      key={si.id}
-                      //alignItems={"center"}
-                      m={"0 auto"}
-                    >
-                      <Card w={"150px"} background={"lavender"}>
+                    <Box key={si.id} m={"0 auto"}>
+                      <Card
+                        w={"150px"}
+                        background={"lavender"}
+                        onClick={() => handleGoToSong(si.id)}
+                        cursor="pointer"
+                      >
                         <CardBody>
                           <Box fontWeight={"bold"} color={"#535353"}>
                             {si.title.length > 10
