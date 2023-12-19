@@ -3,6 +3,7 @@ import { LoginContext } from "../../component/LoginProvider";
 import axios from "axios";
 import {
   Box,
+  Button,
   Card,
   CardBody,
   CardFooter,
@@ -11,7 +12,6 @@ import {
   Flex,
   Heading,
   Image,
-  SimpleGrid,
 } from "@chakra-ui/react";
 import {
   faArrowLeft,
@@ -20,7 +20,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
-import { useImmer } from "use-immer";
 import ItemsCarousel from "react-items-carousel";
 
 export function RecommendPlaylist() {
@@ -28,7 +27,8 @@ export function RecommendPlaylist() {
   const navigate = useNavigate();
   const count = useRef(0);
   const [recommendByViews, setRecommendByViews] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentUpperIndex, setCurrentUpperIndex] = useState(0);
+  const [currentLowerIndex, setCurrentLowerIndex] = useState(0);
   const [recommendList, setRecommendList] = useState(null);
 
   useEffect(() => {
@@ -71,8 +71,8 @@ export function RecommendPlaylist() {
           slidesToScroll={5}
           gutter={0}
           outsideChevron={false}
-          activeItemIndex={currentIndex}
-          requestToChangeActive={setCurrentIndex}
+          activeItemIndex={currentUpperIndex}
+          requestToChangeActive={setCurrentUpperIndex}
           rightChevron={
             <Button>
               <FontAwesomeIcon icon={faArrowRight} />
@@ -150,9 +150,27 @@ export function RecommendPlaylist() {
         <br />
         <br />
       </Box>
-      <SimpleGrid columns={5} spacing={5} minChildWidth="30px">
-        <Flex gap={3} flexWrap="wrap" ml={"90px"} justifyContent="center">
-          {/* S3 이미지 출력 */}
+      <Box w={"1500px"} m={"0 auto"} alignItems={"center"}>
+        <ItemsCarousel
+          chevronWidth={10}
+          numberOfCards={5}
+          slidesToScroll={5}
+          gutter={0}
+          outsideChevron={false}
+          activeItemIndex={currentLowerIndex}
+          requestToChangeActive={setCurrentLowerIndex}
+          rightChevron={
+            <Button>
+              <FontAwesomeIcon icon={faArrowRight} />
+            </Button>
+          }
+          firstAndLastGutter={true}
+          leftChevron={
+            <Button>
+              <FontAwesomeIcon icon={faArrowLeft} />
+            </Button>
+          }
+        >
           {recommendByViews !== null &&
             recommendByViews.map((views, idx) => (
               <Card
@@ -205,8 +223,8 @@ export function RecommendPlaylist() {
                 </Box>
               </Card>
             ))}
-        </Flex>
-      </SimpleGrid>
+        </ItemsCarousel>
+      </Box>
     </>
   );
 }
