@@ -55,10 +55,9 @@ export function RecommendPlaylist() {
   return (
     <>
       <Box mt={50}>
-        <Heading ml={"338px"}>요즘 뜨는 추천 플레이리스트!</Heading>
-        <br />
-        <br />
-        <br />
+        <Heading ml={"338px"} mb={"70px"}>
+          요즘 뜨는 추천 플레이리스트!
+        </Heading>
       </Box>
       <Box w={"1500px"} m={"0 auto"} alignItems={"center"}>
         <ItemsCarousel
@@ -138,10 +137,9 @@ export function RecommendPlaylist() {
       </Box>
       <Divider />
       <Box mt={50}>
-        <Heading ml={"338px"}>가장 많이 들었던 플레이리스트!!</Heading>
-        <br />
-        <br />
-        <br />
+        <Heading ml={"338px"} mb={"70px"}>
+          가장 많이 들었던 플레이리스트!!
+        </Heading>
       </Box>
       <Box w={"1500px"} m={"0 auto"} alignItems={"center"}>
         <ItemsCarousel

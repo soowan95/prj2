@@ -91,7 +91,9 @@ function LiveChatComp(toggle) {
                   height: "auto",
                 }}
               >
-                {item.message}
+                <div style={{ paddingLeft: "10px", paddingRight: "10px" }}>
+                  {item.message}
+                </div>
               </Box>
             </Box>
           );
@@ -196,7 +198,7 @@ function LiveChatComp(toggle) {
         className="chatBox"
         bg={
           localStorage.getItem("chakra-ui-color-mode") === "dark"
-            ? "#f8e3a5"
+            ? "#e8d087"
             : "#f3b6d9"
         }
         width={"270px"}

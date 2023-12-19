@@ -53,7 +53,7 @@ export function MyPlayList() {
   const [playlistName, setPlaylistName] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const [coverImage, setCoverImage] = useState(null);
-  
+
   const count = useRef(0);
   // useRef는 .current 프로퍼티로 전달된 인자로 초기화된 변경 가능한 ref 객체를 반환합니다.
 
@@ -147,14 +147,14 @@ export function MyPlayList() {
   return (
     <Box>
       <Stack spacing={4}>
-        <Divider />
-        <Flex>
-          <Heading ml={5}>{login.nickName} 님의 재생목록</Heading>
+        <Flex mt={"50px"}>
+          <Heading ml={"338px"} mb={"70px"}>
+            {login.nickName} 님의 재생목록
+          </Heading>
           <Button onClick={onOpen}>
             <FontAwesomeIcon icon={faPlus} />
           </Button>
         </Flex>
-        <Divider />
         {/*<SimpleGrid columns={3} spacing={5} minChildWidth="70px">*/}
         <Flex flexWrap="wrap" ml={"140px"} justifyContent="center">
           {/* 수정된 부분 */}
