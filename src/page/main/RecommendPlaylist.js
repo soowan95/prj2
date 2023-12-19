@@ -92,7 +92,6 @@ export function RecommendPlaylist() {
               <Card
                 mr={"100"}
                 mb={"20px"}
-                // border="1px solid purple"
                 width={"250px"}
                 height={"350px"}
                 bgColor={"none"}
@@ -126,7 +125,6 @@ export function RecommendPlaylist() {
                     {srl.listName}
                   </CardBody>
                   <CardFooter
-                    // border={"1px solid red"}
                     ml={"15px"}
                     mt={"-8px"}
                     pt={0}

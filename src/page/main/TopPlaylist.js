@@ -242,7 +242,8 @@ export function TopPlaylist() {
                 >
                   <Box
                     // border={"1px solid red"}
-                    mr={"50px"}
+                    mr={"150px"}
+                    width={"40px"}
                   >
                     &nbsp;&nbsp;삭제
                   </Box>

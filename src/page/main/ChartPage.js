@@ -181,35 +181,16 @@ export function ChartPage() {
                 <Th></Th>
                 <Th>곡정보</Th>
                 <Th></Th>
-                <Th
-                  // border={"1px solid black"}
-                  width={"40px"}
-                  p={0}
-                >
-                  <Box
-                    // border={"1px solid red"}
-                    width={"30px"}
-                    ml={"40px"}
-                  >
+                <Th width={"40px"} p={0}>
+                  <Box width={"30px"} ml={"40px"}>
                     재생
                   </Box>
                 </Th>
-                <Th
-                  // border={"1px solid blue"}
-                  width={"10px"}
-                  p={0}
-                >
+                <Th width={"10px"} p={0}>
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;정보
                 </Th>
-                <Th
-                  // border={"1px solid blue"}
-                  width={"100px"}
-                  p={0}
-                >
-                  <Box
-                    // border={"1px solid red"}
-                    mr={"50px"}
-                  >
+                <Th width={"100px"} p={0}>
+                  <Box mr={"150px"} width={"40px"}>
                     &nbsp;&nbsp;삭제
                   </Box>
                 </Th>
@@ -228,14 +209,10 @@ export function ChartPage() {
                     </Td>
                     <Td color={"#8b8b8b"}>{song.artistName}</Td>
                     <Td>{song.album}</Td>
-                    <Td
-                      // border={"1px solid red"}
-                      p={0}
-                    >
+                    <Td p={0}>
                       <Button
                         borderRadius={0}
                         variant="ghost"
-                        border={"1px solid blue"}
                         width={"40px"}
                         ml={"35px"}
                         onClick={() => {
@@ -250,7 +227,6 @@ export function ChartPage() {
                       <Button
                         borderRadius={0}
                         variant="ghost"
-                        border={"1px solid red"}
                         onClick={() => navigate("/main/song/" + song.id)}
                       >
                         <FontAwesomeIcon icon={faQrcode} />
@@ -261,7 +237,6 @@ export function ChartPage() {
                         p={0}
                         borderRadius={0}
                         variant="ghost"
-                        border={"1px solid blue"}
                         ml={"-5px"}
                         onClick={() => {
                           listIndex.current = idx;

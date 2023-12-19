@@ -219,36 +219,17 @@ function SongInMyFavoritePlaylist() {
                 <Th></Th>
                 <Th>곡정보</Th>
                 <Th></Th>
-                <Th
-                  // border={"1px solid black"}
-                  width={"40px"}
-                  p={0}
-                >
-                  <Box
-                    // border={"1px solid red"}
-                    width={"30px"}
-                    ml={"40px"}
-                  >
+                <Th width={"40px"} p={0}>
+                  <Box width={"30px"} ml={"40px"}>
                     재생
                   </Box>
                 </Th>
-                <Th
-                  // border={"1px solid blue"}
-                  width={"10px"}
-                  p={0}
-                >
+                <Th width={"10px"} p={0}>
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;정보
                 </Th>
-                <Th
-                  // border={"1px solid blue"}
-                  width={"100px"}
-                  p={0}
-                >
-                  <Box
-                    // border={"1px solid red"}
-                    mr={"50px"}
-                  >
-                    &nbsp;&nbsp;삭제
+                <Th width={"100px"} p={0}>
+                  <Box mr={"150px"} width={"40px"}>
+                    &nbsp;&nbsp;추가
                   </Box>
                 </Th>
               </Tr>
