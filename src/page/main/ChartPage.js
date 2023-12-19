@@ -175,11 +175,12 @@ export function ChartPage() {
       <Box>
         <Flex>
           <Flex flexDirection="row">
-            <Box ml={"50px"} mr={"50px"} border="1px solid black">
+            <Box ml={"50px"} mr={"50px"}>
               <Image
                 src={list !== null && list.photo}
                 boxSize="350px"
                 objectFit="cover"
+                borderRadius={"60px 3px"}
                 style={{ margin: "0 auto", display: "block" }}
               />
             </Box>
@@ -195,25 +196,21 @@ export function ChartPage() {
                 <br />
                 <br />
               </Flex>
-              <Flex>
-                <FormLabel style={{ color: "#8d8d8d" }}>제작사</FormLabel>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <FormLabel> {list != null && list.id}</FormLabel>
+              <Flex gap={10}>
+                <Box style={{ color: "#8d8d8d" }}>제작사</Box>
+                <Box> {list != null && list.id}</Box>
               </Flex>
-              <Flex>
-                <FormLabel style={{ color: "#8d8d8d" }}>곡수</FormLabel>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <FormLabel> {list != null && list.totalSongCount}</FormLabel>
+              <Flex gap={14}>
+                <Box style={{ color: "#8d8d8d" }}>곡수</Box>
+                <Box> {list != null && list.totalSongCount}</Box>
               </Flex>
-              <Flex>
-                <FormLabel style={{ color: "#8d8d8d" }}>조회수</FormLabel>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <FormLabel> {params.get("count")}회</FormLabel>
+              <Flex gap={10}>
+                <Box style={{ color: "#8d8d8d" }}>조회수</Box>
+                <Box> {params.get("count")}회</Box>
               </Flex>
-              <Flex>
-                <FormLabel style={{ color: "#8d8d8d" }}>작성일</FormLabel>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <FormLabel> {list !== null && list.inserted}</FormLabel>
+              <Flex gap={10}>
+                <Box style={{ color: "#8d8d8d" }}>작성일</Box>
+                <Box> {list !== null && list.inserted}</Box>
               </Flex>
               <Flex>
                 <FormLabel style={{ color: "#8d8d8d" }}>
@@ -226,6 +223,7 @@ export function ChartPage() {
                   onClick={handleDeletePlaylist}
                 >
                   <FontAwesomeIcon ml={"-5px"} icon={faTrash} />
+                </Button>
               </Flex>
               <Flex>
                 <Button
@@ -252,13 +250,15 @@ export function ChartPage() {
                 <Th></Th>
                 <Th>곡정보</Th>
                 <Th></Th>
-                <Th width={"40px"} p={0}>
-                  <Box width={"30px"} ml={"40px"}>
+                <Th width={"20px"} p={0}>
+                  <Box width={"30px"} ml={"40px"} p={0}>
                     재생
                   </Box>
                 </Th>
-                <Th width={"10px"} p={0}>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;정보
+                <Th width={"30px"} p={0} height={"10px"}>
+                  <Box textAlign={"center"} mr={"3px"}>
+                    정보
+                  </Box>
                 </Th>
                 <Th width={"100px"} p={0}>
                   <Box mr={"150px"} width={"40px"}>

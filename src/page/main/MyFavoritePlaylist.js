@@ -95,6 +95,7 @@ export function MyFavoritePlaylist() {
                       _hover={{ cursor: "pointer" }}
                     >
                       <Image
+                        borderRadius={"20px"}
                         src={song.photo}
                         alt={song.picture}
                         // _hover={{ cursor: "pointer" }}

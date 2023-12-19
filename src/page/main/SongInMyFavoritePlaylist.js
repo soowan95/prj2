@@ -170,8 +170,9 @@ function SongInMyFavoritePlaylist() {
       <Box>
         <Flex>
           <Flex flexDirection="row">
-            <Box ml={"50px"} mr={"50px"} border="1px solid black">
+            <Box ml={"50px"} mr={"50px"}>
               <Image
+                borderRadius={"60px 3px"}
                 src={list !== null && list.photo}
                 boxSize="350px"
                 objectFit="cover" // 이미지가 상자를 완전히 덮도록 크기 조절하는 것
@@ -190,25 +191,21 @@ function SongInMyFavoritePlaylist() {
                 <br />
                 <br />
               </Flex>
-              <Flex>
-                <FormLabel style={{ color: "#8d8d8d" }}>제작자</FormLabel>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <FormLabel> {list != null && list.nickName} 님</FormLabel>
+              <Flex gap={10}>
+                <Box style={{ color: "#8d8d8d" }}>제작자</Box>
+                <Box> {list != null && list.nickName} 님</Box>
               </Flex>
-              <Flex>
-                <FormLabel style={{ color: "#8d8d8d" }}>곡수</FormLabel>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <FormLabel> {list != null && list.totalSongCount}</FormLabel>
+              <Flex gap={14}>
+                <Box style={{ color: "#8d8d8d" }}>곡수</Box>
+                <Box ml={"-3px"}> {list != null && list.totalSongCount}</Box>
               </Flex>
-              <Flex>
-                <FormLabel style={{ color: "#8d8d8d" }}>조회수</FormLabel>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <FormLabel> {params.get("count")}회</FormLabel>
+              <Flex gap={10}>
+                <Box style={{ color: "#8d8d8d" }}>조회수</Box>
+                <Box> {params.get("count")}회</Box>
               </Flex>
-              <Flex>
-                <FormLabel style={{ color: "#8d8d8d" }}>작성일</FormLabel>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <FormLabel> {list != null && list.inserted} </FormLabel>
+              <Flex gap={10}>
+                <Box style={{ color: "#8d8d8d" }}>작성일</Box>
+                <Box> {list != null && list.inserted} </Box>
               </Flex>
             </Box>
           </Flex>
