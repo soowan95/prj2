@@ -48,6 +48,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import PlayComp from "../../component/PlayComp";
 import { faCirclePlay } from "@fortawesome/free-regular-svg-icons";
+import KakaoShareComp from "../../component/KakaoShareComp";
 
 // 내 플레이리스트에서 플레이리스트 클릭시
 export function ChartPage() {
@@ -183,9 +184,15 @@ export function ChartPage() {
               />
             </Box>
             <Box>
-              <Heading fontSize="30px" color="black">
-                {list != null && list.listName}
-              </Heading>
+              <Flex alignItems={"center"} gap={5}>
+                <Heading fontSize="30px" color="black">
+                  {list !== null && list.listName}
+                </Heading>
+                <KakaoShareComp
+                  title={list !== null && list.listName}
+                  imageUrl={list !== null && list.photo}
+                />
+              </Flex>
               <Flex>
                 <FormLabel>
                   작성자

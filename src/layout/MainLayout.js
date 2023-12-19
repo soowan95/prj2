@@ -190,7 +190,12 @@ export function MainLayout() {
         minH={"100vh"}
         overflowX={"hidden"}
         // 배경화면~!!!!!!
-        bgImage={`url(${process.env.PUBLIC_URL}/img/darkmode.jpg)`}
+        bgImage={
+          `url(${process.env.PUBLIC_URL}/img/` +
+          (localStorage.getItem("chakra-ui-color-mode") === "dark"
+            ? `darkmode.jpg)`
+            : `lightmode.jpg)`)
+        }
       >
         <Button
           onClick={toggleColorMode}

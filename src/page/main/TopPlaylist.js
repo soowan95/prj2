@@ -44,6 +44,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { LoginContext } from "../../component/LoginProvider";
 import { faHeart as likeHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import KakaoShareComp from "../../component/KakaoShareComp";
 // 추천 플레이리스트에서 플레이리스트 클릭시
 
 export function TopPlaylist() {
@@ -193,9 +194,15 @@ export function TopPlaylist() {
               />
             </Box>
             <Box>
-              <Heading fontSize="30px" color="black">
-                {list != null && list.listName}
-              </Heading>
+              <Flex alignItems={"center"} gap={5}>
+                <Heading fontSize="30px" color="black">
+                  {list !== null && list.listName}
+                </Heading>
+                <KakaoShareComp
+                  title={list !== null && list.listName}
+                  imageUrl={list !== null && list.photo}
+                />
+              </Flex>
               <Flex>
                 <FormLabel>
                   제작자
