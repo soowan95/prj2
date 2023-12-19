@@ -13,22 +13,29 @@ import {
   Image,
   SimpleGrid,
 } from "@chakra-ui/react";
-import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faArrowRight,
+  faHeart as fullHeart,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
+import { useImmer } from "use-immer";
+import ItemsCarousel from "react-items-carousel";
 
 export function RecommendPlaylist() {
   const { fetchLogin, login } = useContext(LoginContext);
-  const [recommendList, setRecommendList] = useState(null);
   const navigate = useNavigate();
   const count = useRef(0);
   const [recommendByViews, setRecommendByViews] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [recommendList, setRecommendList] = useState(null);
 
   useEffect(() => {
     fetchLogin();
     axios
       .get("/api/myList/recommendOrderByLike")
-      .then((response) => setRecommendList(response.data));
+      .then(({ data }) => setRecommendList(data));
     axios
       .get("/api/myList/recommendOrderByViews")
       .then((response) => setRecommendByViews(response.data));
@@ -57,20 +64,39 @@ export function RecommendPlaylist() {
         <br />
         <br />
       </Box>
-      <SimpleGrid columns={5} spacing={5} minChildWidth="30px">
-        <Flex gap={3} flexWrap="wrap" ml={"90px"} justifyContent="center">
-          {/* S3 이미지 출력 */}
+      <Box w={"1500px"} m={"0 auto"} alignItems={"center"}>
+        <ItemsCarousel
+          chevronWidth={10}
+          numberOfCards={5}
+          slidesToScroll={5}
+          gutter={0}
+          outsideChevron={false}
+          activeItemIndex={currentIndex}
+          requestToChangeActive={setCurrentIndex}
+          rightChevron={
+            <Button>
+              <FontAwesomeIcon icon={faArrowRight} />
+            </Button>
+          }
+          firstAndLastGutter={true}
+          leftChevron={
+            <Button>
+              <FontAwesomeIcon icon={faArrowLeft} />
+            </Button>
+          }
+        >
           {recommendList !== null &&
             recommendList.map((srl, idx) => (
               <Card
-                mr={"100"}
+                key={idx}
                 mb={"20px"}
+                mx={"25px"}
                 width={"250px"}
                 height={"350px"}
                 bgColor={"none"}
               >
                 <Box>
-                  <CardHeader height="242px" key={idx}>
+                  <CardHeader height="242px">
                     <Image
                       borderRadius={"20px"}
                       src={srl.picture}
@@ -84,7 +110,6 @@ export function RecommendPlaylist() {
                       }}
                     />
                   </CardHeader>
-
                   <CardBody
                     fontSize={"25"}
                     fontWeight={"bold"}
@@ -116,8 +141,8 @@ export function RecommendPlaylist() {
                 </Box>
               </Card>
             ))}
-        </Flex>
-      </SimpleGrid>
+        </ItemsCarousel>
+      </Box>
       <Divider />
       <Box mt={50}>
         <Heading ml={"338px"}>가장 많이 들었던 플레이리스트!!</Heading>
