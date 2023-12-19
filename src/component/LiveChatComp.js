@@ -7,6 +7,8 @@ import {
   Flex,
   FormControl,
   Input,
+  Kbd,
+  useColorMode,
 } from "@chakra-ui/react";
 import { LoginContext } from "./LoginProvider";
 import "../css/Scroll.css";
@@ -20,7 +22,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDrag } from "react-use-gesture";
 
-function LiveChatComp() {
+function LiveChatComp(toggle) {
   const {
     isAuthenticated,
     chat,
@@ -213,12 +215,23 @@ function LiveChatComp() {
       >
         <Flex>
           <Box
+            position={"relative"}
+            left={"3%"}
+            top={"5px"}
+            fontSize={"0.7rem"}
+            color={"black"}
+          >
+            접속자 :{" "}
+            {chatList.length !== 0 &&
+              chatList.at(chatList.length - 1).onlineCount}
+          </Box>
+          <Box
             onMouseOver={() => setIsMove(true)}
             onMouseLeave={() => setIsMove(false)}
             opacity={0}
             className="moveIcon"
             position={"relative"}
-            left={"50%"}
+            left={"35%"}
             w={"20px"}
             h={"3%"}
             cursor={"grab"}
@@ -227,7 +240,7 @@ function LiveChatComp() {
           </Box>
           <Box
             position={"relative"}
-            left={"80%"}
+            left={"65%"}
             top={"5px"}
             w={"20px"}
             h={"3%"}
@@ -265,7 +278,7 @@ function LiveChatComp() {
                     setChat("");
                     setChatList([]);
                   } else sendChat(e, chat);
-                }
+                } else if (e.key === "Escape") setChatVisible("none");
               }}
               _focus={{
                 borderColor: "transparent",

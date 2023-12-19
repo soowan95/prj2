@@ -1,14 +1,15 @@
 import {
+  border,
   Box,
   Button,
-  Center,
   Flex,
   FormControl,
+  FormLabel,
   Input,
+  Kbd,
   Popover,
   PopoverContent,
   PopoverTrigger,
-  scaleFadeConfig,
   useColorMode,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -21,10 +22,11 @@ import _ from "lodash";
 import LiveChatComp from "../component/LiveChatComp";
 import "../css/Fonts.css";
 import {
+  faMagnifyingGlass,
   faMoon,
   faSquareCaretUp,
   faSun,
-  faMagnifyingGlass,
+  faCompactDisc,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -37,6 +39,9 @@ export function MainLayout() {
   const [selectedCategory, setSelectedCategory] = useState("가수");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [autoComplete, setAutoComplete] = useState(null);
+  const [currentMode, setCurrentMode] = useState(
+    localStorage.getItem("chakra-ui-color-mode"),
+  );
 
   const genreInclude = useRef(",");
   const moodInclude = useRef(",");
@@ -197,6 +202,17 @@ export function MainLayout() {
     scroll.current.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
+  window.addEventListener("keydown", (e) => {
+    if (
+      e.key === "F2" &&
+      currentMode === localStorage.getItem("chakra-ui-color-mode")
+    ) {
+      toggleColorMode();
+      setCurrentMode(localStorage.getItem("chakra-ui-color-mode"));
+      window.location.reload(0);
+    }
+  });
+
   return (
     <SongContext.Provider value={{ top100, searched }}>
       <Box
@@ -223,6 +239,9 @@ export function MainLayout() {
           fontSize="2xl"
           variant="unstyled"
         >
+          <span style={{ fontSize: "1rem", opacity: "0.5" }}>
+            <Kbd mr={1}>f2</Kbd>
+          </span>
           {localStorage.getItem("chakra-ui-color-mode") === "dark" ? (
             <FontAwesomeIcon icon={faSun} style={{ color: "#f2c84b" }} />
           ) : (
@@ -373,8 +392,10 @@ export function MainLayout() {
         {(location.pathname === "/main" ||
           location.pathname === "/main/search") && (
           <FormControl width={"100%"} height={"50px"} mt={"40px"}>
-            <Flex width={"70%"} m={"0 auto"}>
+            <Flex width={"50%"} m={"0 auto"}>
               <Button
+                mr={1}
+                size={"sm"}
                 value={"가수"}
                 style={getButtonStyle("가수")}
                 onClick={(e) => handleSearchCategoryButton(e)}
@@ -382,6 +403,8 @@ export function MainLayout() {
                 가수
               </Button>
               <Button
+                mr={1}
+                size={"sm"}
                 value={"제목"}
                 style={getButtonStyle("제목")}
                 onClick={(e) => handleSearchCategoryButton(e)}
@@ -389,6 +412,7 @@ export function MainLayout() {
                 제목
               </Button>
               <Button
+                size={"sm"}
                 value={"가사"}
                 style={getButtonStyle("가사")}
                 onClick={(e) => handleSearchCategoryButton(e)}
@@ -400,7 +424,7 @@ export function MainLayout() {
 
             <Flex
               position={"relative"}
-              width={"70%"}
+              width={"50%"}
               m={"0 auto"}
               alignItems={"center"}
             >
@@ -419,35 +443,49 @@ export function MainLayout() {
                 ))}
               <Popover trigger="hover">
                 <PopoverTrigger>
-                  <Input
-                    ref={searchRef}
-                    id="searchInput"
-                    height={"45px"}
-                    placeholder={searchInfoText}
-                    onChange={(e) => {
-                      handleChangeSearchInput(e);
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") handleSearchButton();
-                    }}
-                  />
+                  <Flex
+                    h={"55px"}
+                    w={"100%"}
+                    border={"1px solid white"}
+                    borderRadius={"8px"}
+                    alignItems={"center"}
+                  >
+                    <Input
+                      border={"0px solid"}
+                      variant={"unstyled"}
+                      ml={2}
+                      ref={searchRef}
+                      id="searchInput"
+                      height={"45px"}
+                      placeholder={searchInfoText}
+                      onChange={(e) => {
+                        handleChangeSearchInput(e);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleSearchButton();
+                      }}
+                    />
+                    <Button
+                      mr={2}
+                      id="searchButton"
+                      height={"45px"}
+                      // width={"5%"}
+                      onClick={handleSearchButton}
+                      bg={"none"}
+                      _hover={{ bg: "none" }}
+                      color={"white"}
+                    >
+                      <FontAwesomeIcon icon={faMagnifyingGlass} />
+                    </Button>
+                  </Flex>
                 </PopoverTrigger>
-
-                <Button
-                  id="searchButton"
-                  height={"45px"}
-                  // width={"5%"}
-                  onClick={handleSearchButton}
-                >
-                  <FontAwesomeIcon icon={faMagnifyingGlass} />
-                </Button>
 
                 <PopoverContent
                   w={{
-                    base: "500px",
-                    lg: "700px",
-                    xl: "900px",
-                    "2xl": "1200px",
+                    base: "200px",
+                    lg: "400px",
+                    xl: "600px",
+                    "2xl": "900px",
                   }}
                 >
                   {autoComplete !== null &&
@@ -462,15 +500,27 @@ export function MainLayout() {
                               params.set("sk", song.artistName);
                               handleSearchButton();
                             }}
-                            justifyContent={"center"}
+                            //justifyContent={"center"}
                           >
-                            <Box w={"20%"}>{song.artistName}</Box>
-                            <Box w={"20%"} textAlign={"left"}>
-                              {song.title}
-                            </Box>
-                            <Box w={"40%"} textAlign={"left"}>
-                              {song.lyric.slice(0, 21)}...
-                            </Box>
+                            <Flex ml={5}>
+                              <FormLabel
+                                _hover={{
+                                  cursor: "pointer",
+                                  bgColor: "#B8B8B8",
+                                }}
+                              >
+                                <FontAwesomeIcon icon={faCompactDisc} />　
+                                {song.artistName}　-　{song.title}
+                              </FormLabel>
+                            </Flex>
+
+                            {/*<Box w={"20%"}>{song.artistName}</Box>*/}
+                            {/*<Box w={"20%"} textAlign={"left"}>*/}
+                            {/*  {song.title}*/}
+                            {/*</Box>*/}
+                            {/*<Box w={"40%"} textAlign={"left"}>*/}
+                            {/*  {song.lyric.slice(0, 21)}...*/}
+                            {/*</Box>*/}
                           </Flex>
                         ))
                     : searchCategory === "제목"
@@ -483,15 +533,27 @@ export function MainLayout() {
                                 params.set("sk", song.title);
                                 handleSearchButton();
                               }}
-                              justifyContent={"center"}
+                              //justifyContent={"center"}
                             >
-                              <Box w={"20%"}>{song.artistName}</Box>
-                              <Box w={"20%"} textAlign={"left"}>
-                                {song.title}
-                              </Box>
-                              <Box w={"40%"} textAlign={"left"}>
-                                {song.lyric.slice(0, 21)}...
-                              </Box>
+                              <Flex ml={5}>
+                                <FormLabel
+                                  _hover={{
+                                    cursor: "pointer",
+                                    bgColor: "#B8B8B8",
+                                  }}
+                                >
+                                  <FontAwesomeIcon icon={faCompactDisc} />　
+                                  {song.title} - {song.artistName}
+                                </FormLabel>
+                              </Flex>
+
+                              {/*<Box w={"20%"}>{song.artistName}</Box>*/}
+                              {/*<Box w={"20%"} textAlign={"left"}>*/}
+                              {/*  {song.title}*/}
+                              {/*</Box>*/}
+                              {/*<Box w={"40%"} textAlign={"left"}>*/}
+                              {/*  {song.lyric.slice(0, 21)}...*/}
+                              {/*</Box>*/}
                             </Flex>
                           ))
                       : _.uniqBy(autoComplete, "lyric")
@@ -503,15 +565,26 @@ export function MainLayout() {
                                 params.set("sk", song.lyric);
                                 handleSearchButton();
                               }}
-                              justifyContent={"center"}
+                              //justifyContent={"center"}
                             >
-                              <Box w={"20%"}>{song.artistName}</Box>
-                              <Box w={"20%"} textAlign={"left"}>
-                                {song.title}
-                              </Box>
-                              <Box w={"40%"} textAlign={"left"}>
-                                {song.lyric.slice(0, 21)}...
-                              </Box>
+                              <Flex ml={5}>
+                                <FormLabel
+                                  _hover={{
+                                    cursor: "pointer",
+                                    bgColor: "#B8B8B8",
+                                  }}
+                                >
+                                  <FontAwesomeIcon icon={faCompactDisc} />　
+                                  {song.artistName}　-　{song.title}
+                                </FormLabel>
+                              </Flex>
+                              {/*<Box w={"20%"}>{song.artistName}</Box>*/}
+                              {/*<Box w={"20%"} textAlign={"left"}>*/}
+                              {/*  {song.title}*/}
+                              {/*</Box>*/}
+                              {/*<Box w={"40%"} textAlign={"left"}>*/}
+                              {/*  {song.lyric.slice(0, 21)}...*/}
+                              {/*</Box>*/}
                             </Flex>
                           ))}
                   {autoComplete !== null && autoComplete.length === 0 && (
