@@ -30,8 +30,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHeart as fullHeart,
+  faPlus,
   faQrcode,
-  faTrashCan,
 } from "@fortawesome/free-solid-svg-icons";
 import PlayComp from "../../component/PlayComp";
 import axios from "axios";
@@ -150,7 +150,12 @@ export function TopPlaylist() {
   function LikeContainer({ onClick, listId, isLike }) {
     return (
       <>
-        <Button ml={1} variant="ghost" size="xl" onClick={() => onClick(listId)}>
+        <Button
+          ml={1}
+          variant="ghost"
+          size="xl"
+          onClick={() => onClick(listId)}
+        >
           {isLike && <FontAwesomeIcon icon={fullHeart} size="lg" />}
           {isLike || <FontAwesomeIcon icon={emptyHeart} size="lg" />}
         </Button>
@@ -245,9 +250,9 @@ export function TopPlaylist() {
             <Thead>
               <Tr>
                 <Th>번호</Th>
-                <Th></Th>
-                <Th>곡정보</Th>
-                <Th></Th>
+                <Th>제목</Th>
+                <Th>가수</Th>
+                <Th>앨범명</Th>
                 <Th width={"40px"} p={0}>
                   <Box width={"30px"} ml={"40px"}>
                     재생
@@ -270,7 +275,7 @@ export function TopPlaylist() {
                     mr={"150px"}
                     width={"40px"}
                   >
-                    &nbsp;&nbsp;삭제
+                    &nbsp;&nbsp;추가
                   </Box>
                 </Th>
               </Tr>
@@ -321,7 +326,7 @@ export function TopPlaylist() {
                           handleAddModal(song.id);
                         }}
                       >
-                        <FontAwesomeIcon icon={faTrashCan} />
+                        <FontAwesomeIcon icon={faPlus} />
                       </Button>
                     </Td>
                   </Tr>

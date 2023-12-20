@@ -114,13 +114,14 @@ export function Top100Page() {
                   similar.map((si) => (
                     <Box key={si.id} m={"0 auto"}>
                       <Card
-                        w={"150px"}
+                        w={"180px"}
                         bg={
                           localStorage.getItem("chakra-ui-color-mode") ===
                           "dark"
                             ? "#f3cd5d"
                             : "#e86db3"
                         }
+                        cursor={"pointer"}
                         onClick={() => handleGoToSong(si.id)}
                       >
                         <CardBody>
@@ -129,9 +130,21 @@ export function Top100Page() {
                               ? si.title.slice(0, 10) + ".."
                               : si.title}
                           </Box>
-                          <Box>{si.artistName}</Box>
-                          <Box>{si.genre}</Box>
-                          <Box>{si.mood}</Box>
+                          <Box>
+                            {si.artistName.length > 10
+                              ? si.artistName.slice(0, 10) + ".."
+                              : si.artistName}
+                          </Box>
+                          <Box>
+                            {si.genre.length > 10
+                              ? si.genre.slice(0, 10) + ".."
+                              : si.genre}
+                          </Box>
+                          <Box>
+                            {si.mood.length > 10
+                              ? si.mood.slice(0, 10) + ".."
+                              : si.mood}
+                          </Box>
                         </CardBody>
                       </Card>
                     </Box>

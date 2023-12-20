@@ -68,10 +68,11 @@ function SongPage(props) {
   const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
+    axios.put("/api/song/plusSongPoint", { id });
     axios.get("/api/song/" + id).then(({ data }) => {
       setSongData(data);
       axios
-        .get("/api/song/albumList?album=" + data.album)
+        .get("/api/song/albumList?id=" + id)
         .then(({ data }) => setAlbumList(data));
     });
     window.scrollTo(0, 0);
@@ -330,13 +331,10 @@ function SongPage(props) {
                     >
                       번호
                     </Th>
-                    <Th style={{ width: "300px", textAlign: "center" }}>
+                    <Th style={{ width: "350px", textAlign: "center" }}>
                       제목
                     </Th>
-                    <Th style={{ width: "100px", textAlign: "center" }}>
-                      가수
-                    </Th>
-                    <Th style={{ width: "300px", textAlign: "center" }}>
+                    <Th style={{ width: "350px", textAlign: "center" }}>
                       앨범명
                     </Th>
                     <Th style={{ width: "200px", textAlign: "center" }}>
@@ -363,13 +361,10 @@ function SongPage(props) {
                         >
                           {album.id}
                         </Td>
-                        <Td style={{ width: "300px", textAlign: "center" }}>
+                        <Td style={{ width: "350px", textAlign: "center" }}>
                           {album.title}
                         </Td>
-                        <Td style={{ width: "100px", textAlign: "center" }}>
-                          {album.name}
-                        </Td>
-                        <Td style={{ width: "300px", textAlign: "center" }}>
+                        <Td style={{ width: "350px", textAlign: "center" }}>
                           {album.album}
                         </Td>
                         <Td style={{ width: "200px", textAlign: "center" }}>
@@ -456,14 +451,14 @@ function SongPage(props) {
                     setInputCount(e.target.value.length);
                     setPlaylistName(e.target.value);
                   }}
-                  maxLength="14"
+                  maxLength="7"
                   placeholder="이름 지정"
                 />
                 <Button variant="ghost" onClick={handleCheckPlaylistName}>
                   중복확인
                 </Button>
               </Flex>
-              <Text textAlign="left">{inputCount} / 15</Text>
+              <Text textAlign="left">{inputCount} / 8</Text>
             </ModalBody>
             <ModalBody>
               <Text>사진 설정</Text>

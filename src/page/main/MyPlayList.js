@@ -222,14 +222,14 @@ export function MyPlayList() {
                   setInputCount(e.target.value.length);
                   setPlaylistName(e.target.value);
                 }}
-                maxLength="14"
+                maxLength="7"
                 placeholder="이름 지정"
               />
               <Button variant="ghost" onClick={handleCheckPlaylistName}>
                 중복확인
               </Button>
             </Flex>
-            <Text textAlign="left">{inputCount} / 15</Text>
+            <Text textAlign="left">{inputCount} / 8</Text>
           </ModalBody>
           <ModalBody>
             <Text>사진 설정</Text>

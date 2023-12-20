@@ -125,7 +125,9 @@ function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader onClick={() => goToSongPage(songList.at(index).id)}>
-            {songList !== null && songList.at(index).title}
+            <Box cursor={"pointer"} w={"fit-content"}>
+              {songList !== null && songList.at(index).title}
+            </Box>
           </DrawerHeader>
           <DrawerBody>
             <Box overflow={"hidden"}>

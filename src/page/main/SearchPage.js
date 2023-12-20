@@ -13,8 +13,7 @@ export function SearchPage() {
 
   // 노래 상세 페이지로 이동하는 함수
   const goToSongPage = (songId) => {
-    axios.put("/api/song/plusSongPoint", {id:songId})
-      .then(() => console.log("ok"))
+
     navigate(`/main/song/${songId}`);
   };
 

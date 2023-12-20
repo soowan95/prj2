@@ -236,9 +236,9 @@ export function ChartPage() {
             <Thead>
               <Tr>
                 <Th>번호</Th>
-                <Th></Th>
-                <Th>곡정보</Th>
-                <Th></Th>
+                <Th>제목</Th>
+                <Th>가수</Th>
+                <Th>앨범명</Th>
                 <Th width={"20px"} p={0}>
                   <Box width={"30px"} ml={"40px"} p={0}>
                     재생
@@ -361,7 +361,7 @@ export function ChartPage() {
                       setPlaylistName(e.target.value);
                       setInputCount(e.target.value.length);
                     }}
-                    maxLength="14"
+                    maxLength="7"
                     placeholder={list !== null && list.listName}
                   />
 
@@ -370,7 +370,7 @@ export function ChartPage() {
                   </Button>
                 </Flex>
                 <FormHelperText textAlign="right">
-                  {inputCount} / 15
+                  {inputCount} / 8
                 </FormHelperText>
               </FormControl>
               <FormControl>

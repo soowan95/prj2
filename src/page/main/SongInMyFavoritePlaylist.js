@@ -201,9 +201,9 @@ function SongInMyFavoritePlaylist() {
             <Thead>
               <Tr>
                 <Th>번호</Th>
-                <Th></Th>
-                <Th>곡정보</Th>
-                <Th></Th>
+                <Th>제목</Th>
+                <Th>가수</Th>
+                <Th>앨범명</Th>
                 <Th width={"40px"} p={0}>
                   <Box width={"30px"} ml={"40px"}>
                     재생

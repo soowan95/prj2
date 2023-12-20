@@ -75,11 +75,12 @@ function SongRequestComp() {
 
   return (
     <Flex justifyContent={"center"} alignItems={"center"}>
-      <Box>일치하는 정보가 없습니다. 요청을 원하시면</Box>
+      <Box>요청을 원하시면</Box>
       <Tooltip label={"로그인 후 요청해주세요."} isDisabled={isAuthenticated()}>
         <Button
           onClick={songRequestModal.onOpen}
           isDisabled={!isAuthenticated()}
+          size={"sm"}
         >
           여기
         </Button>
