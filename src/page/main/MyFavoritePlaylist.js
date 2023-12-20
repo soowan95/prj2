@@ -58,13 +58,12 @@ export function MyFavoritePlaylist() {
       );
   }
 
-  function handleHitsCount(likelistId) {}
-
   return (
     <Center mt={50}>
       <Box mt={30}>
-        <Heading>{login.nickName} 님의 취향저격 플레이리스트</Heading>
-        <Divider />
+        <Heading ml={"338px"} mb={"70px"}>
+          {login.nickName} 님의 취향저격 플레이리스트
+        </Heading>
         <Flex flexWrap="wrap" ml={"140px"} justifyContent="center">
           {list !== null &&
             list.map((song, idx) => (

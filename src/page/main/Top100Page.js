@@ -140,13 +140,15 @@ export function Top100Page() {
             </Center>
           </Box>
         ))}
-      <PlayComp
-        index={songIndex}
-        setIndex={setSongIndex}
-        isOpen={songDrawer.isOpen}
-        onClose={songDrawer.onClose}
-        songList={top100}
-      />
+      {top100 !== null && top100.length !== 0 && (
+        <PlayComp
+          index={songIndex}
+          setIndex={setSongIndex}
+          isOpen={songDrawer.isOpen}
+          onClose={songDrawer.onClose}
+          songList={top100}
+        />
+      )}
     </Box>
   );
 }

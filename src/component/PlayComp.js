@@ -13,7 +13,7 @@ import {
   SliderTrack,
   Tooltip,
 } from "@chakra-ui/react";
-import ReactPlayer from "react-player";
+import ReactPlayer from "react-player/lazy";
 import { useRef, useState } from "react";
 import {
   faBackward,
@@ -189,6 +189,13 @@ function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
                   url={songList !== null && songList.at(index).songUrl}
                   onBuffer={() => setIsBuffer(true)}
                   onBufferEnd={() => setIsBuffer(false)}
+                  config={{
+                    youtube: {
+                      playerVars: {
+                        apiKey: "AIzaSyCqaIb2dfvBES9JyV1Usi-z2ly4dKcqWmU",
+                      },
+                    },
+                  }}
                 />
                 <Box
                   lineHeight={"40px"}

@@ -47,6 +47,7 @@ function KakaoShareComp({ title, imageUrl }) {
         },
       ],
     });
+    onClose();
   };
 
   return (

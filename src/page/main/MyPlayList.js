@@ -37,7 +37,7 @@ import { faHeart } from "@fortawesome/free-regular-svg-icons";
 function LikeContainer({ onClick, listId, isLike }) {
   return (
     <>
-      <Button variant="ghost" size="xl" onClick={() => onClick(listId)}>
+      <Button mr={1} variant="ghost" size="xl" onClick={() => onClick(listId)}>
         {isLike && <FontAwesomeIcon icon={fullHeart} size="xl" />}
         {isLike || <FontAwesomeIcon icon={faHeart} size="xl" />}
       </Button>

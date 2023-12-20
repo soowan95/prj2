@@ -14,7 +14,7 @@ function KakaoLogin() {
     fetch(`https://kauth.kakao.com/oauth/token`, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `grant_type=authorization_code&client_id=0f1a49455b8c431d9ecd4207f7e4a12d&redirect_uri=http://3.35.16.24:8080/kakaoLogin&code=${KAKAO_CODE}`,
+      body: `grant_type=authorization_code&client_id=0f1a49455b8c431d9ecd4207f7e4a12d&redirect_uri=http://3.35.16.24/kakaoLogin&code=${KAKAO_CODE}`,
     })
       .then((res) => res.json())
       .then((data) => {
