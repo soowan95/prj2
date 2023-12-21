@@ -147,8 +147,17 @@ export function MainLayout() {
   // 필터 버튼 색 바꾸기
   function handleButtonColor(e) {
     e.target.style.background =
-      e.target.style.background === "purple" ? "white" : "purple";
-    e.target.style.color = e.target.style.color === "white" ? "black" : "white";
+      e.target.style.background === "purple"
+        ? localStorage.getItem("chakra-ui-color-mode") === "light"
+          ? "white"
+          : "black"
+        : "purple";
+    e.target.style.color =
+      e.target.style.color === "white"
+        ? localStorage.getItem("chakra-ui-color-mode") === "light"
+          ? "black"
+          : "white"
+        : "white";
   }
 
   // 스타일을 동적으로 설정하는 함수
