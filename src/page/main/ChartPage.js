@@ -331,7 +331,7 @@ export function ChartPage() {
                 colorScheme="red"
                 onClick={() =>
                   handleEditFavoriteList(
-                    songList.at(listIndex).id,
+                    songList.at(listIndex.current).id,
                     params.get("listId"),
                   )
                 }

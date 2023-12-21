@@ -43,7 +43,6 @@ export function MyInfo() {
       <PopoverTrigger>
         <Avatar
           size="lg"
-          name={login.nickName}
           src={login.profilePhoto}
           _hover={{ cursor: "pointer" }}
         />

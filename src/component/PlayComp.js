@@ -191,13 +191,6 @@ function PlayComp({ isOpen, onClose, songList, index, setIndex, endIndex }) {
                   url={songList !== null && songList.at(index).songUrl}
                   onBuffer={() => setIsBuffer(true)}
                   onBufferEnd={() => setIsBuffer(false)}
-                  config={{
-                    youtube: {
-                      playerVars: {
-                        apiKey: "AIzaSyCqaIb2dfvBES9JyV1Usi-z2ly4dKcqWmU",
-                      },
-                    },
-                  }}
                 />
                 <Box
                   lineHeight={"40px"}

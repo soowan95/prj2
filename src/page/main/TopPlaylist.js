@@ -64,11 +64,14 @@ export function TopPlaylist() {
   const [value, setValue] = useState(1);
   const [inputCount, setInputCount] = useState(0);
   const [currentSongId, setCurrnetSongId] = useState(null);
-  const [reRend, setReRend] = useState(0);
   const location = useLocation();
+  const [currentName, setCurrentName] = useState("");
+  const [isPlaylistSubmit, setIsPlaylistSubmit] = useState(false);
 
   //플레이리스트 이미지 삽입
-  const [imagePreview, setImagePreview] = useState(login.profilePhoto);
+  const [imagePreview, setImagePreview] = useState(
+    "https://practice12323asdf.s3.ap-northeast-2.amazonaws.com/prj2/playlist/default/defaultplaylist.jpg",
+  );
   const [coverImage, setCoverImage] = useState("");
   const freader = new FileReader();
 
@@ -105,7 +108,7 @@ export function TopPlaylist() {
   function handleCreatePlaylist() {
     axios
       .postForm("/api/myList/createPlaylist", {
-        listName: playlistName,
+        listName: currentName,
         memberId: login.id,
         coverimage: coverImage,
       })
@@ -130,12 +133,13 @@ export function TopPlaylist() {
     const params = new URLSearchParams();
     params.set("listName", playlistName);
     axios
-      .get("/api/myList/check?" + params)
+      .get("/api/myList/check?" + params + "&memberId=" + login.id)
       .then(() => {
         toast({
           description: "이미 사용중인 이름입니다.",
           status: "warning",
         });
+        setIsPlaylistSubmit(false);
       })
       .catch((error) => {
         if (error.response.status === 404) {
@@ -143,34 +147,25 @@ export function TopPlaylist() {
             description: "사용 가능한 이름입니다.",
             status: "success",
           });
+          setIsPlaylistSubmit(true);
+          setCurrentName(playlistName);
         }
       });
   }
 
-  function LikeContainer({ onClick, listId, isLike }) {
-    return (
-      <>
-        <Button
-          ml={1}
-          variant="ghost"
-          size="xl"
-          onClick={() => onClick(listId)}
-        >
-          {isLike && <FontAwesomeIcon icon={fullHeart} size="lg" />}
-          {isLike || <FontAwesomeIcon icon={emptyHeart} size="lg" />}
-        </Button>
-      </>
-    );
-  }
   function handleLike(playListId) {
-    axios.post("/api" + "/like", {
-      memberId: login.id,
-      likelistId: playListId, // handliLike의 파라미터playListId로 받지만 모른다 하지만
-      // onClick={handleLike} 밑에 이걸 보면 onClick이 가르키는 것은
-      // <Button variant="ghost" size="xl" onClick={() => onClick(listId)}> 즉 nClick(listId) listId 이다
-    });
-    setReRend((reRend) => reRend + 1);
-    // setRerend 가 0에서 클릭할때 1로 바뀌는 것 1에 의미는 없고 변화되는 것에 의미
+    axios
+      .post("/api/like", {
+        memberId: login.id,
+        likelistId: playListId,
+      })
+      .then(({ data }) => {
+        axios
+          .get("/api/myList/getByListId?listId=" + playListId)
+          .then(({ data }) => {
+            setList(data);
+          });
+      });
   }
 
   useEffect(() => {
@@ -182,7 +177,7 @@ export function TopPlaylist() {
     axios
       .get("/api/song/chartlist?id=" + params.get("listId"))
       .then(({ data }) => setSongList(data));
-  }, [reRend]);
+  }, []);
 
   return (
     <>
@@ -199,7 +194,7 @@ export function TopPlaylist() {
               />
             </Box>
             <Box>
-              <Flex alignItems={"center"} gap={5}>
+              <Flex alignItems={"center"} gap={5} my={5}>
                 <Heading fontSize="30px" color="black">
                   {list !== null && list.listName}
                 </Heading>
@@ -207,8 +202,6 @@ export function TopPlaylist() {
                   title={list !== null && list.listName}
                   imageUrl={list !== null && list.photo}
                 />
-                <br />
-                <br />
               </Flex>
               <Flex gap={10}>
                 <Box style={{ color: "#8d8d8d" }}>제작사</Box>
@@ -230,11 +223,19 @@ export function TopPlaylist() {
                 <Box>좋아요</Box>
                 <Box>
                   {list !== null && list.countLike}
-                  <LikeContainer
-                    onClick={handleLike}
-                    listId={list !== null && list.listId}
-                    isLike={list !== null && list.isLike}
-                  />
+                  <Button
+                    ml={1}
+                    variant="ghost"
+                    size="xl"
+                    onClick={() => handleLike(list.listId)}
+                  >
+                    <FontAwesomeIcon
+                      icon={
+                        list !== null && list.isLike ? fullHeart : emptyHeart
+                      }
+                      size="lg"
+                    />
+                  </Button>
                 </Box>
               </Flex>
             </Box>
@@ -402,7 +403,13 @@ export function TopPlaylist() {
         </Modal>
 
         {/*  플레이리스트 생성 모달  */}
-        <Modal isOpen={createModal.isOpen} onClose={createModal.onClose}>
+        <Modal
+          isOpen={createModal.isOpen}
+          onClose={() => {
+            createModal.onClose();
+            setInputCount(0);
+          }}
+        >
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>플레이리스트 생성</ModalHeader>
@@ -414,14 +421,16 @@ export function TopPlaylist() {
                     setInputCount(e.target.value.length);
                     setPlaylistName(e.target.value);
                   }}
-                  maxLength="14"
+                  maxLength="8"
                   placeholder="이름 지정"
                 />
                 <Button variant="ghost" onClick={handleCheckPlaylistName}>
                   중복확인
                 </Button>
               </Flex>
-              <Text textAlign="left">{inputCount} / 15</Text>
+              <Text textAlign="left">
+                생성될 이름: {currentName} ({inputCount} / 8)
+              </Text>
             </ModalBody>
             <ModalBody>
               <Text>사진 설정</Text>
@@ -446,6 +455,11 @@ export function TopPlaylist() {
                 variant="ghost"
                 colorScheme="facebook"
                 onClick={handleCreatePlaylist}
+                isDisabled={
+                  !isPlaylistSubmit ||
+                  playlistName.length === 0 ||
+                  playlistName !== currentName
+                }
               >
                 생성
               </Button>

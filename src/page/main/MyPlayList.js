@@ -29,6 +29,8 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHeart as fullHeart,
+  faLock,
+  faLockOpen,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { LoginContext } from "../../component/LoginProvider";
@@ -51,8 +53,12 @@ export function MyPlayList() {
   const [reRend, setReRend] = useState(0);
   const [inputCount, setInputCount] = useState(0);
   const [playlistName, setPlaylistName] = useState("");
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState(
+    "https://practice12323asdf.s3.ap-northeast-2.amazonaws.com/prj2/playlist/default/defaultplaylist.jpg",
+  );
   const [coverImage, setCoverImage] = useState(null);
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [currentName, setCurrentName] = useState("");
 
   const count = useRef(0);
   // useRef는 .current 프로퍼티로 전달된 인자로 초기화된 변경 가능한 ref 객체를 반환합니다.
@@ -64,20 +70,22 @@ export function MyPlayList() {
   const freader = new FileReader();
 
   useEffect(() => {
-    const params = new URLSearchParams();
-    params.set("id", login.id);
-    axios.get("/api/myList/get?" + params).then(({ data }) => setList(data));
+    axios
+      .get("/api/myList/get?id=" + login.id)
+      .then(({ data }) => setList(data));
   }, [reRend]);
 
   function handleLike(playListId) {
-    axios.post("/api" + "/like", {
-      memberId: login.id,
-      likelistId: playListId, // handliLike의 파라미터playListId로 받지만 모른다 하지만
-      // onClick={handleLike} 밑에 이걸 보면 onClick이 가르키는 것은
-      // <Button variant="ghost" size="xl" onClick={() => onClick(listId)}> 즉 onClick(listId) listId 이다
-    });
-    setReRend((reRend) => reRend + 1);
-    // setRerend 가 0에서 클릭할때 1로 바뀌는 것 1에 의미는 없고 변화되는 것에 의미
+    axios
+      .post("/api/like", {
+        memberId: login.id,
+        likelistId: playListId,
+      })
+      .then(({ data }) => {
+        axios
+          .get("/api/myList/get?id=" + login.id)
+          .then(({ data }) => setList(data));
+      });
   }
 
   function handleChart(listId) {
@@ -104,12 +112,13 @@ export function MyPlayList() {
     const params = new URLSearchParams();
     params.set("listName", playlistName);
     axios
-      .get("/api/myList/check?" + params)
+      .get("/api/myList/check?" + params + "&memberId=" + login.id)
       .then(() => {
         toast({
           description: "이미 사용중인 이름입니다.",
           status: "warning",
         });
+        setIsSubmit(false);
       })
       .catch((error) => {
         if (error.response.status === 404) {
@@ -117,6 +126,8 @@ export function MyPlayList() {
             description: "사용 가능한 이름입니다.",
             status: "success",
           });
+          setIsSubmit(true);
+          setCurrentName(playlistName);
         }
       });
   }
@@ -124,7 +135,7 @@ export function MyPlayList() {
   function handleCreatePlaylist() {
     axios
       .postForm("/api/myList/createPlaylist", {
-        listName: playlistName,
+        listName: currentName,
         memberId: login.id,
         coverimage: coverImage,
       })
@@ -144,6 +155,12 @@ export function MyPlayList() {
       });
   }
 
+  function handleLock(listId) {
+    axios
+      .put("/api/myList/lock", { listId })
+      .then(() => setReRend((reRend) => reRend - 1));
+  }
+
   return (
     <Box>
       <Stack spacing={4}>
@@ -160,7 +177,7 @@ export function MyPlayList() {
           {/* 수정된 부분 */}
           {list !== null &&
             list.map((memberplaylist, index) => (
-              <Box mr={"130px"} mb={"20px"}>
+              <Box mr={"130px"} mb={"20px"} key={index}>
                 <Card w="xs" bgColor={"none"}>
                   <CardHeader
                     _hover={{ cursor: "pointer" }}
@@ -175,32 +192,47 @@ export function MyPlayList() {
                     />
                   </CardHeader>
                   <CardBody>
-                    <Heading
-                      size="md"
-                      ml={"40px"}
-                      fontSize={"25"}
-                      fontWeight={"bold"}
-                      _hover={{
-                        cursor: "pointer",
-                        textDecoration: "underline",
-                      }}
-                      onClick={() => {
-                        handleChart(memberplaylist.listId);
-                      }}
-                    >
-                      {memberplaylist.listName} &nbsp; &nbsp; &nbsp; &nbsp;
-                      &nbsp;
-                    </Heading>
+                    <Flex>
+                      <Box
+                        cursor={"pointer"}
+                        onClick={() => handleLock(memberplaylist.listId)}
+                      >
+                        <FontAwesomeIcon
+                          icon={memberplaylist.isLock ? faLock : faLockOpen}
+                        />
+                      </Box>
+                      <Heading
+                        size="md"
+                        ml={"20px"}
+                        fontSize={"25"}
+                        fontWeight={"bold"}
+                        _hover={{
+                          cursor: "pointer",
+                          textDecoration: "underline",
+                        }}
+                        onClick={() => {
+                          handleChart(memberplaylist.listId);
+                        }}
+                      >
+                        {memberplaylist.listName}
+                      </Heading>
+                    </Flex>
                   </CardBody>
                   <CardFooter>
                     <Box ml={"43px"}>{memberplaylist.totalSongCount}곡</Box>
                     <Spacer />
                     <Flex mr={"30px"}>
-                      <LikeContainer
-                        onClick={handleLike}
-                        listId={memberplaylist.listId}
-                        isLike={memberplaylist.isLike}
-                      ></LikeContainer>
+                      <Button
+                        mr={1}
+                        variant="ghost"
+                        size="xl"
+                        onClick={() => handleLike(memberplaylist.listId)}
+                      >
+                        <FontAwesomeIcon
+                          icon={memberplaylist.isLike ? fullHeart : faHeart}
+                          size="xl"
+                        />
+                      </Button>
                       <Box>{memberplaylist.countLike}</Box>
                     </Flex>
                   </CardFooter>
@@ -210,7 +242,13 @@ export function MyPlayList() {
         </Flex>
         {/*</SimpleGrid>*/}
       </Stack>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal
+        isOpen={isOpen}
+        onClose={() => {
+          onClose();
+          setInputCount(0);
+        }}
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>플레이리스트 생성</ModalHeader>
@@ -222,14 +260,16 @@ export function MyPlayList() {
                   setInputCount(e.target.value.length);
                   setPlaylistName(e.target.value);
                 }}
-                maxLength="7"
+                maxLength="8"
                 placeholder="이름 지정"
               />
               <Button variant="ghost" onClick={handleCheckPlaylistName}>
                 중복확인
               </Button>
             </Flex>
-            <Text textAlign="left">{inputCount} / 8</Text>
+            <Text textAlign="left">
+              생성될 이름: {currentName} ({inputCount} / 8)
+            </Text>
           </ModalBody>
           <ModalBody>
             <Text>사진 설정</Text>
@@ -254,6 +294,11 @@ export function MyPlayList() {
               variant="ghost"
               colorScheme="facebook"
               onClick={handleCreatePlaylist}
+              isDisabled={
+                !isSubmit ||
+                playlistName.length === 0 ||
+                playlistName !== currentName
+              }
             >
               생성
             </Button>

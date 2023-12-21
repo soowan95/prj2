@@ -40,6 +40,9 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import KakaoShareComp from "../../component/KakaoShareComp";
 import { LoginContext } from "../../component/LoginProvider";
+import { faCirclePlay } from "@fortawesome/free-regular-svg-icons";
+import PlayComp from "../../component/PlayComp";
+import { useImmer } from "use-immer";
 
 function SongPage(props) {
   const [songData, setSongData] = useState({});
@@ -48,14 +51,19 @@ function SongPage(props) {
   const navigate = useNavigate();
   const addModal = useDisclosure();
   const createModal = useDisclosure();
+  const playDrawer = useDisclosure();
   const { login, isAdmin } = useContext(LoginContext);
   const [addPlaylist, setAddPlaylist] = useState([]);
   const [value, setValue] = useState(1);
   const toast = useToast();
   const [inputCount, setInputCount] = useState(0);
   const [playlistName, setPlaylistName] = useState("");
+  const [index, setIndex] = useState(0);
   const isSubmit = useRef(true);
-  const [currentSongId, setCurrentSongId] = useState(null);
+  const [currentName, setCurrentName] = useState("");
+  const [isPlaylistSubmit, setIsPlaylistSubmit] = useState(false);
+
+  const [play, updatePlay] = useImmer([]);
 
   // 플레이리스트 이미지 삽입
   const [imagePreview, setImagePreview] = useState(
@@ -71,6 +79,9 @@ function SongPage(props) {
     axios.put("/api/song/plusSongPoint", { id });
     axios.get("/api/song/" + id).then(({ data }) => {
       setSongData(data);
+      updatePlay((draft) => {
+        draft.push(data);
+      });
       axios
         .get("/api/song/albumList?id=" + id)
         .then(({ data }) => setAlbumList(data));
@@ -110,7 +121,7 @@ function SongPage(props) {
   function handleCreatePlaylist() {
     axios
       .postForm("/api/myList/createPlaylist", {
-        listName: playlistName,
+        listName: currentName,
         memberId: login.id,
         coverimage: coverImage,
       })
@@ -135,12 +146,13 @@ function SongPage(props) {
     const params = new URLSearchParams();
     params.set("listName", playlistName);
     axios
-      .get("/api/myList/check?" + params)
+      .get("/api/myList/check?" + params + "&memberId=" + login.id)
       .then(() => {
         toast({
           description: "이미 사용중인 이름입니다.",
           status: "warning",
         });
+        setIsPlaylistSubmit(false);
       })
       .catch((error) => {
         if (error.response.status === 404) {
@@ -148,8 +160,16 @@ function SongPage(props) {
             description: "사용 가능한 이름입니다.",
             status: "success",
           });
+          setIsPlaylistSubmit(true);
+          setCurrentName(playlistName);
         }
       });
+  }
+
+  function handleGoToSong(id) {
+    navigate(`/main/song/${id}`);
+    window.location.reload(0);
+    window.scrollTo(0, 0);
   }
 
   return (
@@ -190,15 +210,25 @@ function SongPage(props) {
                 title={songData.title}
                 imageUrl={songData.artistFileUrl}
               />
-              <Tooltip label="플레이리스트에 추가" fontSize="0.6rem">
-                <Button
-                  variant="ghost"
-                  borderRadius="full"
-                  onClick={handleAddModal}
-                >
+              <Box cursor={"pointer"} onClick={handleAddModal}>
+                <Tooltip label="플레이리스트에 추가" fontSize="0.6rem">
                   <FontAwesomeIcon icon={faPlus} />
-                </Button>
-              </Tooltip>
+                </Tooltip>
+              </Box>
+              <Box cursor={"pointer"} onClick={playDrawer.onOpen}>
+                <Tooltip label="재생" fontSize="0.6rem">
+                  <FontAwesomeIcon icon={faCirclePlay} />
+                </Tooltip>
+              </Box>
+              {play.length !== 0 && (
+                <PlayComp
+                  isOpen={playDrawer.isOpen}
+                  onClose={playDrawer.onClose}
+                  index={index}
+                  setIndex={setIndex}
+                  songList={play}
+                />
+              )}
             </Flex>
             <Box mt={4}>
               <Flex>
@@ -359,9 +389,13 @@ function SongPage(props) {
                             zIndex: 3,
                           }}
                         >
-                          {album.id}
+                          {album.songId}
                         </Td>
-                        <Td style={{ width: "350px", textAlign: "center" }}>
+                        <Td
+                          style={{ width: "350px", textAlign: "center" }}
+                          cursor={"pointer"}
+                          onClick={() => handleGoToSong(album.id)}
+                        >
                           {album.title}
                         </Td>
                         <Td style={{ width: "350px", textAlign: "center" }}>
@@ -439,7 +473,13 @@ function SongPage(props) {
         </Modal>
 
         {/*  플레이리스트 생성 모달  */}
-        <Modal isOpen={createModal.isOpen} onClose={createModal.onClose}>
+        <Modal
+          isOpen={createModal.isOpen}
+          onClose={() => {
+            createModal.onClose();
+            setInputCount(0);
+          }}
+        >
           <ModalOverlay />
           <ModalContent>
             <ModalHeader>플레이리스트 생성</ModalHeader>
@@ -451,14 +491,16 @@ function SongPage(props) {
                     setInputCount(e.target.value.length);
                     setPlaylistName(e.target.value);
                   }}
-                  maxLength="7"
+                  maxLength="8"
                   placeholder="이름 지정"
                 />
                 <Button variant="ghost" onClick={handleCheckPlaylistName}>
                   중복확인
                 </Button>
               </Flex>
-              <Text textAlign="left">{inputCount} / 8</Text>
+              <Text textAlign="left">
+                생성될 이름: {currentName} ({inputCount} / 8)
+              </Text>
             </ModalBody>
             <ModalBody>
               <Text>사진 설정</Text>
@@ -483,6 +525,11 @@ function SongPage(props) {
                 variant="ghost"
                 colorScheme="facebook"
                 onClick={handleCreatePlaylist}
+                isDisabled={
+                  !isPlaylistSubmit ||
+                  playlistName.length === 0 ||
+                  playlistName !== currentName
+                }
               >
                 생성
               </Button>

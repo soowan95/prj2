@@ -59,68 +59,66 @@ export function MyFavoritePlaylist() {
   }
 
   return (
-    <Center mt={50}>
-      <Box mt={30}>
-        <Heading ml={"338px"} mb={"70px"}>
-          {login.nickName} 님의 취향저격 플레이리스트
-        </Heading>
-        <Flex flexWrap="wrap" ml={"140px"} justifyContent="center">
-          {list !== null &&
-            list.map((song, idx) => (
-              <Box mr={"130px"} mb={"20px"} gap={5} key={song?.id}>
-                <Box mt={30}>
-                  <Card w="xs" bgColor={"none"}>
-                    <CardHeader
-                      height="242px"
-                      key={idx}
-                      _hover={{ cursor: "pointer" }}
+    <Box mt={"50px"}>
+      <Heading ml={"338px"} mb={"70px"}>
+        {login.nickName} 님의 취향저격 플레이리스트
+      </Heading>
+      <Flex flexWrap="wrap" ml={"140px"} justifyContent="center">
+        {list !== null &&
+          list.map((song, idx) => (
+            <Box mr={"130px"} mb={"20px"} gap={5} key={song?.id}>
+              <Box mt={30}>
+                <Card w="xs" bgColor={"none"}>
+                  <CardHeader
+                    height="242px"
+                    key={idx}
+                    _hover={{ cursor: "pointer" }}
+                  >
+                    <Image
+                      borderRadius={"20px"}
+                      src={song.photo}
+                      alt={song.picture}
+                      // _hover={{ cursor: "pointer" }}
+                      boxSize="220px"
+                      objectFit="cover"
+                      style={{ margin: "0 auto", display: "block" }}
+                      onClick={() => handleFavoriteList(song.listId)}
+                    />
+                  </CardHeader>
+                  {/*<CardHeader _hover={{ cursor: "pointer" }}>*/}
+                  {/*  <Image onClick={() => handleFavoriteList(song.listId)} />*/}
+                  {/*</CardHeader>*/}
+                  <CardBody>
+                    <Heading
+                      size="md"
+                      ml={"36px"}
+                      fontSize={"25"}
+                      fontWhight={"bold"}
+                      _hover={{
+                        cursor: "pointer",
+                        textDecoration: "underline",
+                      }}
+                      onClick={() => handleFavoriteList(song.listId)}
                     >
-                      <Image
-                        borderRadius={"20px"}
-                        src={song.photo}
-                        alt={song.picture}
-                        // _hover={{ cursor: "pointer" }}
-                        boxSize="220px"
-                        objectFit="cover"
-                        style={{ margin: "0 auto", display: "block" }}
-                        onClick={() => handleFavoriteList(song.listId)}
-                      />
-                    </CardHeader>
-                    {/*<CardHeader _hover={{ cursor: "pointer" }}>*/}
-                    {/*  <Image onClick={() => handleFavoriteList(song.listId)} />*/}
-                    {/*</CardHeader>*/}
-                    <CardBody>
-                      <Heading
-                        size="md"
-                        ml={"36px"}
-                        fontSize={"25"}
-                        fontWhight={"bold"}
-                        _hover={{
-                          cursor: "pointer",
-                          textDecoration: "underline",
-                        }}
-                        onClick={() => handleFavoriteList(song.listId)}
-                      >
-                        {song?.listName}
-                      </Heading>
-                    </CardBody>
-                    {/*<Divider color="gray" />*/}
-                    <CardFooter>
-                      <Text ml={"40px"}>
-                        <FontAwesomeIcon icon={faRecordVinyl} />
-                        &nbsp;
-                        {song?.songs} 곡
-                      </Text>
-                      <Spacer />
-                      <Text mr={"37px"}>{song?.nickName} 님</Text>
-                    </CardFooter>
-                  </Card>
-                </Box>
+                      {song?.listName}
+                    </Heading>
+                  </CardBody>
+                  {/*<Divider color="gray" />*/}
+                  <CardFooter>
+                    <Text ml={"40px"}>
+                      <FontAwesomeIcon icon={faRecordVinyl} />
+                      &nbsp;
+                      {song?.songs} 곡
+                    </Text>
+                    <Spacer />
+                    <Text mr={"37px"}>{song?.nickName} 님</Text>
+                  </CardFooter>
+                </Card>
               </Box>
-            ))}
-        </Flex>
-      </Box>
-    </Center>
+            </Box>
+          ))}
+      </Flex>
+    </Box>
   );
 }
 
