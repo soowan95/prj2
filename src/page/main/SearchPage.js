@@ -13,8 +13,7 @@ export function SearchPage() {
 
   // 노래 상세 페이지로 이동하는 함수
   const goToSongPage = (songId) => {
-    axios.put("/api/song/plusSongPoint", {id:songId})
-      .then(() => console.log("ok"))
+
     navigate(`/main/song/${songId}`);
   };
 
@@ -47,7 +46,7 @@ export function SearchPage() {
             justifyContent={"center"}
             alignItems={"center"}
             borderBottom={"1px solid lavender"}
-            _hover={{ bg: "grey", opacity: 0.6  }}
+            _hover={{ bg: "rgba(204,204,204,0.38)"  }}
             // Box를 클릭하면 해당 노래의 상세 페이지로 이동
             onClick={() => goToSongPage(song.id)}
           >

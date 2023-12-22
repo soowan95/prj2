@@ -54,9 +54,13 @@ function SongInMyFavoritePlaylist() {
   const [value, setValue] = useState(1);
   const [inputCount, setInputCount] = useState(0);
   const [currentSongId, setCurrnetSongId] = useState(null);
+  const [currentName, setCurrentName] = useState("");
+  const [isPlaylistSubmit, setIsPlaylistSubmit] = useState(false);
 
   //플레이리스트 이미지 삽입
-  const [imagePreview, setImagePreview] = useState(login.profilePhoto);
+  const [imagePreview, setImagePreview] = useState(
+    "https://practice12323asdf.s3.ap-northeast-2.amazonaws.com/prj2/playlist/default/defaultplaylist.jpg",
+  );
   const [coverImage, setCoverImage] = useState("");
   const freader = new FileReader();
 
@@ -104,7 +108,7 @@ function SongInMyFavoritePlaylist() {
   function handleCreatePlaylist() {
     axios
       .postForm("/api/myList/createPlaylist", {
-        listName: playlistName,
+        listName: currentName,
         memberId: login.id,
         coverimage: coverImage,
       })
@@ -129,12 +133,13 @@ function SongInMyFavoritePlaylist() {
     const params = new URLSearchParams();
     params.set("listName", playlistName);
     axios
-      .get("/api/myList/check?" + params)
+      .get("/api/myList/check?" + params + "&memberId=" + login.id)
       .then(() => {
         toast({
           description: "이미 사용중인 이름입니다.",
           status: "warning",
         });
+        setIsPlaylistSubmit(false);
       })
       .catch((error) => {
         if (error.response.status === 404) {
@@ -142,6 +147,8 @@ function SongInMyFavoritePlaylist() {
             description: "사용 가능한 이름입니다.",
             status: "success",
           });
+          setIsPlaylistSubmit(true);
+          setCurrentName(playlistName);
         }
       });
   }
@@ -201,9 +208,9 @@ function SongInMyFavoritePlaylist() {
             <Thead>
               <Tr>
                 <Th>번호</Th>
-                <Th></Th>
-                <Th>곡정보</Th>
-                <Th></Th>
+                <Th>제목</Th>
+                <Th>가수</Th>
+                <Th>앨범명</Th>
                 <Th width={"40px"} p={0}>
                   <Box width={"30px"} ml={"40px"}>
                     재생
@@ -339,7 +346,13 @@ function SongInMyFavoritePlaylist() {
           </Modal>
 
           {/*  플레이리스트 생성 모달  */}
-          <Modal isOpen={createModal.isOpen} onClose={createModal.onClose}>
+          <Modal
+            isOpen={createModal.isOpen}
+            onClose={() => {
+              createModal.onClose();
+              setInputCount(0);
+            }}
+          >
             <ModalOverlay />
             <ModalContent>
               <ModalHeader>플레이리스트 생성</ModalHeader>
@@ -351,14 +364,16 @@ function SongInMyFavoritePlaylist() {
                       setInputCount(e.target.value.length);
                       setPlaylistName(e.target.value);
                     }}
-                    maxLength="14"
+                    maxLength="8"
                     placeholder="이름 지정"
                   />
                   <Button variant="ghost" onClick={handleCheckPlaylistName}>
                     중복확인
                   </Button>
                 </Flex>
-                <Text textAlign="left">{inputCount} / 15</Text>
+                <Text textAlign="left">
+                  생성될 이름: {currentName} ({inputCount} / 8)
+                </Text>
               </ModalBody>
               <ModalBody>
                 <Text>사진 설정</Text>
@@ -383,6 +398,11 @@ function SongInMyFavoritePlaylist() {
                   variant="ghost"
                   colorScheme="facebook"
                   onClick={handleCreatePlaylist}
+                  isDisabled={
+                    !isPlaylistSubmit ||
+                    playlistName.length === 0 ||
+                    playlistName !== currentName
+                  }
                 >
                   생성
                 </Button>

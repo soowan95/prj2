@@ -147,8 +147,17 @@ export function MainLayout() {
   // 필터 버튼 색 바꾸기
   function handleButtonColor(e) {
     e.target.style.background =
-      e.target.style.background === "purple" ? "white" : "purple";
-    e.target.style.color = e.target.style.color === "white" ? "black" : "white";
+      e.target.style.background === "purple"
+        ? localStorage.getItem("chakra-ui-color-mode") === "light"
+          ? "white"
+          : "black"
+        : "purple";
+    e.target.style.color =
+      e.target.style.color === "white"
+        ? localStorage.getItem("chakra-ui-color-mode") === "light"
+          ? "black"
+          : "white"
+        : "white";
   }
 
   // 스타일을 동적으로 설정하는 함수
@@ -233,7 +242,7 @@ export function MainLayout() {
         <Button
           onClick={toggleColorMode}
           position={"absolute"}
-          top={"3%"}
+          top={"50px"}
           right={"10%"}
           fontSize="2xl"
           variant="unstyled"
@@ -315,14 +324,14 @@ export function MainLayout() {
                   Genre
                 </Box>
               </PopoverTrigger>
-              <PopoverContent p={5} w={"100px"}>
+              <PopoverContent p={5} w={"130px"}>
                 {genres !== null &&
                   genres.map((genre) => (
                     <Flex key={genre.id} my={"5px"} alignItems={"center"}>
                       <Button
                         className="genre"
                         h={"30px"}
-                        w={"80px"}
+                        w={"100px"}
                         borderRadius={"5px"}
                         onClick={(e) => handlePlusButton(e)}
                         bg={
@@ -361,14 +370,14 @@ export function MainLayout() {
                   Mood
                 </Box>
               </PopoverTrigger>
-              <PopoverContent p={5} w={"100px"}>
+              <PopoverContent p={5} w={"130px"}>
                 {moods !== null &&
                   moods.map((mood) => (
                     <Flex key={mood.id} my={"5px"} alignItems={"center"}>
                       <Button
                         className="mood"
                         h={"30px"}
-                        w={"80px"}
+                        w={"100px"}
                         borderRadius={"5px"}
                         onClick={(e) => handlePlusButton(e)}
                         bg={
@@ -499,7 +508,6 @@ export function MainLayout() {
                               params.set("sk", song.artistName);
                               handleSearchButton();
                             }}
-                            //justifyContent={"center"}
                           >
                             <Flex ml={5}>
                               <FormLabel
@@ -509,17 +517,9 @@ export function MainLayout() {
                                 }}
                               >
                                 <FontAwesomeIcon icon={faCompactDisc} />　
-                                {song.artistName}　-　{song.title}
+                                {song.artistName}
                               </FormLabel>
                             </Flex>
-
-                            {/*<Box w={"20%"}>{song.artistName}</Box>*/}
-                            {/*<Box w={"20%"} textAlign={"left"}>*/}
-                            {/*  {song.title}*/}
-                            {/*</Box>*/}
-                            {/*<Box w={"40%"} textAlign={"left"}>*/}
-                            {/*  {song.lyric.slice(0, 21)}...*/}
-                            {/*</Box>*/}
                           </Flex>
                         ))
                     : searchCategory === "제목"
@@ -532,7 +532,6 @@ export function MainLayout() {
                                 params.set("sk", song.title);
                                 handleSearchButton();
                               }}
-                              //justifyContent={"center"}
                             >
                               <Flex ml={5}>
                                 <FormLabel
@@ -542,17 +541,9 @@ export function MainLayout() {
                                   }}
                                 >
                                   <FontAwesomeIcon icon={faCompactDisc} />　
-                                  {song.title} - {song.artistName}
+                                  {song.title}
                                 </FormLabel>
                               </Flex>
-
-                              {/*<Box w={"20%"}>{song.artistName}</Box>*/}
-                              {/*<Box w={"20%"} textAlign={"left"}>*/}
-                              {/*  {song.title}*/}
-                              {/*</Box>*/}
-                              {/*<Box w={"40%"} textAlign={"left"}>*/}
-                              {/*  {song.lyric.slice(0, 21)}...*/}
-                              {/*</Box>*/}
                             </Flex>
                           ))
                       : _.uniqBy(autoComplete, "lyric")
@@ -564,7 +555,6 @@ export function MainLayout() {
                                 params.set("sk", song.lyric);
                                 handleSearchButton();
                               }}
-                              //justifyContent={"center"}
                             >
                               <Flex ml={5}>
                                 <FormLabel
@@ -577,18 +567,9 @@ export function MainLayout() {
                                   {song.artistName}　-　{song.title}
                                 </FormLabel>
                               </Flex>
-                              {/*<Box w={"20%"}>{song.artistName}</Box>*/}
-                              {/*<Box w={"20%"} textAlign={"left"}>*/}
-                              {/*  {song.title}*/}
-                              {/*</Box>*/}
-                              {/*<Box w={"40%"} textAlign={"left"}>*/}
-                              {/*  {song.lyric.slice(0, 21)}...*/}
-                              {/*</Box>*/}
                             </Flex>
                           ))}
-                  {autoComplete !== null && autoComplete.length === 0 && (
-                    <SongRequestComp />
-                  )}
+                  <SongRequestComp />
                 </PopoverContent>
               </Popover>
             </Flex>

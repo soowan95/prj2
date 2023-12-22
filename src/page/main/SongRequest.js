@@ -97,78 +97,41 @@ export function SongRequest() {
   function handleInsert() {
     // ok -> 성공 토스트 띄우면서 모달 닫기
     // error -> 오류 토스트 띄우면서 그대로 있기
-    if (files) {
-      axios
-        .postForm("/api/song/insert", {
-          title: title.current,
-          artistName: artist.current,
-          mood: selectMood.join(", "),
-          genre: selectGenre.join(", "),
-          artistGroup: group.current,
-          album: album.current,
-          release: release.current,
-          lyric: lyric.current,
-          requestTitle: songTitle.current,
-          requestArtist: artistName.current,
-          songUrl: songUrl.current,
-          files: files,
-        })
-        .then(() => {
-          toast({
-            description: "저장이 완료 되었습니다☺️",
-            status: "success",
-          });
-          setIsUpdate(true);
-          submitModal.onClose();
-          updateSelectGenre((draft) => {
-            draft.splice(0, draft.length);
-          });
-          updateSelectMood((draft) => {
-            draft.splice(0, draft.length);
-          });
-        })
-        .catch((error) => {
-          toast({
-            description: "저장 중 문제가 발생하였습니다😥",
-            status: "warning",
-          });
+    axios
+      .postForm("/api/song/insert", {
+        title: title.current,
+        artistName: artist.current,
+        mood: selectMood.join(", "),
+        genre: selectGenre.join(", "),
+        artistGroup: group.current,
+        album: album.current,
+        release: release.current,
+        lyric: lyric.current,
+        requestTitle: songTitle.current,
+        requestArtist: artistName.current,
+        songUrl: songUrl.current,
+        files: files,
+      })
+      .then(() => {
+        toast({
+          description: "저장이 완료 되었습니다☺️",
+          status: "success",
         });
-    } else {
-      axios
-        .post("/api/song/insertOnlyInfo", {
-          title: title.current,
-          artistName: artist.current,
-          mood: selectMood.join(", "),
-          genre: selectGenre.join(", "),
-          artistGroup: group.current,
-          album: album.current,
-          release: release.current,
-          lyric: lyric.current,
-          requestTitle: songTitle.current,
-          requestArtist: artistName.current,
-          songUrl: songUrl.current,
-        })
-        .then(() => {
-          toast({
-            description: "저장이 완료 되었습니다☺️",
-            status: "success",
-          });
-          setIsUpdate(true);
-          submitModal.onClose();
-          updateSelectGenre((draft) => {
-            draft.splice(0, draft.length);
-          });
-          updateSelectMood((draft) => {
-            draft.splice(0, draft.length);
-          });
-        })
-        .catch((error) => {
-          toast({
-            description: "저장 중 문제가 발생하였습니다😥",
-            status: "warning",
-          });
+        setIsUpdate(true);
+        submitModal.onClose();
+        updateSelectGenre((draft) => {
+          draft.splice(0, draft.length);
         });
-    }
+        updateSelectMood((draft) => {
+          draft.splice(0, draft.length);
+        });
+      })
+      .catch((error) => {
+        toast({
+          description: "저장 중 문제가 발생하였습니다😥",
+          status: "warning",
+        });
+      });
   }
 
   function handleGenre(e) {
@@ -336,7 +299,7 @@ export function SongRequest() {
             <FormControl mb={5}>
               <FormLabel fontWeight={"bold"}>출시일</FormLabel>
               <Input
-                type="datetime-local"
+                type="date"
                 onChange={(e) => (release.current = e.target.value)}
               />
             </FormControl>

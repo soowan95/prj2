@@ -87,7 +87,6 @@ function LiveChatComp(toggle) {
                       : "#fbe6f2",
                   borderRadius: "20px",
                   whiteSpace: "normal",
-                  width: "auto",
                   maxWidth: "200px",
                   height: "auto",
                 }}
@@ -199,7 +198,7 @@ function LiveChatComp(toggle) {
         className="chatBox"
         bg={
           localStorage.getItem("chakra-ui-color-mode") === "dark"
-            ? "#f8e3a5"
+            ? "#e8d087"
             : "#f3b6d9"
         }
         width={"270px"}
