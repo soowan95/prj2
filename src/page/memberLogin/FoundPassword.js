@@ -180,10 +180,10 @@ function FoundPassword({ isOpen, onClose, securityQuestions }) {
                 />
               </p>
               <p style={{ fontSize: "20px", fontWeight: "bold" }}>
-                <span style={{ color: "purple" }}>{nickName}</span>님의
+                <span style={{ color: "#9851da" }}>{nickName}</span>님의
                 비밀번호는
                 <br />
-                <span style={{ color: "purple" }}>{fetchedPassword}</span>{" "}
+                <span style={{ color: "#9851da" }}>{fetchedPassword}</span>{" "}
                 입니다.
               </p>
             </Box>
@@ -192,7 +192,7 @@ function FoundPassword({ isOpen, onClose, securityQuestions }) {
                 textAlign: "center",
                 marginTop: "35px",
                 marginBottom: "50px",
-                backgroundColor: "#FAF5FF",
+                backgroundColor: "#3b1d54",
                 borderRadius: "5px",
                 padding: "10px",
               }}
